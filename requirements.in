@@ -2,3 +2,4 @@ django>=4.1,<4.2
 environs[django]
 django-htmx
 django-bootstrap-v5
+django-debug-toolbar

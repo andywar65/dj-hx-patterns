@@ -17,11 +17,13 @@
     {% block extra-head %}{% endblock extra-head %}
   </head>
   <body class="d-flex flex-column h-100" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    <div id="content">
-      {% block content %}
-        <h1>Hello, world!</h1>
-      {% endblock content %}
-    </div>
+    <main class="flex-shrink-0">
+      <div id="content" class="container">
+        {% block content %}
+          <h1>Hello, world!</h1>
+        {% endblock content %}
+      </div>
+    </main>
     <!-- Optional JavaScript -->
     <!-- Bootstrap bundled JS -->
     {% bootstrap_javascript %}

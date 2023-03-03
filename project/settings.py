@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     "bootstrap5",
     "django_htmx",
     "debug_toolbar",
+    # local
+    "boxlist.apps.BoxlistConfig",
 ]
 
 MIDDLEWARE = [

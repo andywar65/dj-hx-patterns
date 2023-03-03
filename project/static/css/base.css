@@ -1,0 +1,60 @@
+html {
+    position: relative;
+    min-height: 100%;
+    padding-bottom:160px;
+  }
+  body {
+    margin-bottom: 60px;
+  }
+  footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+  }
+
+  main > .container {
+    padding: 60px 15px 0;
+  }
+
+  .gradient-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    background: linear-gradient(to top, black, transparent, transparent);
+  }
+
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+
+  /*------------------------------------
+  - fix HTMX
+  ------------------------------------*/
+  .dropdown-item {
+    cursor: pointer;
+  }
+
+  .navbar-brand {
+    cursor: pointer;
+  }
+
+  .link-primary {
+      cursor: pointer;
+  }
+
+  a.link-primary:hover, a.link-primary:focus {
+      cursor: pointer;
+  }

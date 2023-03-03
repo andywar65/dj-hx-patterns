@@ -1,0 +1,30 @@
+{% load static %}
+{% load bootstrap5 %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type='image/x-icon' href="{% static 'favicon.ico' %}">
+    <!-- Bootstrap CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    {% bootstrap_css %}
+    <script src="https://unpkg.com/htmx.org@1.8.6" integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx" crossorigin="anonymous"></script>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <title>Hello World!</title>
+    {% block extra-head %}{% endblock extra-head %}
+  </head>
+  <body class="d-flex flex-column h-100" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <div id="content">
+      {% block content %}
+        <h1>Hello, world!</h1>
+      {% endblock content %}
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- Bootstrap bundled JS -->
+    {% bootstrap_javascript %}
+    {% block extra-js %}{% endblock extra-js %}
+  </body>
+</html>

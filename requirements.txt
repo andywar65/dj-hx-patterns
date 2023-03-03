@@ -6,6 +6,8 @@
 #
 asgiref==3.6.0
     # via django
+beautifulsoup4==4.11.2
+    # via django-bootstrap-v5
 dj-database-url==1.2.0
     # via environs
 dj-email-url==1.0.6
@@ -14,7 +16,10 @@ django==4.1.7
     # via
     #   -r requirements.in
     #   dj-database-url
+    #   django-bootstrap-v5
     #   django-htmx
+django-bootstrap-v5==1.0.11
+    # via -r requirements.in
 django-cache-url==3.4.4
     # via environs
 django-htmx==1.14.0
@@ -27,6 +32,8 @@ packaging==23.0
     # via marshmallow
 python-dotenv==1.0.0
     # via environs
+soupsieve==2.4
+    # via beautifulsoup4
 sqlparse==0.4.3
     # via django
 tzdata==2022.7

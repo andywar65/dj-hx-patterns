@@ -1,3 +1,5 @@
-from django.shortcuts import render  # noqa
+from django.views.generic import TemplateView
 
-# Create your views here.
+
+class BoxListView(TemplateView):
+    template_name = "boxlist/htmx/list.html"

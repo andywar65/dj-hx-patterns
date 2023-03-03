@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.utils.translation import gettext_lazy as _
 
 from .views import BaseTemplateView
 
@@ -22,4 +23,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
     path("", BaseTemplateView.as_view(), name="base"),
+    path(_("box-list/"), include("boxlist.urls", namespace="boxlist")),
 ]

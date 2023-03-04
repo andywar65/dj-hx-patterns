@@ -1,7 +1,13 @@
 from django.urls import path
 from django.utils.translation import gettext_lazy as _  # noqa
 
-from .views import ItemCreateView, ItemDetailView, ItemListRefreshView, ItemListView
+from .views import (
+    ItemCreateView,
+    ItemDetailView,
+    ItemListRefreshView,
+    ItemListView,
+    ItemUpdateView,
+)
 
 app_name = "boxlist"
 urlpatterns = [
@@ -24,5 +30,10 @@ urlpatterns = [
         "item/<pk>/",
         ItemDetailView.as_view(),
         name="detail",
+    ),
+    path(
+        "item/<pk>/update/",
+        ItemUpdateView.as_view(),
+        name="update",
     ),
 ]

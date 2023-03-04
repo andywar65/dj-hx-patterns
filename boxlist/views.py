@@ -1,5 +1,10 @@
 from django.urls import reverse
-from django.views.generic import CreateView, DetailView, ListView  # , TemplateView
+from django.views.generic import (  # , TemplateView
+    CreateView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
@@ -29,3 +34,12 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
     model = Item
     context_object_name = "item"
     template_name = "boxlist/htmx/detail.html"
+
+
+class ItemUpdateView(HxOnlyTemplateMixin, UpdateView):
+    model = Item
+    form_class = ItemCreateForm
+    template_name = "boxlist/htmx/update.html"
+
+    def get_success_url(self):
+        return reverse("boxlist:detail", kwargs={"pk": self.object.id})

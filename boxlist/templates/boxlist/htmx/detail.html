@@ -14,14 +14,14 @@
       {% if item.get_previous_item %}
         <a class="link-primary"
            title="{% trans 'Move up' %}"
-           hx-get="#"
+           hx-get="{% url 'boxlist:move_up' pk=item.id %}"
            hx-target="#list-refresh">
           <i class="fa fa-arrow-up"></i></a>
       {% endif %}
       {% if item.get_next_item %}
         <a class="link-primary"
            title="{% trans 'Move down' %}"
-           hx-get="#"
+           hx-get="{% url 'boxlist:move_down' pk=item.id %}"
            hx-target="#list-refresh">
           <i class="fa fa-arrow-down"></i></a>
       {% endif %}

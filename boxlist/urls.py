@@ -7,6 +7,8 @@ from .views import (
     ItemDetailView,
     ItemListRefreshView,
     ItemListView,
+    ItemMoveDownView,
+    ItemMoveUpView,
     ItemUpdateView,
 )
 
@@ -41,5 +43,15 @@ urlpatterns = [
         "item/<pk>/delete/",
         ItemDeleteView.as_view(),
         name="delete",
+    ),
+    path(
+        "item/<pk>/move/down/",
+        ItemMoveDownView.as_view(),
+        name="move_down",
+    ),
+    path(
+        "item/<pk>/move/up/",
+        ItemMoveUpView.as_view(),
+        name="move_up",
     ),
 ]

@@ -4,6 +4,7 @@ from django.views.generic import (
     CreateView,
     DetailView,
     ListView,
+    RedirectView,
     TemplateView,
     UpdateView,
 )
@@ -60,3 +61,33 @@ class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
         item = get_object_or_404(Item, id=self.kwargs["pk"])
         item.move_following_items()
         item.delete()
+
+
+class ItemMoveDownView(HxOnlyTemplateMixin, RedirectView):
+    def setup(self, request, *args, **kwargs):
+        super(ItemMoveDownView, self).setup(request, *args, **kwargs)
+        item = get_object_or_404(Item, id=self.kwargs["pk"])
+        next = item.get_next_item()
+        if next:
+            item.position += 1
+            item.save()
+            next.position -= 1
+            next.save()
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("boxlist:list_refresh")
+
+
+class ItemMoveUpView(HxOnlyTemplateMixin, RedirectView):
+    def setup(self, request, *args, **kwargs):
+        super(ItemMoveUpView, self).setup(request, *args, **kwargs)
+        item = get_object_or_404(Item, id=self.kwargs["pk"])
+        prev = item.get_previous_item()
+        if prev:
+            item.position -= 1
+            item.save()
+            prev.position += 1
+            prev.save()
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("boxlist:list_refresh")

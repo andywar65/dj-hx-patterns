@@ -58,4 +58,5 @@ class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
     def setup(self, request, *args, **kwargs):
         super(ItemDeleteView, self).setup(request, *args, **kwargs)
         item = get_object_or_404(Item, id=self.kwargs["pk"])
+        item.move_following_items()
         item.delete()

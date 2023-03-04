@@ -32,3 +32,13 @@ class Item(models.Model):
             return prev
         except Item.DoesNotExist:
             return None
+
+    def move_following_items(self):
+        """Used when an item is deleted.
+        Items with greater position than (self) are
+        moved up the ladder.
+        """
+        following = Item.objects.filter(position__gt=self.position)
+        for item in following:
+            item.position -= 1
+            item.save()

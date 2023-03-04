@@ -18,3 +18,17 @@ class Item(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_next_item(self):
+        try:
+            next = Item.objects.get(position=self.position + 1)
+            return next
+        except Item.DoesNotExist:
+            return None
+
+    def get_previous_item(self):
+        try:
+            prev = Item.objects.get(position=self.position - 1)
+            return prev
+        except Item.DoesNotExist:
+            return None

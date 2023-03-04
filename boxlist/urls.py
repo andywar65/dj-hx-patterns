@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _  # noqa
 
 from .views import (
     ItemCreateView,
+    ItemDeleteView,
     ItemDetailView,
     ItemListRefreshView,
     ItemListView,
@@ -35,5 +36,10 @@ urlpatterns = [
         "item/<pk>/update/",
         ItemUpdateView.as_view(),
         name="update",
+    ),
+    path(
+        "item/<pk>/delete/",
+        ItemDeleteView.as_view(),
+        name="delete",
     ),
 ]

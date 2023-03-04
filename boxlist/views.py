@@ -1,8 +1,10 @@
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import (  # , TemplateView
+from django.views.generic import (
     CreateView,
     DetailView,
     ListView,
+    TemplateView,
     UpdateView,
 )
 
@@ -43,3 +45,12 @@ class ItemUpdateView(HxOnlyTemplateMixin, UpdateView):
 
     def get_success_url(self):
         return reverse("boxlist:detail", kwargs={"pk": self.object.id})
+
+
+class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "boxlist/htmx/delete.html"
+
+    def setup(self, request, *args, **kwargs):
+        super(ItemDeleteView, self).setup(request, *args, **kwargs)
+        item = get_object_or_404(Item, id=self.kwargs["pk"])
+        item.delete()

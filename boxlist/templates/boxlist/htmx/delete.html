@@ -1,7 +1,8 @@
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-  {% for message in messages %}
-    {{ message }}
-  {% endfor %}
-  Deleting...
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+{% load i18n %}
+
+<div class="alert alert-danger"
+     hx-get="{% url 'boxlist:list_refresh' %}"
+     hx-target="#list-refresh"
+     hx-trigger="load delay:1s">
+  {% trans "Deleting..." %}<span class="spinner-border spinner-border-sm"></span>
 </div>

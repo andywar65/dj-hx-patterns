@@ -1,0 +1,21 @@
+{% load bootstrap5 %}
+{% load i18n %}
+
+<div class="card">
+  <form
+    hx-post="{% url 'boxlist:create' %}"
+    hx-target="#list-refresh">
+    <div class="card-body">
+      {% bootstrap_form form %}
+      <button class="btn btn-success" type="submit">
+        {% trans "Add" %}
+        <span class="htmx-indicator spinner-border spinner-border-sm"></span>
+      </button>
+      <button class="btn-close"
+              title="{% trans 'Dismiss' %}"
+              hx-get="#"
+              hx-target="#cat-add">
+      </button>
+    </div>
+  </form>
+</div>

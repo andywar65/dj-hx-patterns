@@ -29,12 +29,20 @@ django-htmx==1.14.0
     # via -r requirements.in
 environs[django]==9.5.0
     # via -r requirements.in
+factory-boy==3.2.1
+    # via -r requirements.in
+faker==17.6.0
+    # via factory-boy
 marshmallow==3.19.0
     # via environs
 packaging==23.0
     # via marshmallow
+python-dateutil==2.8.2
+    # via faker
 python-dotenv==1.0.0
     # via environs
+six==1.16.0
+    # via python-dateutil
 soupsieve==2.4
     # via beautifulsoup4
 sqlparse==0.4.3

@@ -1,1 +1,8 @@
-add button
+{% load i18n %}
+
+<a class="btn btn-success"
+   hx-get="#"
+   hx-target="#add-button">
+  {% trans "Add item" %}
+  <span class="htmx-indicator spinner-border spinner-border-sm text-success"></span>
+</a>

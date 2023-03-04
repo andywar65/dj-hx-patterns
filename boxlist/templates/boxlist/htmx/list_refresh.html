@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<div id="add-button">
+  {% include "boxlist/htmx/add_button.html" %}
+</div>
+{% if object_list %}
+  {% for item in object_list %}
+    {{ item.title }}
+  {% endfor %}
+{% else %}
+  no items
+{% endif %}

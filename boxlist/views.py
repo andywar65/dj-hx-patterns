@@ -28,6 +28,11 @@ class ItemCreateView(HxOnlyTemplateMixin, CreateView):
     form_class = ItemCreateForm
     template_name = "boxlist/htmx/create.html"
 
+    def form_valid(self, form):
+        last = Item.objects.last()
+        form.instance.position = last.position + 1
+        return super(ItemCreateView, self).form_valid(form)
+
     def get_success_url(self):
         return reverse("boxlist:list_refresh")
 

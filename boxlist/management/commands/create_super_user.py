@@ -18,4 +18,4 @@ class Command(BaseCommand):
 
 
 def create_item():
-    User.objects.create_superuser("andywar65", "andy.war1965@gmail.com", "0qww294e")
+    User.objects.create_superuser("andywar65", "andy.war1965@gmail.com", "P4s5W0r6")

@@ -1,3 +1,4 @@
+# change root and directory name
 cd D:/venvs/
 mkdir my_directory
 cd my_directory

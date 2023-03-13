@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     # local
     "boxlist.apps.BoxlistConfig",
+    "hierarchy.apps.HierarchyConfig",
 ]
 
 MIDDLEWARE = [

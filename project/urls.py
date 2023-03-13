@@ -24,4 +24,5 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path("", BaseTemplateView.as_view(), name="base"),
     path(_("box-list/"), include("boxlist.urls", namespace="boxlist")),
+    path(_("hierarchy/"), include("hierarchy.urls", namespace="hierarchy")),
 ]

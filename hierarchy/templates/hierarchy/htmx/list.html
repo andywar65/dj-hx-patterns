@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<div class="card mx-auto" style="max-width: 960px">
+  <div class="card-header">
+    <h3>{% translate 'Categories' %}</h3>
+  </div>
+  <div hx-get="#"
+       hx-target="#list-refresh"
+       hx-trigger="refreshList from:body">
+  </div>
+  <div class="card-body" id="list-refresh">
+    {% include "hierarchy/htmx/list_refresh.html" %}
+  </div>
+</div>

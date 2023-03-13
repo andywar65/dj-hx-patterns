@@ -30,6 +30,14 @@
                 {% trans "Box list" %}
               </a>
             </li>
+            <li>
+              <a class="link-primary"
+                 hx-get="{% url 'hierarchy:list' %}"
+                 hx-target="#content"
+                 hx-push-url="true">
+                {% trans "Hierarchy" %}
+              </a>
+            </li>
           </ul>
         {% endblock content %}
       </div>

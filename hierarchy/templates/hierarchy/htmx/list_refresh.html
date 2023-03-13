@@ -1,0 +1,18 @@
+{% load i18n %}
+
+<div id="add-button" class="mb-3">
+  {% include "hierarchy/htmx/add_button.html" %}
+</div>
+{% if object_list %}
+  {% for category in object_list %}
+    <div class="row">
+      <div class="col-{{ category.tree_depth }}">
+      </div>
+      <div class="col" id="cat-{{ category.id }}">
+        {% include "hierarchy/htmx/detail.html" %}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>{% trans "No categories yet" %}</p>
+{% endif %}

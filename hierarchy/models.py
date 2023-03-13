@@ -14,3 +14,12 @@ class Category(TreeNode):
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
         ordering = ["position"]
+
+    def __str__(self):
+        return self.title
+
+    def get_punctuated_index(self):
+        qs = self.ancestors(include_self=True).with_tree_fields()
+        int_list = qs.values_list("position", flat=True)
+        str_list = list(map(str, int_list))
+        return ".".join(str_list)

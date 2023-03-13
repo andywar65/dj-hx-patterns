@@ -5,20 +5,20 @@
     <div class="col col-10">
       <strong>{{ category.get_punctuated_index }}</strong> -
       <a class="link-primary"
-         title="{% trans 'Modify item' %}"
+         title="{% trans 'Modify category' %}"
          hx-get="#"
          hx-target="#category-{{ category.id }}">
         {{ category.title }}</a>
     </div>
     <div class="col text-end">
-      {% if item.get_previous_item %}
+      {% if category.get_previous_sibling %}
         <a class="link-primary"
            title="{% trans 'Move up' %}"
            hx-get="#"
            hx-target="#list-refresh">
           <i class="fa fa-arrow-up"></i></a>
       {% endif %}
-      {% if item.get_next_item %}
+      {% if category.get_next_sibling %}
         <a class="link-primary"
            title="{% trans 'Move down' %}"
            hx-get="#"

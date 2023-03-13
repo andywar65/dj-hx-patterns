@@ -27,6 +27,8 @@ django-debug-toolbar==3.8.1
     # via -r requirements.in
 django-htmx==1.14.0
     # via -r requirements.in
+django-tree-queries==0.14.0
+    # via -r requirements.in
 environs[django]==9.5.0
     # via -r requirements.in
 factory-boy==3.2.1

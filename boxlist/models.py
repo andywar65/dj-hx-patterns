@@ -33,6 +33,22 @@ class Item(models.Model):
         except Item.DoesNotExist:
             return None
 
+    def move_down(self):
+        next = self.get_next_item()
+        if next:
+            self.position += 1
+            self.save()
+            next.position -= 1
+            next.save()
+
+    def move_up(self):
+        prev = self.get_previous_item()
+        if prev:
+            self.position -= 1
+            self.save()
+            prev.position += 1
+            prev.save()
+
     def move_following_items(self):
         """Used when an item is deleted.
         Items with greater position than (self) are

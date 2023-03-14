@@ -4,7 +4,7 @@
   <div class="card-header">
     <h3>{% translate 'Categories' %}</h3>
   </div>
-  <div hx-get="#"
+  <div hx-get="{% url 'hierarchy:list_refresh' %}"
        hx-target="#list-refresh"
        hx-trigger="refreshList from:body">
   </div>

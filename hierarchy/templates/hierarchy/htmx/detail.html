@@ -6,8 +6,8 @@
       <strong>{{ category.get_punctuated_index }}</strong> -
       <a class="link-primary"
          title="{% trans 'Modify category' %}"
-         hx-get="#"
-         hx-target="#category-{{ category.id }}">
+         hx-get="{% url 'hierarchy:update' pk=category.id %}"
+         hx-target="#cat-{{ category.id }}">
         {{ category.title }}</a>
     </div>
     <div class="col text-end">

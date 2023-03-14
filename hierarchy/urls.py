@@ -7,6 +7,7 @@ from .views import (
     CategoryDetailView,
     CategoryListRefreshView,
     CategoryListView,
+    CategoryUpdateView,
 )
 
 app_name = "hierarchy"
@@ -35,5 +36,10 @@ urlpatterns = [
         "category/<pk>/",
         CategoryDetailView.as_view(),
         name="detail",
+    ),
+    path(
+        "category/<pk>/update/",
+        CategoryUpdateView.as_view(),
+        name="update",
     ),
 ]

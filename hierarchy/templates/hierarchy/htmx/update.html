@@ -23,7 +23,7 @@
         <div class="col text-end">
           <button class="btn btn-danger"
                   title="{% trans 'Delete category' %}"
-                  hx-get="#"
+                  hx-get="{% url 'hierarchy:delete' pk=object.id %}"
                   hx-target="#cat-{{ object.id }}"
                   hx-confirm="{% trans 'Are you sure you want to delete category' %} {{ object.title }}?">
             <i class="fa fa-times"></i>

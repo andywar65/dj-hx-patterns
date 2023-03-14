@@ -1,0 +1,8 @@
+{% load i18n %}
+
+<div class="alert alert-danger"
+     hx-get="{% url 'hierarchy:list_refresh' %}"
+     hx-target="#list-refresh"
+     hx-trigger="load delay:1s">
+  {% trans "Deleting..." %}<span class="spinner-border spinner-border-sm"></span>
+</div>

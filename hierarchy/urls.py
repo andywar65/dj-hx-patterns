@@ -1,9 +1,9 @@
 from django.urls import path
-from django.utils.translation import gettext_lazy as _  # noqa
 
 from .views import (
     CategoryAddButtonView,
     CategoryCreateView,
+    CategoryDeleteView,
     CategoryDetailView,
     CategoryListRefreshView,
     CategoryListView,
@@ -41,5 +41,10 @@ urlpatterns = [
         "category/<pk>/update/",
         CategoryUpdateView.as_view(),
         name="update",
+    ),
+    path(
+        "category/<pk>/delete/",
+        CategoryDeleteView.as_view(),
+        name="delete",
     ),
 ]

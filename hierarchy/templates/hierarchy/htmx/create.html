@@ -13,7 +13,7 @@
       </button>
       <button class="btn-close"
               title="{% trans 'Dismiss' %}"
-              hx-get="#"
+              hx-get="{% url 'hierarchy:add_button' %}"
               hx-target="#add-button">
       </button>
     </div>

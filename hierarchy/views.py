@@ -1,6 +1,6 @@
 from django.shortcuts import render  # noqa
 from django.urls import reverse
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, TemplateView
 
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
@@ -33,3 +33,7 @@ class CategoryCreateView(HxOnlyTemplateMixin, CreateView):
 
     def get_success_url(self):
         return reverse("hierarchy:list_refresh")
+
+
+class CategoryAddButtonView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "hierarchy/htmx/add_button.html"

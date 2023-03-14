@@ -13,8 +13,8 @@
       </button>
       <button class="btn-close"
               title="{% trans 'Dismiss' %}"
-              hx-get="#"
-              hx-target="#cat-add">
+              hx-get="{% url 'boxlist:add_button' %}"
+              hx-target="#add-button">
       </button>
     </div>
   </form>

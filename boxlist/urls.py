@@ -2,6 +2,7 @@ from django.urls import path
 from django.utils.translation import gettext_lazy as _  # noqa
 
 from .views import (
+    ItemAddButtonView,
     ItemCreateView,
     ItemDeleteView,
     ItemDetailView,
@@ -28,6 +29,11 @@ urlpatterns = [
         "item/create/",
         ItemCreateView.as_view(),
         name="create",
+    ),
+    path(
+        "item/add/button/",
+        ItemAddButtonView.as_view(),
+        name="add_button",
     ),
     path(
         "item/<pk>/",

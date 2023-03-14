@@ -38,6 +38,10 @@ class ItemCreateView(HxOnlyTemplateMixin, CreateView):
         return reverse("boxlist:list_refresh")
 
 
+class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "boxlist/htmx/add_button.html"
+
+
 class ItemDetailView(HxOnlyTemplateMixin, DetailView):
     model = Item
     context_object_name = "item"

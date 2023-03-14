@@ -50,17 +50,31 @@ class CategoryDetailView(HxOnlyTemplateMixin, DetailView):
     context_object_name = "category"
     template_name = "hierarchy/htmx/detail.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super(CategoryDetailView, self).dispatch(request, *args, **kwargs)
+        if "refresh" in request.GET:
+            response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
+
 
 class CategoryUpdateView(HxOnlyTemplateMixin, UpdateView):
     model = Category
     form_class = CategoryCreateForm
     template_name = "hierarchy/htmx/update.html"
 
-    def get_success_url(self):
-        return reverse("hierarchy:detail", kwargs={"pk": self.object.id})
+    def setup(self, request, *args, **kwargs):
+        super(CategoryUpdateView, self).setup(request, *args, **kwargs)
+        self.original_parent = None
 
-    def dispatch(self, request, *args, **kwargs):
-        # TODO has to work if parent is updated
-        response = super(CategoryUpdateView, self).dispatch(request, *args, **kwargs)
-        # response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
+    def get_object(self, queryset=None):
+        obj = super(CategoryUpdateView, self).get_object(queryset=None)
+        self.original_parent = obj.parent
+        return obj
+
+    def get_success_url(self):
+        if self.original_parent != self.object.parent:
+            return (
+                reverse("hierarchy:detail", kwargs={"pk": self.object.id})
+                + "?refresh=true"
+            )
+        return reverse("hierarchy:detail", kwargs={"pk": self.object.id})

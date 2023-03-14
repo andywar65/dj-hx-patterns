@@ -71,8 +71,13 @@ class CategoryUpdateView(HxOnlyTemplateMixin, UpdateView):
         self.original_parent = obj.parent
         return obj
 
+    def form_valid(self, form):
+        if not self.original_parent == form.instance.parent:
+            form.instance.position = get_position_by_parent(form.instance.parent)
+        return super(CategoryUpdateView, self).form_valid(form)
+
     def get_success_url(self):
-        if self.original_parent != self.object.parent:
+        if not self.original_parent == self.object.parent:
             return (
                 reverse("hierarchy:detail", kwargs={"pk": self.object.id})
                 + "?refresh=true"

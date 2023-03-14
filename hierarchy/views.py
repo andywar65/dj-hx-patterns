@@ -1,6 +1,6 @@
 from django.shortcuts import render  # noqa
 from django.urls import reverse
-from django.views.generic import CreateView, ListView, TemplateView
+from django.views.generic import CreateView, DetailView, ListView, TemplateView
 
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
@@ -37,3 +37,9 @@ class CategoryCreateView(HxOnlyTemplateMixin, CreateView):
 
 class CategoryAddButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "hierarchy/htmx/add_button.html"
+
+
+class CategoryDetailView(HxOnlyTemplateMixin, DetailView):
+    model = Category
+    context_object_name = "category"
+    template_name = "hierarchy/htmx/detail.html"

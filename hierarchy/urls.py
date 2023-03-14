@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _  # noqa
 from .views import (
     CategoryAddButtonView,
     CategoryCreateView,
+    CategoryDetailView,
     CategoryListRefreshView,
     CategoryListView,
 )
@@ -29,5 +30,10 @@ urlpatterns = [
         "category/add/button/",
         CategoryAddButtonView.as_view(),
         name="add_button",
+    ),
+    path(
+        "category/<pk>/",
+        CategoryDetailView.as_view(),
+        name="detail",
     ),
 ]

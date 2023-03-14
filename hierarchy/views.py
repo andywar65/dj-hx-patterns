@@ -1,9 +1,11 @@
 from django.shortcuts import render  # noqa
-from django.views.generic import ListView
+from django.urls import reverse
+from django.views.generic import CreateView, ListView
 
-from project.views import HxPageTemplateMixin
+from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
-from .models import Category
+from .forms import CategoryCreateForm
+from .models import Category, get_position_by_parent
 
 
 class CategoryListView(HxPageTemplateMixin, ListView):
@@ -14,3 +16,20 @@ class CategoryListView(HxPageTemplateMixin, ListView):
         context = super(CategoryListView, self).get_context_data()
         context["object_list"] = context["object_list"].with_tree_fields()
         return context
+
+
+class CategoryListRefreshView(CategoryListView, HxOnlyTemplateMixin):
+    template_name = "hierarchy/htmx/list_refresh.html"
+
+
+class CategoryCreateView(HxOnlyTemplateMixin, CreateView):
+    model = Category
+    form_class = CategoryCreateForm
+    template_name = "hierarchy/htmx/create.html"
+
+    def form_valid(self, form):
+        form.instance.position = get_position_by_parent(form.instance.parent)
+        return super(CategoryCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse("hierarchy:list_refresh")

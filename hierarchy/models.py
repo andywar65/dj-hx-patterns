@@ -48,3 +48,9 @@ class Category(TreeNode):
             return prev
         except Category.DoesNotExist:
             return None
+
+
+def get_position_by_parent(parent):
+    if not parent:
+        return Category.objects.filter(parent_id=None).count()
+    return parent.children.count()

@@ -11,7 +11,7 @@ from django.views.generic import (
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
 from .forms import CategoryCreateForm
-from .models import Category, get_position_by_parent
+from .models import Category, get_position_by_parent, move_younger_siblings
 
 
 class CategoryListView(HxPageTemplateMixin, ListView):
@@ -73,6 +73,7 @@ class CategoryUpdateView(HxOnlyTemplateMixin, UpdateView):
 
     def form_valid(self, form):
         if not self.original_parent == form.instance.parent:
+            move_younger_siblings(self.original_parent, form.instance.position)
             form.instance.position = get_position_by_parent(form.instance.parent)
         return super(CategoryUpdateView, self).form_valid(form)
 

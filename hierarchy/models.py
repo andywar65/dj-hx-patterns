@@ -54,3 +54,13 @@ def get_position_by_parent(parent):
     if not parent:
         return Category.objects.filter(parent_id=None).count()
     return parent.children.count()
+
+
+def move_younger_siblings(parent, position):
+    if not parent:
+        siblings = Category.objects.filter(parent_id=None, position__gt=position)
+    else:
+        siblings = parent.children.filter(position__gt=position)
+    for sibling in siblings:
+        sibling.position -= 1
+        sibling.save()

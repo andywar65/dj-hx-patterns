@@ -14,14 +14,14 @@
       {% if category.get_previous_sibling %}
         <a class="link-primary"
            title="{% trans 'Move up' %}"
-           hx-get="#"
+           hx-get="{% url 'hierarchy:move_up' pk=category.id %}"
            hx-target="#list-refresh">
           <i class="fa fa-arrow-up"></i></a>
       {% endif %}
       {% if category.get_next_sibling %}
         <a class="link-primary"
            title="{% trans 'Move down' %}"
-           hx-get="#"
+           hx-get="{% url 'hierarchy:move_down' pk=category.id %}"
            hx-target="#list-refresh">
           <i class="fa fa-arrow-down"></i></a>
       {% endif %}

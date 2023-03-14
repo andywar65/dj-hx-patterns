@@ -7,6 +7,8 @@ from .views import (
     CategoryDetailView,
     CategoryListRefreshView,
     CategoryListView,
+    CategoryMoveDownView,
+    CategoryMoveUpView,
     CategoryUpdateView,
 )
 
@@ -46,5 +48,15 @@ urlpatterns = [
         "category/<pk>/delete/",
         CategoryDeleteView.as_view(),
         name="delete",
+    ),
+    path(
+        "category/<pk>/move/down/",
+        CategoryMoveDownView.as_view(),
+        name="move_down",
+    ),
+    path(
+        "category/<pk>/move/up/",
+        CategoryMoveUpView.as_view(),
+        name="move_up",
     ),
 ]

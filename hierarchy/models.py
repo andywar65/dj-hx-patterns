@@ -49,6 +49,22 @@ class Category(TreeNode):
         except Category.DoesNotExist:
             return None
 
+    def move_down(self):
+        next = self.get_next_sibling()
+        if next:
+            self.position += 1
+            self.save()
+            next.position -= 1
+            next.save()
+
+    def move_up(self):
+        prev = self.get_previous_sibling()
+        if prev:
+            self.position -= 1
+            self.save()
+            prev.position += 1
+            prev.save()
+
 
 def get_position_by_parent(parent):
     if not parent:

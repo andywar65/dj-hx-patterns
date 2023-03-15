@@ -21,9 +21,9 @@
     <form id="checked-rows">
       <tbody id="row-list">
         {% for row in object_list %}
-          <div id="row-{{ row.id }}">
+          <tr id="row-{{ row.id }}">
             {% include "bulktable/htmx/detail.html" %}
-          </div>
+          </tr>
         {% endfor %}
       </tbody>
     </form>

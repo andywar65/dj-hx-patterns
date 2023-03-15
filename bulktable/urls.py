@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .views import RowListRefreshView, RowListView
+from .views import RowCreateView, RowListRefreshView, RowListView
 
-# RowAddButtonView,; RowCreateView,; RowDeleteView,; RowDetailView,; RowUpdateView,
+# RowAddButtonView,; ; RowDeleteView,; RowDetailView,; RowUpdateView,
 
 app_name = "bulktable"
 urlpatterns = [
@@ -15,5 +15,10 @@ urlpatterns = [
         "refresh/",
         RowListRefreshView.as_view(),
         name="list_refresh",
+    ),
+    path(
+        "row/create/",
+        RowCreateView.as_view(),
+        name="create",
     ),
 ]

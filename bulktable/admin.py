@@ -1,3 +1,8 @@
-from django.contrib import admin  # noqa
+from django.contrib import admin
 
-# Register your models here.
+from .models import Row
+
+
+@admin.register(Row)
+class RowAdmin(admin.ModelAdmin):
+    list_display = ("title", "color")

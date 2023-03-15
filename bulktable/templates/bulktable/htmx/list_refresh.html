@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<div class="row mb-3">
+  <div id="add-button" class="col">
+    {% include "bulktable/htmx/add_button.html" %}
+  </div>
+  <div id="update-button" class="col">
+    {% include "bulktable/htmx/update_button.html" %}
+  </div>
+</div>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">{% trans "Title" %}</th>
+      <th scope="col">{% trans "Color" %}</th>
+      <th scope="col">{% trans "Select" %}</th>
+    </tr>
+  </thead>
+  {% if object_list %}
+    <form id="checked-rows">
+      <tbody id="row-list">
+        {% for row in object_list %}
+          <div id="row-{{ row.id }}">
+            {% include "bulktable/htmx/detail.html" %}
+          </div>
+        {% endfor %}
+      </tbody>
+    </form>
+  {% else %}
+    <p>{% trans "No rows yet" %}</p>
+  {% endif %}
+</table>

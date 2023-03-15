@@ -1,0 +1,18 @@
+{% load i18n %}
+
+<div class="card mx-auto" style="max-width: 960px">
+  <div class="card-header">
+    <h3>{% translate 'Rows' %}</h3>
+  </div>
+  <div {% if page_obj.number %}
+         hx-get="{% url 'bulktable:list_refresh' %}?page={{ page_obj.number }}"
+       {% else %}
+         hx-get="{% url 'bulktable:list_refresh' %}"
+       {% endif %}
+       hx-target="#list-refresh"
+       hx-trigger="refreshList from:body">
+  </div>
+  <div class="card-body" id="list-refresh">
+    {% include "bulktable/htmx/list_refresh.html" %}
+  </div>
+</div>

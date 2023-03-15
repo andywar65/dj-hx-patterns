@@ -1,0 +1,35 @@
+{% load bootstrap5 %}
+{% load i18n %}
+
+<div class="card" style="margin-bottom: 15px">
+  <div class="card-body">
+    <form
+      hx-include="#checked-rowss"
+      hx-post="#"
+      hx-target="#list_refresh">
+      {% bootstrap_form form %}
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-primary" type="submit">
+            {% trans "Update" %}
+            <span class="htmx-indicator spinner-border spinner-border-sm"></span>
+          </button>
+          <button class="btn btn-close"
+                  hx-get="#"
+                  hx-target="#update-button"
+                  title="{% trans 'Dismiss' %}">
+          </button>
+        </div>
+        <div class="col text-end">
+          <button class="btn btn-danger"
+                  type="submit"
+                  name="delete_tasks"
+                  title="{% trans 'Delete' %}"
+                  hx-confirm="{% trans 'Are you sure you want to delete the checked rows?' %}">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

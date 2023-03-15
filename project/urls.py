@@ -25,4 +25,5 @@ urlpatterns = [
     path("", BaseTemplateView.as_view(), name="base"),
     path(_("box-list/"), include("boxlist.urls", namespace="boxlist")),
     path(_("hierarchy/"), include("hierarchy.urls", namespace="hierarchy")),
+    path(_("bulk-table/"), include("bulktable.urls", namespace="bulktable")),
 ]

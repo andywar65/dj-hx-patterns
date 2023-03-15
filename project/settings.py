@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # local
     "boxlist.apps.BoxlistConfig",
     "hierarchy.apps.HierarchyConfig",
+    "bulktable.apps.BulktableConfig",
 ]
 
 MIDDLEWARE = [

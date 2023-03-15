@@ -4,7 +4,7 @@
 <div class="card">
   <form
     hx-post="{% url 'bulktable:create' %}"
-    hx-target="#list-refresh">
+    hx-target="#add-button">
     <div class="card-body">
       {% bootstrap_form form %}
       <button class="btn btn-success" type="submit">

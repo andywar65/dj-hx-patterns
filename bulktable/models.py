@@ -4,11 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 class Row(models.Model):
     COLOR = [
-        ("#000000", _("White")),
+        ("#FFFFFF", _("White")),
         ("#FF0000", _("Red")),
         ("#00FF00", _("Green")),
         ("#0000FF", _("Blue")),
-        ("#00FFFF", _("Yellow")),
+        ("#FFFF00", _("Yellow")),
     ]
 
     title = models.CharField(
@@ -18,7 +18,7 @@ class Row(models.Model):
     color = models.CharField(
         max_length=7,
         choices=COLOR,
-        default="#000000",
+        default="#FFFFFF",
     )
 
     class Meta:

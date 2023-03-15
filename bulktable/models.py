@@ -18,7 +18,6 @@ class Row(models.Model):
     color = models.CharField(
         max_length=7,
         choices=COLOR,
-        default="#FFFFFF",
     )
 
     class Meta:

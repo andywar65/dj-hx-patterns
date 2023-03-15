@@ -4,9 +4,9 @@
 <div class="card" style="margin-bottom: 15px">
   <div class="card-body">
     <form
-      hx-include="#checked-rowss"
-      hx-post="#"
-      hx-target="#list_refresh">
+      hx-include="#checked-rows"
+      hx-post="{% url 'bulktable:update' %}"
+      hx-target="#update-button">
       {% bootstrap_form form %}
       <div class="row">
         <div class="col">
@@ -15,7 +15,7 @@
             <span class="htmx-indicator spinner-border spinner-border-sm"></span>
           </button>
           <button class="btn btn-close"
-                  hx-get="#"
+                  hx-get="{% url 'bulktable:update_button' %}"
                   hx-target="#update-button"
                   title="{% trans 'Dismiss' %}">
           </button>
@@ -23,7 +23,7 @@
         <div class="col text-end">
           <button class="btn btn-danger"
                   type="submit"
-                  name="delete_tasks"
+                  name="delete_rows"
                   title="{% trans 'Delete' %}"
                   hx-confirm="{% trans 'Are you sure you want to delete the checked rows?' %}">
             <i class="fa fa-times"></i>

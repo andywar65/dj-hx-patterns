@@ -1,6 +1,13 @@
 from django.urls import path
 
-from .views import RowAddButtonView, RowCreateView, RowListRefreshView, RowListView
+from .views import (
+    RowAddButtonView,
+    RowCreateView,
+    RowListRefreshView,
+    RowListView,
+    RowUpdateButtonView,
+    RowUpdateView,
+)
 
 # ; ; RowDeleteView,; RowDetailView,; RowUpdateView,
 
@@ -25,5 +32,15 @@ urlpatterns = [
         "row/add/button/",
         RowAddButtonView.as_view(),
         name="add_button",
+    ),
+    path(
+        "row/update/",
+        RowUpdateView.as_view(),
+        name="update",
+    ),
+    path(
+        "row/update/button/",
+        RowUpdateButtonView.as_view(),
+        name="update_button",
     ),
 ]

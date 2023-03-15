@@ -1,13 +1,13 @@
 # from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, TemplateView
 
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
 from .forms import RowCreateForm
 from .models import Row
 
-# ; DetailView,; RedirectView,; TemplateView,; UpdateView,
+# ; DetailView,; RedirectView,; T,; UpdateView,
 
 
 class RowListView(HxPageTemplateMixin, ListView):
@@ -27,3 +27,7 @@ class RowCreateView(HxOnlyTemplateMixin, CreateView):
 
     def get_success_url(self):
         return reverse("bulktable:list_refresh")
+
+
+class RowAddButtonView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "bulktable/htmx/add_button.html"

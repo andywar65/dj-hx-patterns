@@ -6,8 +6,8 @@
 <td>
   {{ row.title }}
 </td>
-<td>
-  {{ row.color }}
+<td style="background-color: {{ row.color }}">
+  {{ row.get_color_display }}
 </td>
 <td>
   <input type='checkbox' name='ids' value='{{ row.id }}'>

@@ -1,5 +1,14 @@
 {% load i18n %}
 
+<div {% if page_obj.number %}
+       hx-get="{% url 'bulktable:list' %}?page={{ page_obj.number }}"
+     {% else %}
+       hx-get="{% url 'bulktable:list' %}"
+     {% endif %}
+     hx-trigger="refreshList from:body"
+     hx-target="#content"
+     hx-push-url="true">
+</div>
 <div class="card mx-auto" style="max-width: 960px">
   <div class="card-header">
     <h3>{% translate 'Rows' %}</h3>
@@ -13,16 +22,7 @@
         {% include "bulktable/htmx/update_button.html" %}
       </div>
     </div>
-    <div {% if page_obj.number %}
-           hx-get="{% url 'bulktable:list' %}?page={{ page_obj.number }}"
-         {% else %}
-           hx-get="{% url 'bulktable:list' %}"
-         {% endif %}
-         hx-trigger="refreshList from:body"
-         hx-target="#content"
-         hx-push-url="true">
-      {% include "bulktable/htmx/list_refresh.html" %}
-    </div>
+    {% include "bulktable/htmx/list_refresh.html" %}
   </div>
   {% if page_obj.has_previous or page_obj.has_next %}
     <div class="card-footer">
@@ -32,7 +32,8 @@
             <a class="link-primary"
                hx-get="{% url 'bulktable:list' %}?page={{ page_obj.previous_page_number }}"
                hx-target="#content"
-               hx-push-url="true">
+               hx-push-url="true"
+               title="{% trans 'Previous rows' %}">
               <i class="fa fa-arrow-left"></i>
             </a>
           {% endif %}
@@ -42,7 +43,8 @@
             <a class="link-primary"
                hx-get="{% url 'bulktable:list' %}?page={{ page_obj.next_page_number }}"
                hx-target="#content"
-               hx-push-url="true">
+               hx-push-url="true"
+               title="{% trans 'Next rows' %}">
               <i class="fa fa-arrow-right"></i>
             </a>
           {% endif %}

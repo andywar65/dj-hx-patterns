@@ -41,7 +41,7 @@ def create_categories():
     if last:
         start = last.position + 1
     else:
-        start = 1
+        start = 0
     for i in range(start, start + 4, 1):
         CategoryFactory.create(position=i)
 

@@ -4,15 +4,22 @@
   <div class="card-header">
     <h3>{% translate 'Rows' %}</h3>
   </div>
-  <div {% if page_obj.number %}
-         hx-get="{% url 'bulktable:list_refresh' %}?page={{ page_obj.number }}"
-       {% else %}
-         hx-get="{% url 'bulktable:list_refresh' %}"
-       {% endif %}
-       hx-target="#list-refresh"
-       hx-trigger="refreshList from:body">
-  </div>
-  <div class="card-body" id="list-refresh">
-    {% include "bulktable/htmx/list_refresh.html" %}
+  <div class="card-body">
+    <div class="row mb-3">
+      <div id="add-button" class="col">
+        {% include "bulktable/htmx/add_button.html" %}
+      </div>
+      <div id="update-button" class="col">
+        {% include "bulktable/htmx/update_button.html" %}
+      </div>
+    </div>
+    <div {% if page_obj.number %}
+           hx-get="{% url 'bulktable:list_refresh' %}?page={{ page_obj.number }}"
+         {% else %}
+           hx-get="{% url 'bulktable:list_refresh' %}"
+         {% endif %}
+         hx-trigger="refreshList from:body">
+      {% include "bulktable/htmx/list_refresh.html" %}
+    </div>
   </div>
 </div>

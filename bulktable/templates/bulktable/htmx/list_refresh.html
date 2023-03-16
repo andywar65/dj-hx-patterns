@@ -1,14 +1,6 @@
 {% load i18n %}
 {% load bootstrap5 %}
 
-<div class="row mb-3">
-  <div id="add-button" class="col">
-    {% include "bulktable/htmx/add_button.html" %}
-  </div>
-  <div id="update-button" class="col">
-    {% include "bulktable/htmx/update_button.html" %}
-  </div>
-</div>
 {% bootstrap_messages %}
 <table class="table table-hover">
   <thead>

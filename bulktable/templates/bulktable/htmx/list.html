@@ -22,4 +22,30 @@
       {% include "bulktable/htmx/list_refresh.html" %}
     </div>
   </div>
+  {% if page_obj.has_previous or page_obj.has_next %}
+    <div class="card-footer">
+      <div class="row">
+        <div class="col">
+          {% if page_obj.has_previous %}
+            <a class="link-primary"
+               hx-get="{% url 'bulktable:list' %}?page={{ page_obj.previous_page_number }}"
+               hx-target="#content"
+               hx-push-url="true">
+              <i class="fa fa-arrow-left"></i>
+            </a>
+          {% endif %}
+        </div>
+        <div class="col text-end">
+          {% if page_obj.has_next %}
+            <a class="link-primary"
+               hx-get="{% url 'bulktable:list' %}?page={{ page_obj.next_page_number }}"
+               hx-target="#content"
+               hx-push-url="true">
+              <i class="fa fa-arrow-right"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
 </div>

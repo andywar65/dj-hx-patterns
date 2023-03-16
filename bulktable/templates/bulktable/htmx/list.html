@@ -14,11 +14,13 @@
       </div>
     </div>
     <div {% if page_obj.number %}
-           hx-get="{% url 'bulktable:list_refresh' %}?page={{ page_obj.number }}"
+           hx-get="{% url 'bulktable:list' %}?page={{ page_obj.number }}"
          {% else %}
-           hx-get="{% url 'bulktable:list_refresh' %}"
+           hx-get="{% url 'bulktable:list' %}"
          {% endif %}
-         hx-trigger="refreshList from:body">
+         hx-trigger="refreshList from:body"
+         hx-target="#content"
+         hx-push-url="true">
       {% include "bulktable/htmx/list_refresh.html" %}
     </div>
   </div>

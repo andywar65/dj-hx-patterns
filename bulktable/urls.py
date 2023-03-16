@@ -3,13 +3,14 @@ from django.urls import path
 from .views import (
     RowAddButtonView,
     RowCreateView,
+    RowDeleteView,
     RowListRefreshView,
     RowListView,
     RowUpdateButtonView,
     RowUpdateView,
 )
 
-# ; ; RowDeleteView,; RowDetailView,; RowUpdateView,
+# ; ; ,; RowDetailView,; RowUpdateView,
 
 app_name = "bulktable"
 urlpatterns = [
@@ -42,5 +43,10 @@ urlpatterns = [
         "row/update/button/",
         RowUpdateButtonView.as_view(),
         name="update_button",
+    ),
+    path(
+        "row/delete/",
+        RowDeleteView.as_view(),
+        name="delete",
     ),
 ]

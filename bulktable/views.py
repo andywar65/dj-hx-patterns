@@ -54,31 +54,44 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
     def form_valid(self, form):
         if "ids" in self.request.POST:
             updated = 0
-            deleted = 0
             id_list = self.request.POST.getlist("ids")
             title = form.cleaned_data["title"]
             color = form.cleaned_data["color"]
             for row in Row.objects.filter(id__in=id_list):
-                if "delete_rows" in self.request.POST:
-                    row.delete()
-                    deleted += 1
-                else:
-                    if title:
-                        row.title = title
-                    if color:
-                        row.color = color
-                    if title or color:
-                        row.save()
-                        updated += 1
+                if title:
+                    row.title = title
+                if color:
+                    row.color = color
+                if title or color:
+                    row.save()
+                    updated += 1
             messages.success(
                 self.request,
-                _("Updated %(updated)s row(s). Deleted %(deleted)s row(s).")
-                % {"updated": str(updated), "deleted": str(deleted)},
+                _("Updated %(updated)s row(s).") % {"updated": str(updated)},
             )
         return super(RowUpdateView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse("bulktable:update_button") + "?refresh=true"
+
+
+class RowDeleteView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "bulktable/htmx/update_button.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if "ids" in self.request.GET:
+            deleted = 0
+            id_list = self.request.GET.getlist("ids")
+            for row in Row.objects.filter(id__in=id_list):
+                row.delete()
+                deleted += 1
+            messages.error(
+                self.request,
+                _("Deleted %(deleted)s row(s).") % {"deleted": str(deleted)},
+            )
+        response = super(RowDeleteView, self).dispatch(request, *args, **kwargs)
+        response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
 
 
 class RowUpdateButtonView(HxOnlyTemplateMixin, TemplateView):

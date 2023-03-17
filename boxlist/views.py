@@ -74,7 +74,7 @@ class ItemMoveDownView(HxOnlyTemplateMixin, RedirectView):
         item.move_down()
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("boxlist:list_refresh")
+        return reverse("boxlist:list")
 
 
 class ItemMoveUpView(HxOnlyTemplateMixin, RedirectView):
@@ -84,4 +84,4 @@ class ItemMoveUpView(HxOnlyTemplateMixin, RedirectView):
         item.move_up()
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("boxlist:list_refresh")
+        return reverse("boxlist:list")

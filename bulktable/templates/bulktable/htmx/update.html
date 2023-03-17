@@ -24,7 +24,8 @@
           <button class="btn btn-danger"
                   hx-include="#checked-rows"
                   hx-get="{% url 'bulktable:delete' %}"
-                  hx-target="#update-button"
+                  hx-target="#content"
+                  hx-push-url="true"
                   title="{% trans 'Delete' %}"
                   hx-confirm="{% trans 'Are you sure you want to delete the checked rows?' %}">
             <i class="fa fa-times"></i>

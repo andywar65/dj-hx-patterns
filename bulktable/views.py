@@ -3,7 +3,13 @@ from django.contrib import messages
 # from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, FormView, ListView, TemplateView
+from django.views.generic import (
+    CreateView,
+    FormView,
+    ListView,
+    RedirectView,
+    TemplateView,
+)
 
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
@@ -72,15 +78,12 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
         return super(RowUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        if "page" in self.request.POST:
-            return reverse("bulktable:list") + f"?page={self.request.POST['page']}"
-        return reverse("bulktable:list")
+        return reverse("bulktable:list") + f"?page={self.request.POST['page']}"
 
 
-class RowDeleteView(HxOnlyTemplateMixin, TemplateView):
-    template_name = "bulktable/htmx/update_button.html"
-
-    def dispatch(self, request, *args, **kwargs):
+class RowDeleteView(HxOnlyTemplateMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        # control if we actually have rows and delete them
         if "ids" in self.request.GET:
             deleted = 0
             id_list = self.request.GET.getlist("ids")
@@ -91,16 +94,17 @@ class RowDeleteView(HxOnlyTemplateMixin, TemplateView):
                 self.request,
                 _("Deleted %(deleted)s row(s).") % {"deleted": str(deleted)},
             )
-        response = super(RowDeleteView, self).dispatch(request, *args, **kwargs)
-        response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
+            # control if we deleted all rows in the page
+            if len(id_list) == int(self.request.GET["number"]):
+                # control if it's not the first page (that may be left empty)
+                if int(self.request.GET["page"]) > 1:
+                    # go to previous page
+                    return (
+                        reverse("bulktable:list")
+                        + f"?page={int(self.request.GET['page']) - 1}"
+                    )
+        return reverse("bulktable:list") + f"?page={self.request.GET['page']}"
 
 
 class RowUpdateButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "bulktable/htmx/update_button.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super(RowUpdateButtonView, self).dispatch(request, *args, **kwargs)
-        if "refresh" in request.GET:
-            response["HX-Trigger-After-Swap"] = "refreshList"
-        return response

@@ -35,7 +35,7 @@ class ItemCreateView(HxOnlyTemplateMixin, CreateView):
         return super(ItemCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("boxlist:list_refresh")
+        return reverse("boxlist:list")
 
 
 class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):

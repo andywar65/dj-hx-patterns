@@ -39,7 +39,7 @@ class CategoryCreateView(HxOnlyTemplateMixin, CreateView):
         return super(CategoryCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("hierarchy:list_refresh")
+        return reverse("hierarchy:list")
 
 
 class CategoryAddButtonView(HxOnlyTemplateMixin, TemplateView):

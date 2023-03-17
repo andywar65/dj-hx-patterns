@@ -1,8 +1,8 @@
 {% load i18n %}
 
 <div class="alert alert-danger"
-     hx-get="{% url 'boxlist:list_refresh' %}"
-     hx-target="#list-refresh"
+     hx-get="{% url 'boxlist:list' %}"
+     hx-target="#content"
      hx-trigger="load delay:1s">
   {% trans "Deleting..." %}<span class="spinner-border spinner-border-sm"></span>
 </div>

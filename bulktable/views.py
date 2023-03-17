@@ -16,17 +16,11 @@ from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 from .forms import RowCreateForm, RowUpdateForm
 from .models import Row
 
-# ; DetailView,; RedirectView,; T,; UpdateView,
-
 
 class RowListView(HxPageTemplateMixin, ListView):
     model = Row
     paginate_by = 10
     template_name = "bulktable/htmx/list.html"
-
-
-class RowListRefreshView(RowListView, HxOnlyTemplateMixin):
-    template_name = "bulktable/htmx/list_refresh.html"
 
 
 class RowCreateView(HxOnlyTemplateMixin, CreateView):

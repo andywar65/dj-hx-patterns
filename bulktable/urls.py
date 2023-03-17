@@ -4,13 +4,10 @@ from .views import (
     RowAddButtonView,
     RowCreateView,
     RowDeleteView,
-    RowListRefreshView,
     RowListView,
     RowUpdateButtonView,
     RowUpdateView,
 )
-
-# ; ; ,; RowDetailView,; RowUpdateView,
 
 app_name = "bulktable"
 urlpatterns = [
@@ -18,11 +15,6 @@ urlpatterns = [
         "",
         RowListView.as_view(),
         name="list",
-    ),
-    path(
-        "refresh/",
-        RowListRefreshView.as_view(),
-        name="list_refresh",
     ),
     path(
         "row/create/",

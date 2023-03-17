@@ -72,7 +72,9 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
         return super(RowUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("bulktable:update_button") + "?refresh=true"
+        if "page" in self.request.POST:
+            return reverse("bulktable:list") + f"?page={self.request.POST['page']}"
+        return reverse("bulktable:list")
 
 
 class RowDeleteView(HxOnlyTemplateMixin, TemplateView):

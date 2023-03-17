@@ -22,7 +22,7 @@
         {% include "bulktable/htmx/update_button.html" %}
       </div>
     </div>
-    {% include "bulktable/htmx/list_refresh.html" %}
+    {% include "bulktable/htmx/list_loop.html" %}
   </div>
   {% if page_obj.has_previous or page_obj.has_next %}
     <div class="card-footer">

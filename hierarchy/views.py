@@ -104,7 +104,7 @@ class CategoryMoveDownView(HxOnlyTemplateMixin, RedirectView):
         category.move_down()
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("hierarchy:list_refresh")
+        return reverse("hierarchy:list")
 
 
 class CategoryMoveUpView(HxOnlyTemplateMixin, RedirectView):
@@ -114,4 +114,4 @@ class CategoryMoveUpView(HxOnlyTemplateMixin, RedirectView):
         category.move_up()
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("hierarchy:list_refresh")
+        return reverse("hierarchy:list")

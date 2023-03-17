@@ -4,11 +4,18 @@
   <div class="card-header">
     <h3>{% translate 'Item list' %}</h3>
   </div>
-  <div hx-get="#"
-       hx-target="#list-refresh"
-       hx-trigger="refreshList from:body">
-  </div>
-  <div class="card-body" id="list-refresh">
-    {% include "boxlist/htmx/list_refresh.html" %}
+  <div class="card-body">
+    <div id="add-button" class="mb-3">
+      {% include "boxlist/htmx/add_button.html" %}
+    </div>
+    {% if object_list %}
+      {% for item in object_list %}
+        <div id="item-{{ item.id }}">
+          {% include "boxlist/htmx/detail.html" %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>{% trans "No items yet" %}</p>
+    {% endif %}
   </div>
 </div>

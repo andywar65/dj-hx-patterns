@@ -20,10 +20,6 @@ class ItemListView(HxPageTemplateMixin, ListView):
     template_name = "boxlist/htmx/list.html"
 
 
-class ItemListRefreshView(ItemListView, HxOnlyTemplateMixin):
-    template_name = "boxlist/htmx/list_refresh.html"
-
-
 class ItemCreateView(HxOnlyTemplateMixin, CreateView):
     model = Item
     form_class = ItemCreateForm

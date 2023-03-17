@@ -5,7 +5,6 @@ from .views import (
     ItemCreateView,
     ItemDeleteView,
     ItemDetailView,
-    ItemListRefreshView,
     ItemListView,
     ItemMoveDownView,
     ItemMoveUpView,
@@ -18,11 +17,6 @@ urlpatterns = [
         "",
         ItemListView.as_view(),
         name="list",
-    ),
-    path(
-        "refresh/",
-        ItemListRefreshView.as_view(),
-        name="list_refresh",
     ),
     path(
         "item/create/",

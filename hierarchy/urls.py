@@ -5,7 +5,6 @@ from .views import (
     CategoryCreateView,
     CategoryDeleteView,
     CategoryDetailView,
-    CategoryListRefreshView,
     CategoryListView,
     CategoryMoveDownView,
     CategoryMoveUpView,
@@ -18,11 +17,6 @@ urlpatterns = [
         "",
         CategoryListView.as_view(),
         name="list",
-    ),
-    path(
-        "refresh/",
-        CategoryListRefreshView.as_view(),
-        name="list_refresh",
     ),
     path(
         "category/create/",

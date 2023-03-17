@@ -25,10 +25,6 @@ class CategoryListView(HxPageTemplateMixin, ListView):
         return context
 
 
-class CategoryListRefreshView(CategoryListView, HxOnlyTemplateMixin):
-    template_name = "hierarchy/htmx/list_refresh.html"
-
-
 class CategoryCreateView(HxOnlyTemplateMixin, CreateView):
     model = Category
     form_class = CategoryCreateForm

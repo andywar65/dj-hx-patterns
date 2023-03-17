@@ -20,6 +20,8 @@
           </tr>
         {% endfor %}
       </tbody>
+      <input type="hidden" name="page" value="{{ page_obj.number }}" />
+      <input type="hidden" name="number" value="{{ page_obj.object_list.count }}" />
     </form>
   {% else %}
     <p>{% trans "No rows yet" %}</p>

@@ -11,9 +11,9 @@ All views are `Class Based` (this is not mainstream). I have a pair of `HTMX  Mi
 ## Apps
 ### Box list
 Most simple. Add items to a list, modify them inline, change their position. Suitable for related objects.
-### Hierarchy
-Like previous, but you build trees instead of lists. Based on fabulous lightweight [django-tree-queries](https://django-tree-queries.readthedocs.io/en/latest/).
 ### Bulk table
 Long list with pagination. Modify or delete in bulk.
+### Hierarchy
+Like previous, but you build trees instead of lists. Based on fabulous lightweight [django-tree-queries](https://django-tree-queries.readthedocs.io/en/latest/).
 ## TODO
-Tests
+Tests, Timeline app.

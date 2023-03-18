@@ -32,18 +32,18 @@
             </li>
             <li>
               <a class="link-primary"
-                 hx-get="{% url 'hierarchy:list' %}"
-                 hx-target="#content"
-                 hx-push-url="true">
-                {% trans "Hierarchy" %}
-              </a>
-            </li>
-            <li>
-              <a class="link-primary"
                  hx-get="{% url 'bulktable:list' %}"
                  hx-target="#content"
                  hx-push-url="true">
                 {% trans "Bulk table" %}
+              </a>
+            </li>
+            <li>
+              <a class="link-primary"
+                 hx-get="{% url 'hierarchy:list' %}"
+                 hx-target="#content"
+                 hx-push-url="true">
+                {% trans "Hierarchy" %}
               </a>
             </li>
           </ul>

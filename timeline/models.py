@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from tree_queries.models import TreeNode
 
@@ -29,8 +30,8 @@ class Phase(TreeNode):
     )
     position = models.PositiveIntegerField(default=0)
     start = models.DateField(null=True, blank=True)
-    duration = models.PositiveIntegerField(default=1)
-    delay = models.IntegerField(default=0)
+    duration = models.PositiveIntegerField(default=1, help_text=_("In weeks"))
+    delay = models.IntegerField(default=0, help_text=_("In weeks"))
 
     class Meta:
         verbose_name = _("Phase")
@@ -39,3 +40,12 @@ class Phase(TreeNode):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.parent and not self.start:
+            self.start = now()
+        # import datetime
+        # datetime.date(2010, 6, 16).isocalendar().week
+        if self.start:
+            self.delay = 0
+        super(Phase, self).save(*args, **kwargs)

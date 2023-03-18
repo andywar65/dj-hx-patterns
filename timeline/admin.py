@@ -1,3 +1,10 @@
-from django.contrib import admin  # noqa
+from django.contrib import admin
 
-# Register your models here.
+from .models import Phase
+
+
+@admin.register(Phase)
+class PhaseAdmin(admin.ModelAdmin):
+    list_display = ("title", "parent", "position")
+    list_filter = ("parent",)
+    list_editable = ("position",)

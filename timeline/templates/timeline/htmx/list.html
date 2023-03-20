@@ -1,0 +1,13 @@
+{% load i18n %}
+
+{% if object_list %}
+  <ul>
+    {% for phase in object_list %}
+      <li>
+        {{ phase }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>{% trans "No phases yet" %}</p>
+{% endif %}

@@ -46,6 +46,14 @@
                 {% trans "Hierarchy" %}
               </a>
             </li>
+            <li>
+              <a class="link-primary"
+                 hx-get="{% url 'timeline:list' %}"
+                 hx-target="#content"
+                 hx-push-url="true">
+                {% trans "Timeline" %}
+              </a>
+            </li>
           </ul>
         {% endblock content %}
       </div>

@@ -1,13 +1,29 @@
 {% load i18n %}
 
-{% if object_list %}
-  <ul>
-    {% for phase in object_list %}
-      <li>
-        {{ phase }}
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>{% trans "No phases yet" %}</p>
-{% endif %}
+<table class="table table-hover">
+  <thead class="table-dark" style="position: sticky; top: 0; z-index: 1">
+    <tr>
+      <th scope="col">{% trans "Add phase" %}</th>
+      <th scope="col">{% trans "Year" %}</th>
+    </tr>
+    <tr>
+      <th scope="col">{% trans "Title" %}</th>
+      <th scope="col">{% trans "Months" %}</th>
+    </tr>
+  </thead>
+  {% if object_list %}
+    <tbody>
+      {% for phase in object_list %}
+        <tr id="phase-{{ phase.id }}">
+          <td>
+            {{ phase }}
+          </td>
+          <td>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  {% else %}
+    <p>{% trans "No phases yet" %}</p>
+  {% endif %}
+</table>

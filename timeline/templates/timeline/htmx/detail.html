@@ -1,5 +1,10 @@
 <td>
-  {{ phase.get_punctuated_index }} - {{ phase }}
+  {{ phase.get_punctuated_index }} -
+  <a class="link-primary"
+     hx-get="{% url 'timeline:update' pk=phase.id %}"
+     hx-target="#phase-{{ phase.id }}">
+    {{ phase }}
+  </a>
 </td>
 <td>
 </td>

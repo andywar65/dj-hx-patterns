@@ -23,7 +23,7 @@
       {% for phase in object_list %}
         <tr>
           <td id="phase-{{ phase.id }}">
-            {{ phase }}
+            {{ phase.get_punctuated_index }} - {{ phase }}
           </td>
           <td>
           </td>

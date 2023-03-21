@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.urls import reverse
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, TemplateView
 
@@ -16,6 +17,7 @@ class PhaseListView(HxPageTemplateMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PhaseListView, self).get_context_data()
         context["object_list"] = context["object_list"].with_tree_fields()
+        context["year"] = now().year
         return context
 
 
@@ -26,7 +28,7 @@ class PhaseCreateView(HxOnlyTemplateMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.position = get_position_by_parent(form.instance.parent)
-        report = _("Added phase with title: ") + form.instance.title
+        report = _("Added phase '%(title)s'") % {"title": form.instance.title}
         messages.success(self.request, report)
         return super(PhaseCreateView, self).form_valid(form)
 

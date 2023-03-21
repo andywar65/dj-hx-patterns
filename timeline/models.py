@@ -49,3 +49,9 @@ class Phase(TreeNode):
         if self.start:
             self.delay = 0
         super(Phase, self).save(*args, **kwargs)
+
+
+def get_position_by_parent(parent):
+    if not parent:
+        return Phase.objects.filter(parent_id=None).count()
+    return parent.children.count()

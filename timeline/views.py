@@ -6,7 +6,7 @@ from django.views.generic import CreateView, ListView, TemplateView
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
 from .forms import PhaseCreateForm
-from .models import Phase
+from .models import Phase, get_position_by_parent
 
 
 class PhaseListView(HxPageTemplateMixin, ListView):
@@ -25,6 +25,7 @@ class PhaseCreateView(HxOnlyTemplateMixin, CreateView):
     template_name = "timeline/htmx/create.html"
 
     def form_valid(self, form):
+        form.instance.position = get_position_by_parent(form.instance.parent)
         report = _("Added phase with title: ") + form.instance.title
         messages.success(self.request, report)
         return super(PhaseCreateView, self).form_valid(form)

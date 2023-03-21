@@ -1,10 +1,32 @@
+{% load i18n %}
+
 <td>
-  {{ phase.get_punctuated_index }} -
-  <a class="link-primary"
-     hx-get="{% url 'timeline:update' pk=phase.id %}"
-     hx-target="#phase-{{ phase.id }}">
-    {{ phase }}
-  </a>
+  <div class="row">
+    <div class="col col-8">
+      {{ phase.get_punctuated_index }} -
+      <a class="link-primary"
+         hx-get="{% url 'timeline:update' pk=phase.id %}"
+         hx-target="#phase-{{ phase.id }}">
+        {{ phase }}
+      </a>
+    </div>
+    <div class="col text-end">
+      {% if phase.get_previous_sibling %}
+        <a class="link-primary"
+           title="{% trans 'Move up' %}"
+           hx-get="{% url 'timeline:move_up' pk=phase.id %}"
+           hx-target="#content">
+          <i class="fa fa-arrow-up"></i></a>
+      {% endif %}
+      {% if phase.get_next_sibling %}
+        <a class="link-primary"
+           title="{% trans 'Move down' %}"
+           hx-get="{% url 'timeline:move_down' pk=phase.id %}"
+           hx-target="#content">
+          <i class="fa fa-arrow-down"></i></a>
+      {% endif %}
+    </div>
+  </div>
 </td>
 <td>
 </td>

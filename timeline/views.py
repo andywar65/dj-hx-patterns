@@ -7,6 +7,7 @@ from django.views.generic import (
     CreateView,
     DetailView,
     ListView,
+    RedirectView,
     TemplateView,
     UpdateView,
 )
@@ -102,3 +103,23 @@ class PhaseDeleteView(HxOnlyTemplateMixin, TemplateView):
         phase = get_object_or_404(Phase, id=self.kwargs["pk"])
         move_younger_siblings(phase.parent, phase.position)
         phase.delete()
+
+
+class PhaseMoveDownView(HxOnlyTemplateMixin, RedirectView):
+    def setup(self, request, *args, **kwargs):
+        super(PhaseMoveDownView, self).setup(request, *args, **kwargs)
+        phase = get_object_or_404(Phase, id=self.kwargs["pk"])
+        phase.move_down()
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("timeline:list")
+
+
+class PhaseMoveUpView(HxOnlyTemplateMixin, RedirectView):
+    def setup(self, request, *args, **kwargs):
+        super(PhaseMoveUpView, self).setup(request, *args, **kwargs)
+        phase = get_object_or_404(Phase, id=self.kwargs["pk"])
+        phase.move_up()
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("timeline:list")

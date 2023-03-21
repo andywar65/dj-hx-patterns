@@ -6,6 +6,8 @@ from .views import (
     PhaseDeleteView,
     PhaseDetailView,
     PhaseListView,
+    PhaseMoveDownView,
+    PhaseMoveUpView,
     PhaseUpdateView,
 )
 
@@ -40,5 +42,15 @@ urlpatterns = [
         "phase/<pk>/delete/",
         PhaseDeleteView.as_view(),
         name="delete",
+    ),
+    path(
+        "phase/<pk>/move/down/",
+        PhaseMoveDownView.as_view(),
+        name="move_down",
+    ),
+    path(
+        "phase/<pk>/move/up/",
+        PhaseMoveUpView.as_view(),
+        name="move_up",
     ),
 ]

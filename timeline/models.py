@@ -47,6 +47,47 @@ class Phase(TreeNode):
         str_list = list(map(str, int_list))
         return ".".join(str_list)
 
+    def get_parent_id(self):
+        if not self.parent:
+            return None
+        return self.parent.id
+
+    def get_next_sibling(self):
+        try:
+            next = Phase.objects.get(
+                parent_id=self.get_parent_id(), position=self.position + 1
+            )
+            return next
+        except Phase.DoesNotExist:
+            return None
+
+    def get_previous_sibling(self):
+        if self.position == 0:
+            return None
+        try:
+            prev = Phase.objects.get(
+                parent_id=self.get_parent_id(), position=self.position - 1
+            )
+            return prev
+        except Phase.DoesNotExist:
+            return None
+
+    def move_down(self):
+        next = self.get_next_sibling()
+        if next:
+            self.position += 1
+            self.save()
+            next.position -= 1
+            next.save()
+
+    def move_up(self):
+        prev = self.get_previous_sibling()
+        if prev:
+            self.position -= 1
+            self.save()
+            prev.position += 1
+            prev.save()
+
     def save(self, *args, **kwargs):
         if not self.parent and not self.start:
             self.start = now()

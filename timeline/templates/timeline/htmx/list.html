@@ -21,12 +21,8 @@
   {% if object_list %}
     <tbody>
       {% for phase in object_list %}
-        <tr>
-          <td id="phase-{{ phase.id }}">
-            {{ phase.get_punctuated_index }} - {{ phase }}
-          </td>
-          <td>
-          </td>
+        <tr id="phase-{{ phase.id }}">
+          {% include "timeline/htmx/detail.html" %}
         </tr>
       {% endfor %}
     </tbody>

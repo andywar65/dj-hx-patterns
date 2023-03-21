@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -91,3 +92,13 @@ class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
                 + "?refresh=true"
             )
         return reverse("timeline:detail", kwargs={"pk": self.object.id})
+
+
+class PhaseDeleteView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "timeline/htmx/delete.html"
+
+    def setup(self, request, *args, **kwargs):
+        super(PhaseDeleteView, self).setup(request, *args, **kwargs)
+        phase = get_object_or_404(Phase, id=self.kwargs["pk"])
+        move_younger_siblings(phase.parent, phase.position)
+        phase.delete()

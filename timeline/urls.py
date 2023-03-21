@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     PhaseAddButtonView,
     PhaseCreateView,
+    PhaseDeleteView,
     PhaseDetailView,
     PhaseListView,
     PhaseUpdateView,
@@ -34,5 +35,10 @@ urlpatterns = [
         "phase/<pk>/update/",
         PhaseUpdateView.as_view(),
         name="update",
+    ),
+    path(
+        "phase/<pk>/delete/",
+        PhaseDeleteView.as_view(),
+        name="delete",
     ),
 ]

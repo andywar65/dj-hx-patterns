@@ -90,22 +90,35 @@ class Phase(TreeNode):
             prev.save()
 
     def draw_bar_chart(self):
-        start = "Foo"
-        end = "Bar"
+        # duration of phase as % of table cell (52 weeks in an year)
         width = str(self.duration / 52 * 100) + "%"
+        # simple case
         if self.start:
+            # left margin as % of cell
             margin = str(self.start.isocalendar().week / 52 * 100) + "%"
+            # start and end date
             start = self.start
             end = self.start + timedelta(days=self.duration * 7)
+        # complex case
         else:
+            # get all ancestors in reverse order
             ancestors = self.ancestors().reverse()
+            # delay from parent end
             margin = self.delay
+            # walk through ancestors backwards
             for ancestor in ancestors:
+                # increment margin
                 margin += ancestor.duration
+                # stop if ancestor has a start date
                 if ancestor.start:
+                    # start and end date
+                    start = ancestor.start + timedelta(days=margin * 7)
+                    end = start + timedelta(days=self.duration * 7)
+                    # add start week to margin, then transform in % of cell
                     margin += ancestor.start.isocalendar().week
                     margin = str(margin / 52 * 100) + "%"
                     break
+                # continue if start date is not found
                 margin += ancestor.delay
         style = (
             "background-color: %(color)s; margin-left: %(margin)s; width: %(width)s"

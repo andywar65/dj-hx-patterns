@@ -9,10 +9,16 @@ from .views import (
     PhaseMoveDownView,
     PhaseMoveUpView,
     PhaseUpdateView,
+    ProjectListView,
 )
 
 app_name = "timeline"
 urlpatterns = [
+    path(
+        "project/list/",
+        ProjectListView.as_view(),
+        name="list_project",
+    ),
     path(
         "",
         PhaseListView.as_view(),

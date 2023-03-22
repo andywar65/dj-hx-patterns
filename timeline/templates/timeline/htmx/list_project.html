@@ -1,0 +1,32 @@
+{% load i18n %}
+{% load bootstrap5 %}
+
+<div hx-get="{% url 'timeline:list' %}"
+     hx-trigger="refreshList from:body"
+     hx-target="#content"
+     hx-push-url="true">
+</div>
+{% bootstrap_messages %}
+<table class="table table-hover">
+  <thead class="table-dark" style="position: sticky; top: 0; z-index: 1">
+    <tr>
+      <th scope="col" id="add-button">{% include "timeline/htmx/add_button.html" %}</th>
+      <th scope="col">{% include "timeline/htmx/year.html" %}</th>
+    </tr>
+    <tr>
+      <th scope="col">{% trans "Project title" %}</th>
+      <th scope="col">{% include "timeline/htmx/months.html" %}</th>
+    </tr>
+  </thead>
+  {% if object_list %}
+    <tbody>
+      {% for phase in object_list %}
+        <tr id="phase-{{ phase.id }}">
+          {% include "timeline/htmx/detail.html" %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  {% else %}
+    <p>{% trans "No projects yet" %}</p>
+  {% endif %}
+</table>

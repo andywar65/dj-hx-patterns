@@ -18,27 +18,13 @@ from .forms import PhaseCreateForm
 from .models import Phase, get_position_by_parent, move_younger_siblings
 
 
-class ProjectListView(HxPageTemplateMixin, ListView):
-    model = Phase
-    template_name = "timeline/htmx/list_project.html"
-
-    def get_queryset(self):
-        qs = Phase.objects.filter(parent_id=None).with_tree_fields()
-        return qs
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ProjectListView, self).get_context_data()
-        context["year"] = now().year
-        return context
-
-
 class PhaseListView(HxPageTemplateMixin, ListView):
     model = Phase
     template_name = "timeline/htmx/list.html"
 
     def get_queryset(self):
-        root = get_object_or_404(Phase, id=self.kwargs["pk"])
-        qs = root.descendants(include_self=True).with_tree_fields()
+        qs = super(PhaseListView, self).get_queryset()
+        qs = qs.with_tree_fields()
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):

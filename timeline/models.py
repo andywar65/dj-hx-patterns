@@ -88,9 +88,14 @@ class Phase(TreeNode):
             prev.save()
 
     def draw_bar_chart(self):
+        margin = "50%"
+        width = "20%"
+        if self.start:
+            margin = str(self.start.isocalendar().week / 52 * 100) + "%"
+            width = str(self.duration / 52 * 100) + "%"
         return (
             "background-color: %(color)s; margin-left: %(margin)s; width: %(width)s"
-            % {"color": self.phase_type, "margin": "50%", "width": "20%"}
+            % {"color": self.phase_type, "margin": margin, "width": width}
         )
 
     def save(self, *args, **kwargs):

@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<td>
+  {{ phase.get_punctuated_index }} -
+  <a class="link-primary"
+     hx-get="{% url 'timeline:list' pk=phase.id %}"
+     hx-target="#content">
+    {{ phase }}
+  </a>
+</td>
+<td>
+</td>

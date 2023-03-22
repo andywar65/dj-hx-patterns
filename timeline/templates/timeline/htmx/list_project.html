@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load bootstrap5 %}
 
-<div hx-get="{% url 'timeline:list' %}"
+<div hx-get="{% url 'timeline:list_project' %}"
      hx-trigger="refreshList from:body"
      hx-target="#content"
      hx-push-url="true">
@@ -11,18 +11,18 @@
   <thead class="table-dark" style="position: sticky; top: 0; z-index: 1">
     <tr>
       <th scope="col" id="add-button">{% include "timeline/htmx/add_button.html" %}</th>
-      <th scope="col">{% include "timeline/htmx/year.html" %}</th>
+      <th scope="col">{% include "timeline/htmx/year_project.html" %}</th>
     </tr>
     <tr>
       <th scope="col">{% trans "Project title" %}</th>
-      <th scope="col">{% include "timeline/htmx/months.html" %}</th>
+      <th scope="col">{% include "timeline/htmx/months_project.html" %}</th>
     </tr>
   </thead>
   {% if object_list %}
     <tbody>
       {% for phase in object_list %}
         <tr id="phase-{{ phase.id }}">
-          {% include "timeline/htmx/detail.html" %}
+          {% include "timeline/htmx/detail_project.html" %}
         </tr>
       {% endfor %}
     </tbody>

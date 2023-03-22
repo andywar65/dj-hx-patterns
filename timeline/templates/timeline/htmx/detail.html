@@ -1,12 +1,12 @@
 {% load i18n %}
 
-<td>
+<td id="phase-index-{{ phase.id }}">
   <div class="row">
     <div class="col col-8">
       {{ phase.get_punctuated_index }} -
       <a class="link-primary"
          hx-get="{% url 'timeline:update' pk=phase.id %}"
-         hx-target="#phase-{{ phase.id }}">
+         hx-target="#phase-index-{{ phase.id }}">
         {{ phase }}
       </a>
     </div>
@@ -29,4 +29,5 @@
   </div>
 </td>
 <td>
+  Display
 </td>

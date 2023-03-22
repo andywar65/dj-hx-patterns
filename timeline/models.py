@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -88,9 +90,13 @@ class Phase(TreeNode):
             prev.save()
 
     def draw_bar_chart(self):
+        start = "Foo"
+        end = "Bar"
         width = str(self.duration / 52 * 100) + "%"
         if self.start:
             margin = str(self.start.isocalendar().week / 52 * 100) + "%"
+            start = self.start
+            end = self.start + timedelta(days=self.duration * 7)
         else:
             ancestors = self.ancestors().reverse()
             margin = self.delay
@@ -101,16 +107,20 @@ class Phase(TreeNode):
                     margin = str(margin / 52 * 100) + "%"
                     break
                 margin += ancestor.delay
-        return (
+        style = (
             "background-color: %(color)s; margin-left: %(margin)s; width: %(width)s"
             % {"color": self.phase_type, "margin": margin, "width": width}
         )
+        popup = _("Type: %(type)s, start: %(start)s, end: %(end)s") % {
+            "type": self.get_phase_type_display(),
+            "start": start,
+            "end": end,
+        }
+        return style, popup
 
     def save(self, *args, **kwargs):
         if not self.parent and not self.start:
             self.start = now()
-        # import datetime
-        # datetime.date(2010, 6, 16).isocalendar().week
         if self.start:
             self.delay = 0
         super(Phase, self).save(*args, **kwargs)

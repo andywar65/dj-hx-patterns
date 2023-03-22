@@ -29,5 +29,11 @@
   </div>
 </td>
 <td>
-  <div style="{{ phase.draw_bar_chart }}">@</div>
+  {% with data=phase.draw_bar_chart %}
+    <div style="{{ data.0 }}">
+      <a href="#" title="{{ data.1 }}">
+        @
+      </a>
+    </div>
+  {% endwith %}
 </td>

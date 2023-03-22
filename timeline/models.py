@@ -6,16 +6,16 @@ from tree_queries.models import TreeNode
 
 class Phase(TreeNode):
     TYPES = [
-        ("LP0", _("Other")),
-        ("LP1", _("Feasibility study")),
-        ("LP2", _("Preliminary design")),
-        ("LP3", _("Definitive design")),
-        ("LP4", _("Authoring")),
-        ("LP5", _("Construction design")),
-        ("LP6", _("Tender design")),
-        ("LP7", _("Project management")),
-        ("LP8", _("Construction supervision")),
-        ("LP9", _("Maintenance design")),
+        ("#ffffff", _("Other")),
+        ("#e3342f", _("Feasibility study")),
+        ("#f6993f", _("Preliminary design")),
+        ("#ffed4a", _("Definitive design")),
+        ("#38c172", _("Authoring")),
+        ("#4dc0b5", _("Construction design")),
+        ("#3490dc", _("Tender design")),
+        ("#6574cd", _("Project management")),
+        ("#9561e2", _("Construction supervision")),
+        ("#f66d9b", _("Maintenance design")),
     ]
 
     title = models.CharField(
@@ -23,10 +23,9 @@ class Phase(TreeNode):
         max_length=50,
     )
     phase_type = models.CharField(
-        max_length=4,
+        max_length=7,
         choices=TYPES,
-        null=True,
-        blank=True,
+        default="#ffffff",
     )
     position = models.PositiveIntegerField(default=0)
     start = models.DateField(null=True, blank=True)
@@ -87,6 +86,9 @@ class Phase(TreeNode):
             self.save()
             prev.position += 1
             prev.save()
+
+    def draw_bar_chart(self):
+        return "background-color: red; margin-left: 50%; width: 20%"
 
     def save(self, *args, **kwargs):
         if not self.parent and not self.start:

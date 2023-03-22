@@ -88,7 +88,10 @@ class Phase(TreeNode):
             prev.save()
 
     def draw_bar_chart(self):
-        return "background-color: red; margin-left: 50%; width: 20%"
+        return (
+            "background-color: %(color)s; margin-left: %(margin)s; width: %(width)s"
+            % {"color": self.phase_type, "margin": "50%", "width": "20%"}
+        )
 
     def save(self, *args, **kwargs):
         if not self.parent and not self.start:

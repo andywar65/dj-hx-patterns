@@ -1,6 +1,18 @@
+{% load i18n %}
+
 <div class="row">
   <div class="col">
-    <i class="fa fa-arrow-left"></i>
+    <a class="link-primary"
+       {% if month == 1 %}
+         hx-get="{% url 'timeline:list' year=year|add:'-1' month=7 %}"
+       {% else %}
+         hx-get="{% url 'timeline:list' year=year month=1 %}"
+       {% endif %}
+       hx-target="#content"
+       hx-push-url="true"
+       title="{% trans 'Previous semester' %}">
+      <i class="fa fa-arrow-left"></i>
+    </a>
   </div>
   <div class="col text-center">
     {% if month == 1 %}
@@ -10,6 +22,16 @@
     {% endif %}
   </div>
   <div class="col text-end">
-    <i class="fa fa-arrow-right"></i>
+    <a class="link-primary"
+       {% if month == 1 %}
+         hx-get="{% url 'timeline:list' year=year month=7 %}"
+       {% else %}
+         hx-get="{% url 'timeline:list' year=year|add:'1' month=1 %}"
+       {% endif %}
+       hx-target="#content"
+       hx-push-url="true"
+       title="{% trans 'Next semester' %}">
+      <i class="fa fa-arrow-right"></i>
+    </a>
   </div>
 </div>

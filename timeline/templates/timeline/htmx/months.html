@@ -1,40 +1,9 @@
-{% load i18n %}
-
 <div class="row">
-  <div class="col">
-    {% trans "Jan" %}
-  </div>
-  <div class="col">
-    {% trans "Feb" %}
-  </div>
-  <div class="col">
-    {% trans "Mar" %}
-  </div>
-  <div class="col">
-    {% trans "Apr" %}
-  </div>
-  <div class="col">
-    {% trans "May" %}
-  </div>
-  <div class="col">
-    {% trans "Jun" %}
-  </div>
-  <div class="col">
-    {% trans "Jul" %}
-  </div>
-  <div class="col">
-    {% trans "Aug" %}
-  </div>
-  <div class="col">
-    {% trans "Sep" %}
-  </div>
-  <div class="col">
-    {% trans "Oct" %}
-  </div>
-  <div class="col">
-    {% trans "Nov" %}
-  </div>
-  <div class="col">
-    {% trans "Dec" %}
-  </div>
+  {% if month == 1 %}
+    {% include "timeline/htmx/months_1.html" %}
+    {% include "timeline/htmx/months_2.html" %}
+  {% else %}
+    {% include "timeline/htmx/months_2.html" %}
+    {% include "timeline/htmx/months_1.html" %}
+  {% endif %}
 </div>

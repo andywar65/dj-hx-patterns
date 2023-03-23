@@ -3,7 +3,11 @@
     <i class="fa fa-arrow-left"></i>
   </div>
   <div class="col text-center">
-    {{ year }}
+    {% if month == 1 %}
+      {{ year }}
+    {% else %}
+      {{ year }} / {{ year|add:"1" }}
+    {% endif %}
   </div>
   <div class="col text-end">
     <i class="fa fa-arrow-right"></i>

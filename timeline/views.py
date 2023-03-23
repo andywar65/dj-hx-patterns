@@ -91,7 +91,9 @@ class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
         return super(PhaseUpdateView, self).form_valid(form)
 
     def get_success_url(self, *args, **kwargs):
-        return reverse("timeline:list")
+        return (
+            reverse("timeline:detail", kwargs={"pk": self.object.id}) + "?refresh=true"
+        )
 
 
 class PhaseDeleteView(HxOnlyTemplateMixin, TemplateView):

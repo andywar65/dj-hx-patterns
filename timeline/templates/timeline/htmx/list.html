@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load bootstrap5 %}
 
-<div hx-get="{% url 'timeline:list' year=2023 month=1 %}"
+<div hx-get="{% url 'timeline:list' year=year month=month %}"
      hx-trigger="refreshList from:body"
      hx-target="#content"
      hx-push-url="true">

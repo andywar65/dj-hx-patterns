@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
     CreateView,
@@ -29,7 +28,8 @@ class PhaseListView(HxPageTemplateMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PhaseListView, self).get_context_data()
-        context["year"] = now().year
+        context["year"] = self.kwargs["year"]
+        context["month"] = self.kwargs["month"]
         return context
 
 

@@ -26,7 +26,7 @@ class PhaseListView(HxPageTemplateMixin, ListView):
         qs = qs.with_tree_fields()
         return qs
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(PhaseListView, self).get_context_data()
         context["year"] = self.kwargs["year"]
         context["month"] = self.kwargs["month"]

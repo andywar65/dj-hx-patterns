@@ -1,8 +1,5 @@
 {% load i18n %}
 
-<div class="alert alert-danger"
-     hx-get="{% url 'timeline:list' %}"
-     hx-target="#content"
-     hx-trigger="load delay:1s">
+<div class="alert alert-danger">
   {% trans "Deleting..." %}<span class="spinner-border spinner-border-sm"></span>
 </div>

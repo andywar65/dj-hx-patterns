@@ -105,6 +105,11 @@ class PhaseDeleteView(HxOnlyTemplateMixin, TemplateView):
         move_younger_siblings(phase.parent, phase.position)
         phase.delete()
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super(PhaseDeleteView, self).dispatch(request, *args, **kwargs)
+        response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
+
 
 class PhaseMoveDownView(HxOnlyTemplateMixin, RedirectView):
     def setup(self, request, *args, **kwargs):

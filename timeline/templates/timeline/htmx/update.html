@@ -24,7 +24,7 @@
           <button class="btn btn-danger"
                   title="{% trans 'Delete phase' %}"
                   hx-get="{% url 'timeline:delete' pk=object.id %}"
-                  hx-target="#phase-{{ object.id }}"
+                  hx-target="#phase-index-{{ object.id }}"
                   hx-confirm="{% trans 'Are you sure you want to delete phase' %} {{ object.title }}?">
             <i class="fa fa-times"></i>
           </button>

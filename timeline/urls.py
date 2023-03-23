@@ -14,7 +14,7 @@ from .views import (
 app_name = "timeline"
 urlpatterns = [
     path(
-        "",
+        "<int:year>/<int:month>/",
         PhaseListView.as_view(),
         name="list",
     ),

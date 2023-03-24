@@ -89,7 +89,44 @@ class Phase(TreeNode):
             prev.position += 1
             prev.save()
 
-    def draw_bar_chart(self):
+    def get_start_end(self):
+        start = None
+        end = None
+        # simple case
+        if self.start:
+            start = self.start
+            end = self.start + timedelta(days=self.duration * 7)
+        # complex case
+        else:
+            # get all ancestors in reverse order
+            ancestors = self.ancestors().reverse()
+            # delay from parent end
+            margin = self.delay
+            # walk through ancestors backwards
+            for ancestor in ancestors:
+                # increment margin
+                margin += ancestor.duration
+                # stop if ancestor has a start date
+                if ancestor.start:
+                    # start and end date
+                    start = ancestor.start + timedelta(days=margin * 7)
+                    end = start + timedelta(days=self.duration * 7)
+                    break
+                # continue if start date is not found
+                margin += ancestor.delay
+        return start, end
+
+    def get_popup(self):
+        start, end = self.get_start_end()
+        popup = _("Type: %(type)s, start: %(start)s, end: %(end)s") % {
+            "type": self.get_phase_type_display(),
+            "start": start,
+            "end": end,
+        }
+        return popup
+
+    def draw_bar_chart(self, year, month):
+        start, end = self.get_start_end()
         # duration of phase as % of table cell (52 weeks in an year)
         width = str(self.duration / 52 * 100) + "%"
         # simple case
@@ -113,7 +150,7 @@ class Phase(TreeNode):
                 if ancestor.start:
                     # start and end date
                     start = ancestor.start + timedelta(days=margin * 7)
-                    end = start + timedelta(days=self.duration * 7)
+                    end = start + timedelta(days=self.duration * 7)  # noqa
                     # add start week to margin, then transform in % of cell
                     margin += ancestor.start.isocalendar().week
                     margin = str(margin / 52 * 100) + "%"
@@ -124,12 +161,7 @@ class Phase(TreeNode):
             "background-color: %(color)s; margin-left: %(margin)s; width: %(width)s"
             % {"color": self.phase_type, "margin": margin, "width": width}
         )
-        popup = _("Type: %(type)s, start: %(start)s, end: %(end)s") % {
-            "type": self.get_phase_type_display(),
-            "start": start,
-            "end": end,
-        }
-        return style, popup
+        return style
 
     def save(self, *args, **kwargs):
         if not self.parent and not self.start:

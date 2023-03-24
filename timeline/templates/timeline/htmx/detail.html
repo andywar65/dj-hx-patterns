@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load timeline_tags %}
 
 <td id="phase-index-{{ phase.id }}">
   <div class="row">
@@ -29,11 +30,9 @@
   </div>
 </td>
 <td>
-  {% with data=phase.draw_bar_chart %}
-    <div style="{{ data.0 }}">
-      <a href="#" title="{{ data.1 }}">
-        @
-      </a>
-    </div>
-  {% endwith %}
+  <div style="{% draw_bar_chart phase year month %}">
+    <a href="#" title="{{ phase.get_popup }}">
+      @
+    </a>
+  </div>
 </td>

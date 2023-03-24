@@ -16,7 +16,7 @@
           <button class="btn-close"
                   title="{% trans 'Dismiss' %}"
                   hx-get="{% url 'timeline:detail' pk=object.id %}"
-                  hx-target="#phase-{{ object.id }}">
+                  hx-target="#phase-index-{{ object.id }}">
           </button>
         </div>
         <div class="col text-end">

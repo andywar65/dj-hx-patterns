@@ -16,6 +16,15 @@ from .forms import PhaseCreateForm
 from .models import Phase, get_position_by_parent, move_younger_siblings
 
 
+class RefreshListMixin:
+    """Description here"""
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
+
+
 class PhaseListView(HxPageTemplateMixin, ListView):
     model = Phase
     template_name = "timeline/htmx/list.html"
@@ -62,12 +71,6 @@ class PhaseDetailView(HxOnlyTemplateMixin, DetailView):
     context_object_name = "phase"
     template_name = "timeline/htmx/detail.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super(PhaseDetailView, self).dispatch(request, *args, **kwargs)
-        if "refresh" in request.GET:
-            response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
-
 
 class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
     model = Phase
@@ -93,16 +96,11 @@ class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
         return reverse("timeline:updating", kwargs={"pk": self.object.id})
 
 
-class PhaseUpdatingView(HxOnlyTemplateMixin, TemplateView):
+class PhaseUpdatingView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
     template_name = "timeline/htmx/move.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super(PhaseUpdatingView, self).dispatch(request, *args, **kwargs)
-        response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
 
-
-class PhaseDeleteView(HxOnlyTemplateMixin, TemplateView):
+class PhaseDeleteView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
     template_name = "timeline/htmx/delete.html"
 
     def setup(self, request, *args, **kwargs):
@@ -111,13 +109,8 @@ class PhaseDeleteView(HxOnlyTemplateMixin, TemplateView):
         move_younger_siblings(phase.parent, phase.position)
         phase.delete()
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super(PhaseDeleteView, self).dispatch(request, *args, **kwargs)
-        response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
 
-
-class PhaseMoveDownView(HxOnlyTemplateMixin, TemplateView):
+class PhaseMoveDownView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
     template_name = "timeline/htmx/move.html"
 
     def setup(self, request, *args, **kwargs):
@@ -125,21 +118,11 @@ class PhaseMoveDownView(HxOnlyTemplateMixin, TemplateView):
         self.object = get_object_or_404(Phase, id=self.kwargs["pk"])
         self.object.move_down()
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super(PhaseMoveDownView, self).dispatch(request, *args, **kwargs)
-        response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
 
-
-class PhaseMoveUpView(HxOnlyTemplateMixin, TemplateView):
+class PhaseMoveUpView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
     template_name = "timeline/htmx/move.html"
 
     def setup(self, request, *args, **kwargs):
         super(PhaseMoveUpView, self).setup(request, *args, **kwargs)
         self.object = get_object_or_404(Phase, id=self.kwargs["pk"])
         self.object.move_up()
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super(PhaseMoveUpView, self).dispatch(request, *args, **kwargs)
-        response["HX-Trigger-After-Swap"] = "refreshList"
-        return response

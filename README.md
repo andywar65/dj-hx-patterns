@@ -14,6 +14,8 @@ Most simple. Add items to a list, modify them inline, change their position. Sui
 ### Bulk table
 Long list with pagination. Modify or delete in bulk.
 ### Hierarchy
-Like previous, but you build trees instead of lists. Based on fabulous lightweight [django-tree-queries](https://django-tree-queries.readthedocs.io/en/latest/).
+Tree of hierarchical items. Based on fabulous lightweight [django-tree-queries](https://django-tree-queries.readthedocs.io/en/latest/).
+### Timeline
+A timeline of hierarchical items. Items may have start date or follow parent item.
 ## TODO
-Tests, Timeline app.
+Tests.

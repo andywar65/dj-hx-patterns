@@ -27,7 +27,7 @@ class Phase(TreeNode):
     phase_type = models.CharField(
         max_length=7,
         choices=TYPES,
-        default="#ffffff",
+        default="#eeeeee",
     )
     position = models.PositiveIntegerField(default=0)
     start = models.DateField(null=True, blank=True)

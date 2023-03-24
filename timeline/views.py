@@ -6,7 +6,6 @@ from django.views.generic import (
     CreateView,
     DetailView,
     ListView,
-    RedirectView,
     TemplateView,
     UpdateView,
 )
@@ -111,25 +110,29 @@ class PhaseDeleteView(HxOnlyTemplateMixin, TemplateView):
         return response
 
 
-class PhaseMoveDownView(HxOnlyTemplateMixin, RedirectView):
+class PhaseMoveDownView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "timeline/htmx/move.html"
+
     def setup(self, request, *args, **kwargs):
         super(PhaseMoveDownView, self).setup(request, *args, **kwargs)
         self.object = get_object_or_404(Phase, id=self.kwargs["pk"])
         self.object.move_down()
 
-    def get_redirect_url(self, *args, **kwargs):
-        return (
-            reverse("timeline:detail", kwargs={"pk": self.object.id}) + "?refresh=true"
-        )
+    def dispatch(self, request, *args, **kwargs):
+        response = super(PhaseMoveDownView, self).dispatch(request, *args, **kwargs)
+        response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
 
 
-class PhaseMoveUpView(HxOnlyTemplateMixin, RedirectView):
+class PhaseMoveUpView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "timeline/htmx/move.html"
+
     def setup(self, request, *args, **kwargs):
         super(PhaseMoveUpView, self).setup(request, *args, **kwargs)
         self.object = get_object_or_404(Phase, id=self.kwargs["pk"])
         self.object.move_up()
 
-    def get_redirect_url(self, *args, **kwargs):
-        return (
-            reverse("timeline:detail", kwargs={"pk": self.object.id}) + "?refresh=true"
-        )
+    def dispatch(self, request, *args, **kwargs):
+        response = super(PhaseMoveUpView, self).dispatch(request, *args, **kwargs)
+        response["HX-Trigger-After-Swap"] = "refreshList"
+        return response

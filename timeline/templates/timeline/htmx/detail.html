@@ -15,14 +15,14 @@
         <a class="link-primary"
            title="{% trans 'Move up' %}"
            hx-get="{% url 'timeline:move_up' pk=phase.id %}"
-           hx-target="#phase-{{ phase.id }}">
+           hx-target="#phase-index-{{ phase.id }}">
           <i class="fa fa-arrow-up"></i></a>
       {% endif %}
       {% if phase.get_next_sibling %}
         <a class="link-primary"
            title="{% trans 'Move down' %}"
            hx-get="{% url 'timeline:move_down' pk=phase.id %}"
-           hx-target="#phase-{{ phase.id }}">
+           hx-target="#phase-index-{{ phase.id }}">
           <i class="fa fa-arrow-down"></i></a>
       {% endif %}
     </div>

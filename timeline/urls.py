@@ -9,6 +9,7 @@ from .views import (
     PhaseMoveDownView,
     PhaseMoveUpView,
     PhaseUpdateView,
+    PhaseUpdatingView,
 )
 
 app_name = "timeline"
@@ -37,6 +38,11 @@ urlpatterns = [
         "phase/<pk>/update/",
         PhaseUpdateView.as_view(),
         name="update",
+    ),
+    path(
+        "phase/<pk>/updating/",
+        PhaseUpdatingView.as_view(),
+        name="updating",
     ),
     path(
         "phase/<pk>/delete/",

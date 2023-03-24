@@ -4,7 +4,7 @@
 <div class="card mb-3">
   <form
     hx-post="{% url 'timeline:update' pk=object.id %}"
-    hx-target="#phase-{{ object.id }}">
+    hx-target="#phase-index-{{ object.id }}">
     <div class="card-body">
       <h5>{{ object.title }}</h5>
       {% bootstrap_form form %}
@@ -12,7 +12,6 @@
         <div class="col">
           <button class="btn btn-primary" type="submit">
             {% trans "Update" %}
-            <span class="htmx-indicator spinner-border spinner-border-sm"></span>
           </button>
           <button class="btn-close"
                   title="{% trans 'Dismiss' %}"

@@ -90,9 +90,16 @@ class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
         return super(PhaseUpdateView, self).form_valid(form)
 
     def get_success_url(self, *args, **kwargs):
-        return (
-            reverse("timeline:detail", kwargs={"pk": self.object.id}) + "?refresh=true"
-        )
+        return reverse("timeline:updating", kwargs={"pk": self.object.id})
+
+
+class PhaseUpdatingView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "timeline/htmx/move.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super(PhaseUpdatingView, self).dispatch(request, *args, **kwargs)
+        response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
 
 
 class PhaseDeleteView(HxOnlyTemplateMixin, TemplateView):

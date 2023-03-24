@@ -106,6 +106,8 @@ class PhaseDeleteView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
     def setup(self, request, *args, **kwargs):
         super(PhaseDeleteView, self).setup(request, *args, **kwargs)
         phase = get_object_or_404(Phase, id=self.kwargs["pk"])
+        report = _("Deleted phase '%(title)s'") % {"title": phase.title}
+        messages.error(request, report)
         move_younger_siblings(phase.parent, phase.position)
         phase.delete()
 

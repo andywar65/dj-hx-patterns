@@ -8,7 +8,7 @@ from tree_queries.models import TreeNode
 
 class Phase(TreeNode):
     TYPES = [
-        ("#ffffff", _("Other")),
+        ("#eeeeee", _("Other")),
         ("#e3342f", _("Feasibility study")),
         ("#f6993f", _("Preliminary design")),
         ("#ffed4a", _("Definitive design")),

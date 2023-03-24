@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import date, timedelta
 
 from django.db import models
 from django.utils.timezone import now
@@ -127,36 +127,29 @@ class Phase(TreeNode):
 
     def draw_bar_chart(self, year, month):
         start, end = self.get_start_end()
-        # duration of phase as % of table cell (52 weeks in an year)
-        width = str(self.duration / 52 * 100) + "%"
-        # simple case
-        if self.start:
-            # left margin as % of cell
-            margin = str(self.start.isocalendar().week / 52 * 100) + "%"
-            # start and end date
-            start = self.start
-            end = self.start + timedelta(days=self.duration * 7)
-        # complex case
+        if month == 1:
+            chart_start = date(year, 1, 1)
+            chart_end = date(year, 12, 31)
         else:
-            # get all ancestors in reverse order
-            ancestors = self.ancestors().reverse()
-            # delay from parent end
-            margin = self.delay
-            # walk through ancestors backwards
-            for ancestor in ancestors:
-                # increment margin
-                margin += ancestor.duration
-                # stop if ancestor has a start date
-                if ancestor.start:
-                    # start and end date
-                    start = ancestor.start + timedelta(days=margin * 7)
-                    end = start + timedelta(days=self.duration * 7)  # noqa
-                    # add start week to margin, then transform in % of cell
-                    margin += ancestor.start.isocalendar().week
-                    margin = str(margin / 52 * 100) + "%"
-                    break
-                # continue if start date is not found
-                margin += ancestor.delay
+            chart_start = date(year, 7, 1)
+            chart_end = date(year + 1, 6, 30)
+        width = 100
+        if start < chart_start:
+            margin = 0
+        elif start > chart_start and start < chart_end:
+            margin = (start - chart_start).days / 365 * 100
+        else:
+            margin = 100
+            width = 0
+        if width:
+            if end < chart_start:
+                width = 0
+            elif end < chart_end:
+                width = 100 - margin - (chart_end - end).days / 365 * 100
+            else:
+                width = 100 - margin
+        margin = str(margin) + "%"
+        width = str(width) + "%"
         style = (
             "background-color: %(color)s; margin-left: %(margin)s; width: %(width)s"
             % {"color": self.phase_type, "margin": margin, "width": width}

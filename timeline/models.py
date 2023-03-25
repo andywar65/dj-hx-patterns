@@ -9,7 +9,7 @@ from tree_queries.models import TreeNode
 
 class Phase(TreeNode):
     TYPES = [
-        ("#eeeeee", _("Other")),
+        ("#dddddd", _("Other")),
         ("#e3342f", _("Feasibility study")),
         ("#f6993f", _("Preliminary design")),
         ("#ffed4a", _("Definitive design")),
@@ -28,7 +28,7 @@ class Phase(TreeNode):
     phase_type = models.CharField(
         max_length=7,
         choices=TYPES,
-        default="#eeeeee",
+        default="#dddddd",
     )
     position = models.PositiveIntegerField(default=0)
     start = models.DateField(null=True, blank=True)
@@ -135,7 +135,7 @@ class Phase(TreeNode):
             chart_start = date(year, 7, 1)
             chart_end = date(year + 1, 6, 30)
         width = 100
-        if start < chart_start:
+        if start <= chart_start:
             margin = 0
         elif start > chart_start and start < chart_end:
             margin = (start - chart_start).days / 365 * 100

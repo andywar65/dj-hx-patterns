@@ -1,13 +1,18 @@
 {% load i18n %}
 
 <div class="row">
-  <div class="col col-8">
+  <div class="col col-9">
     {{ phase.get_punctuated_index }} -
     <a class="link-primary"
        hx-get="{% url 'timeline:update' pk=phase.id %}"
        hx-target="#phase-index-{{ phase.id }}">
       {{ phase }}
     </a>
+  </div>
+  <div class="col col-1">
+    {% if phase.start %}
+      <i class="fa fa-hourglass-start"></i>
+    {% endif %}
   </div>
   <div class="col text-end">
     {% if phase.get_previous_sibling %}

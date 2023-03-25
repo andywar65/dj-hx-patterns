@@ -1,3 +1,4 @@
+import calendar
 from datetime import date, timedelta
 
 from django.db import models
@@ -181,13 +182,17 @@ def move_younger_siblings(parent, position):
 
 
 def get_month_dict(year, month):
-    month_1 = [_("Jan"), _("Feb"), _("Mar"), _("Apr"), _("May"), _("Jun")]
-    month_2 = [_("Jul"), _("Aug"), _("Sep"), _("Oct"), _("Nov"), _("Dec")]
+    month_1 = [1, 2, 3, 4, 5, 6]
+    month_2 = [7, 8, 9, 10, 11, 12]
     if month < 7:
         months = month_1 + month_2
     else:
+        year += 1
         months = month_2 + month_1
     month_dict = {}
     for m in months:
-        month_dict[m] = False
+        actual = False
+        if now().year == year and now().month == m:
+            actual = True
+        month_dict[calendar.month_abbr[m]] = actual
     return month_dict

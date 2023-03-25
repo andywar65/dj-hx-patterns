@@ -13,7 +13,7 @@ from django.views.generic import (
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
 from .forms import PhaseCreateForm
-from .models import Phase, get_position_by_parent, move_younger_siblings
+from .models import Phase, get_month_dict, get_position_by_parent, move_younger_siblings
 
 
 class RefreshListMixin:
@@ -38,6 +38,7 @@ class PhaseListView(HxPageTemplateMixin, ListView):
         context = super(PhaseListView, self).get_context_data()
         context["year"] = self.kwargs["year"]
         context["month"] = self.kwargs["month"]
+        context["month_dict"] = get_month_dict(context["year"], context["month"])
         return context
 
 

@@ -1,9 +1,12 @@
 <div class="row">
-  {% if month == 1 %}
-    {% include "timeline/htmx/months_1.html" %}
-    {% include "timeline/htmx/months_2.html" %}
-  {% else %}
-    {% include "timeline/htmx/months_2.html" %}
-    {% include "timeline/htmx/months_1.html" %}
-  {% endif %}
+  {% for key, value in month_dict.items %}
+    <div
+      {% if value %}
+        class="col text-dark" style="background-color: yellow;"
+      {% else %}
+        class="col"
+      {% endif %}>
+      {{ key }}
+    </div>
+  {% endfor %}
 </div>

@@ -178,3 +178,16 @@ def move_younger_siblings(parent, position):
     for sibling in siblings:
         sibling.position -= 1
         sibling.save()
+
+
+def get_month_dict(year, month):
+    month_1 = [_("Jan"), _("Feb"), _("Mar"), _("Apr"), _("May"), _("Jun")]
+    month_2 = [_("Jul"), _("Aug"), _("Sep"), _("Oct"), _("Nov"), _("Dec")]
+    if month < 7:
+        months = month_1 + month_2
+    else:
+        months = month_2 + month_1
+    month_dict = {}
+    for m in months:
+        month_dict[m] = False
+    return month_dict

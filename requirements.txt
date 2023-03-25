@@ -8,6 +8,8 @@ asgiref==3.6.0
     # via django
 beautifulsoup4==4.11.2
     # via django-bootstrap-v5
+coverage==7.2.2
+    # via -r requirements.in
 dj-database-url==1.2.0
     # via environs
 dj-email-url==1.0.6

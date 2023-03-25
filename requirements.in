@@ -5,3 +5,4 @@ django-bootstrap-v5
 django-debug-toolbar
 factory_boy
 django-tree-queries
+coverage

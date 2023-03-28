@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import Item
 
@@ -11,7 +12,7 @@ class ItemModelTest(TestCase):
         Item.objects.create(position=2, title="Central")
         Item.objects.create(position=3, title="Last")
 
-    def test_homepage_str(self):
+    def test_item_str(self):
         it1 = Item.objects.get(title="First")
         self.assertEquals(it1.__str__(), "First")
         print("\n-Test Item title")
@@ -53,3 +54,24 @@ class ItemModifiedModelTest(TestCase):
         it2 = Item.objects.get(title="Central")
         self.assertEquals(it2.position, 1)
         print("\n-Test move following Items")
+
+
+class ItemViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        print("\nTest unmodified boxlist views")
+        Item.objects.create(position=1, title="First")
+        Item.objects.create(position=2, title="Central")
+        Item.objects.create(position=3, title="Last")
+
+    def test_list_view(self):
+        response = self.client.get(reverse("boxlist:list"))
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test list status 200")
+        self.assertTemplateUsed(response, "boxlist/list.html")
+        print("\n-Test list template")
+        response = self.client.get(
+            reverse("boxlist:list"), headers={"HTTP_HX-request": True}
+        )
+        self.assertTemplateUsed(response, "boxlist/htmx/list.html")
+        print("\n-Test list template with HTMX header")

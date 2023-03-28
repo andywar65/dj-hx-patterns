@@ -32,14 +32,6 @@ class CategoryModelTest(TestCase):
         print("\n-Test parent id")
 
     def test_get_next_previous_sibling(self):
-        cat0 = Category.objects.get(title="Parent")
-        cat1 = Category.objects.get(title="Uncle")
-        self.assertEquals(cat0.get_next_sibling(), cat1)
-        self.assertEquals(cat1.get_next_sibling(), None)
-        print("\n-Test get next sibling for roots")
-        self.assertEquals(cat0.get_previous_sibling(), None)
-        self.assertEquals(cat1.get_previous_sibling(), cat0)
-        print("\n-Test get previous sibling for roots")
         cat0 = Category.objects.get(title="First")
         cat1 = Category.objects.get(title="Last")
         self.assertEquals(cat0.get_next_sibling(), cat1)

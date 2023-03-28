@@ -41,13 +41,10 @@ class Category(TreeNode):
     def get_previous_sibling(self):
         if self.position == 0:
             return None
-        try:
-            prev = Category.objects.get(
-                parent_id=self.get_parent_id(), position=self.position - 1
-            )
-            return prev
-        except Category.DoesNotExist:
-            return None
+        prev = Category.objects.get(
+            parent_id=self.get_parent_id(), position=self.position - 1
+        )
+        return prev
 
     def move_down(self):
         next = self.get_next_sibling()

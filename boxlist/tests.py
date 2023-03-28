@@ -71,7 +71,32 @@ class ItemViewTest(TestCase):
         self.assertTemplateUsed(response, "boxlist/list.html")
         print("\n-Test list template")
         response = self.client.get(
-            reverse("boxlist:list"), headers={"HTTP_HX-request": True}
+            reverse("boxlist:list"), headers={"HTTP_HX-REQUEST": True}
         )
         self.assertTemplateUsed(response, "boxlist/htmx/list.html")
         print("\n-Test list template with HTMX header")
+
+    def test_create_view(self):
+        response = self.client.get(
+            reverse("boxlist:create"), headers={"HTTP_HX-REQUEST": True}
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test create status 200")
+        self.assertTemplateUsed(response, "boxlist/htmx/create.html")
+        print("\n-Test create template")
+        response = self.client.post(
+            reverse("boxlist:create"),
+            {"title": "Foo"},
+            headers={"HTTP_HX-REQUEST": True},
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("boxlist:list"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test create redirect")
+        it4 = Item.objects.last()
+        self.assertEqual(it4.position, 4)
+        print("\n-Test last created position")

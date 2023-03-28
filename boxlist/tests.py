@@ -61,8 +61,7 @@ class ItemViewTest(TestCase):
     def setUpTestData(cls):
         print("\nTest unmodified boxlist views")
         Item.objects.create(position=1, title="First")
-        Item.objects.create(position=2, title="Central")
-        Item.objects.create(position=3, title="Last")
+        Item.objects.create(position=2, title="Last")
 
     def test_list_view(self):
         response = self.client.get(reverse("boxlist:list"))
@@ -70,16 +69,12 @@ class ItemViewTest(TestCase):
         print("\n-Test list status 200")
         self.assertTemplateUsed(response, "boxlist/list.html")
         print("\n-Test list template")
-        response = self.client.get(
-            reverse("boxlist:list"), headers={"HTTP_HX-REQUEST": True}
-        )
+        response = self.client.get(reverse("boxlist:list"), HTTP_HX_REQUEST="true")
         self.assertTemplateUsed(response, "boxlist/htmx/list.html")
         print("\n-Test list template with HTMX header")
 
     def test_create_view(self):
-        response = self.client.get(
-            reverse("boxlist:create"), headers={"HTTP_HX-REQUEST": True}
-        )
+        response = self.client.get(reverse("boxlist:create"), HTTP_HX_REQUEST="true")
         self.assertEqual(response.status_code, 200)
         print("\n-Test create status 200")
         self.assertTemplateUsed(response, "boxlist/htmx/create.html")
@@ -87,7 +82,7 @@ class ItemViewTest(TestCase):
         response = self.client.post(
             reverse("boxlist:create"),
             {"title": "Foo"},
-            headers={"HTTP_HX-REQUEST": True},
+            HTTP_HX_REQUEST="true",
             follow=True,
         )
         self.assertRedirects(
@@ -97,6 +92,85 @@ class ItemViewTest(TestCase):
             target_status_code=200,
         )
         print("\n-Test create redirect")
-        it4 = Item.objects.last()
-        self.assertEqual(it4.position, 4)
+        it3 = Item.objects.last()
+        self.assertEqual(it3.position, 3)
         print("\n-Test last created position")
+
+    def test_update_view(self):
+        it1 = Item.objects.get(title="First")
+        response = self.client.get(
+            reverse("boxlist:update", kwargs={"pk": it1.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test update status 200")
+        self.assertTemplateUsed(response, "boxlist/htmx/update.html")
+        print("\n-Test update template")
+        response = self.client.post(
+            reverse("boxlist:update", kwargs={"pk": it1.id}),
+            {"title": "Bar"},
+            HTTP_HX_REQUEST="true",
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("boxlist:detail", kwargs={"pk": it1.id}),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test update redirect")
+
+
+class ItemViewModifyTest(TestCase):
+    def setUp(self):
+        print("\nTest modified objects boxlist views")
+        Item.objects.create(position=1, title="First")
+        Item.objects.create(position=2, title="Last")
+
+    def test_move_down_view(self):
+        it1 = Item.objects.get(title="First")
+        response = self.client.get(
+            reverse("boxlist:move_down", kwargs={"pk": it1.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 302)
+        print("\n-Test move down status 302")
+        self.assertRedirects(
+            response,
+            reverse("boxlist:list"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test move down redirect")
+        it2 = Item.objects.get(title="Last")
+        self.assertEqual(it2.position, 1)
+        print("\n-Test move down next position")
+
+    def test_move_up_view(self):
+        it2 = Item.objects.get(title="Last")
+        response = self.client.get(
+            reverse("boxlist:move_up", kwargs={"pk": it2.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 302)
+        print("\n-Test move up status 302")
+        self.assertRedirects(
+            response,
+            reverse("boxlist:list"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test move up redirect")
+        it1 = Item.objects.get(title="First")
+        self.assertEqual(it1.position, 2)
+        print("\n-Test move up previous position")
+
+    def test_delete_view(self):
+        it1 = Item.objects.get(title="First")
+        response = self.client.get(
+            reverse("boxlist:delete", kwargs={"pk": it1.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test delete status 200")
+        self.assertTemplateUsed(response, "boxlist/htmx/delete.html")
+        print("\n-Test delete template")
+        it2 = Item.objects.get(title="Last")
+        self.assertEqual(it2.position, 1)
+        print("\n-Test delete next position")

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import Category, get_position_by_parent
+from .models import Category, get_position_by_parent, move_younger_siblings
 
 # from django.urls import reverse
 
@@ -46,3 +46,39 @@ class CategoryModelTest(TestCase):
         self.assertEquals(get_position_by_parent(cat0), 2)
         self.assertEquals(get_position_by_parent(None), 2)
         print("\n-Test get position by parent")
+
+
+class CategoryModifiedModelTest(TestCase):
+    def setUp(cls):
+        print("\nTest modified hierarchy models")
+        parent = Category.objects.create(title="Parent")
+        Category.objects.create(title="Uncle", position=1)
+        Category.objects.create(title="First", parent=parent)
+        Category.objects.create(title="Last", parent=parent, position=1)
+
+    def test_move_down_category(self):
+        cat0 = Category.objects.get(title="First")
+        cat0.move_down()
+        cat1 = Category.objects.get(title="Last")
+        self.assertEquals(cat0.position, 1)
+        self.assertEquals(cat1.position, 0)
+        print("\n-Test move down category")
+
+    def test_move_up_category(self):
+        cat1 = Category.objects.get(title="Last")
+        cat1.move_up()
+        cat0 = Category.objects.get(title="First")
+        self.assertEquals(cat0.position, 1)
+        self.assertEquals(cat1.position, 0)
+        print("\n-Test move up category")
+
+    def test_move_younger_siblings(self):
+        parent = Category.objects.get(title="Parent")
+        move_younger_siblings(parent, 0)
+        cat1 = Category.objects.get(title="Last")
+        self.assertEquals(cat1.position, 0)
+        print("\n-Test move younger children")
+        move_younger_siblings(None, 0)
+        cat1 = Category.objects.get(title="Uncle")
+        self.assertEquals(cat1.position, 0)
+        print("\n-Test move younger roots")

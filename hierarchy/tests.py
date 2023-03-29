@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import Category
+from .models import Category, get_position_by_parent
 
 # from django.urls import reverse
 
@@ -36,7 +36,13 @@ class CategoryModelTest(TestCase):
         cat1 = Category.objects.get(title="Last")
         self.assertEquals(cat0.get_next_sibling(), cat1)
         self.assertEquals(cat1.get_next_sibling(), None)
-        print("\n-Test get next sibling for children")
+        print("\n-Test get next sibling")
         self.assertEquals(cat0.get_previous_sibling(), None)
         self.assertEquals(cat1.get_previous_sibling(), cat0)
-        print("\n-Test get previous sibling for children")
+        print("\n-Test get previous sibling")
+
+    def test_get_position_by_parent(self):
+        cat0 = Category.objects.get(title="Parent")
+        self.assertEquals(get_position_by_parent(cat0), 2)
+        self.assertEquals(get_position_by_parent(None), 2)
+        print("\n-Test get position by parent")

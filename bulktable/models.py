@@ -23,6 +23,9 @@ class Row(models.Model):
     class Meta:
         verbose_name = _("Row")
         verbose_name_plural = _("Rows")
+        ordering = [
+            "id",
+        ]
 
     def __str__(self):
         return self.title

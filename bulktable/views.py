@@ -72,7 +72,7 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
         return super(RowUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("bulktable:list") + f"?page={self.request.POST['page']}"
+        return reverse("bulktable:list") + f"?page={self.request.POST.get('page')}"
 
 
 class RowDeleteView(HxOnlyTemplateMixin, RedirectView):
@@ -97,7 +97,7 @@ class RowDeleteView(HxOnlyTemplateMixin, RedirectView):
                         reverse("bulktable:list")
                         + f"?page={int(self.request.GET['page']) - 1}"
                     )
-        return reverse("bulktable:list") + f"?page={self.request.GET['page']}"
+        return reverse("bulktable:list") + f"?page={self.request.GET.get('page')}"
 
 
 class RowUpdateButtonView(HxOnlyTemplateMixin, TemplateView):

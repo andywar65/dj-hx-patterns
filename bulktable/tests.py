@@ -2,8 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .factories import RowFactory
-
-# from .models import Row
+from .models import Row
 
 
 class RowModelTest(TestCase):
@@ -48,3 +47,53 @@ class RowViewTest(TestCase):
             target_status_code=200,
         )
         print("\n-Test create redirect")
+
+
+class RowModifiedViewTest(TestCase):
+    def test_update_view(self):
+        RowFactory.create_batch(3)
+        response = self.client.get(reverse("bulktable:update"), HTTP_HX_REQUEST="true")
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test update status 200")
+        self.assertTemplateUsed(response, "bulktable/htmx/update.html")
+        print("\n-Test update template")
+        first = Row.objects.first()
+        last = Row.objects.last()
+        response = self.client.post(
+            reverse("bulktable:update"),
+            {"title": "Foo", "color": "success", "page": 1, "ids": [first.id, last.id]},
+            HTTP_HX_REQUEST="true",
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("bulktable:list") + "?page=1",
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test update redirect")
+        first = Row.objects.first()
+        last = Row.objects.last()
+        self.assertEqual(first.color, "success")
+        self.assertEqual(last.color, "success")
+        print("\n-Test row color has changed")
+
+    def test_delete_view(self):
+        RowFactory.create_batch(1)
+        response = self.client.get(reverse("bulktable:delete"), HTTP_HX_REQUEST="true")
+        self.assertEqual(response.status_code, 302)
+        print("\n-Test delete status 302")
+        last = Row.objects.last()
+        response = self.client.get(
+            reverse("bulktable:delete"),
+            {"page": 2, "ids": [last.id], "number": 1},
+            HTTP_HX_REQUEST="true",
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("bulktable:list") + "?page=1",
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test delete redirect")

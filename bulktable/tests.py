@@ -1,16 +1,14 @@
 from django.test import TestCase
 
-from .models import Row
+from .factories import RowFactory
+
+# from .models import Row
 
 # from django.urls import reverse
 
 
 class RowModelTest(TestCase):
-    def setUp(self):
-        print("\nTest unmodified bulk table models")
-        Row.objects.create(title="Row", color="light")
-
-    def test_category_str(self):
-        row1 = Row.objects.first()
-        self.assertEquals(row1.__str__(), "Row")
+    def test_row_str(self):
+        row1 = RowFactory()
+        self.assertEquals(row1.__str__(), row1.title)
         print("\n-Test Row title")

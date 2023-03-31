@@ -66,13 +66,10 @@ class Phase(TreeNode):
     def get_previous_sibling(self):
         if self.position == 0:
             return None
-        try:
-            prev = Phase.objects.get(
-                parent_id=self.get_parent_id(), position=self.position - 1
-            )
-            return prev
-        except Phase.DoesNotExist:
-            return None
+        prev = Phase.objects.get(
+            parent_id=self.get_parent_id(), position=self.position - 1
+        )
+        return prev
 
     def move_down(self):
         next = self.get_next_sibling()

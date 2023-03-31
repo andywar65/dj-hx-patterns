@@ -125,27 +125,8 @@ class Phase(TreeNode):
 
     def draw_bar_chart(self, year, month):
         start, end = self.get_start_end()
-        if month == 1:
-            chart_start = date(year, 1, 1)
-            chart_end = date(year, 12, 31)
-        else:
-            chart_start = date(year, 7, 1)
-            chart_end = date(year + 1, 6, 30)
-        width = 100
-        if start <= chart_start:
-            margin = 0
-        elif start > chart_start and start < chart_end:
-            margin = (start - chart_start).days / 365 * 100
-        else:
-            margin = 100
-            width = 0
-        if width:
-            if end < chart_start:
-                width = 0
-            elif end < chart_end:
-                width = 100 - margin - (chart_end - end).days / 365 * 100
-            else:
-                width = 100 - margin
+        chart_start, chart_end = get_chart_start_end(year, month)
+        margin, width = get_margin_width(start, end, chart_start, chart_end)
         margin = str(margin) + "%"
         width = str(width) + "%"
         style = (
@@ -160,6 +141,35 @@ class Phase(TreeNode):
         if self.start:
             self.delay = 0
         super(Phase, self).save(*args, **kwargs)
+
+
+def get_chart_start_end(year, month):
+    if month == 1:
+        chart_start = date(year, 1, 1)
+        chart_end = date(year, 12, 31)
+    else:
+        chart_start = date(year, 7, 1)
+        chart_end = date(year + 1, 6, 30)
+    return chart_start, chart_end
+
+
+def get_margin_width(start, end, chart_start, chart_end):
+    width = 100
+    if start <= chart_start:
+        margin = 0
+    elif start > chart_start and start < chart_end:
+        margin = (start - chart_start).days / 365 * 100
+    else:
+        margin = 100
+        width = 0
+    if width:
+        if end < chart_start:
+            width = 0
+        elif end < chart_end:
+            width = 100 - margin - (chart_end - end).days / 365 * 100
+        else:
+            width = 100 - margin
+    return margin, width
 
 
 def get_position_by_parent(parent):

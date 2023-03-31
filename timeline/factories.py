@@ -23,4 +23,4 @@ class PhaseDelayFactory(DjangoModelFactory):
     title = Faker("sentence", nb_words=2)
     phase_type = Faker("random_element", elements=[x[0] for x in Phase.TYPES])
     duration = Faker("pyint", min_value=1, max_value=10)
-    delay = Faker("pydecimal", min_value=-3, max_value=3)
+    delay = Faker("pyint", min_value=-3, max_value=3)

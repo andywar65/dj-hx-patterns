@@ -1,10 +1,15 @@
 # import calendar
-from datetime import timedelta
+from datetime import date, timedelta
 
 from django.test import TestCase
 
 from .factories import PhaseDelayFactory, PhaseStartFactory
-from .models import Phase, get_position_by_parent, move_younger_siblings
+from .models import (
+    Phase,
+    get_chart_start_end,
+    get_position_by_parent,
+    move_younger_siblings,
+)
 
 # from django.urls import reverse
 
@@ -83,6 +88,15 @@ class PhaseModelTest(TestCase):
         }
         self.assertEquals(pha1.get_popup(), popup)
         print("\n-Test get popup")
+
+    def test_get_chart_start_end(self):
+        self.assertEquals(
+            get_chart_start_end(2023, 1), (date(2023, 1, 1), date(2023, 12, 31))
+        )
+        self.assertEquals(
+            get_chart_start_end(2023, 2), (date(2023, 7, 1), date(2024, 6, 30))
+        )
+        print("\n-Test get chart start & end")
 
 
 class PhaseModifiedModelTest(TestCase):

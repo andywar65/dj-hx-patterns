@@ -1,13 +1,15 @@
-# import calendar
+import calendar
 from datetime import date, timedelta
 
 from django.test import TestCase
+from django.utils.timezone import now
 
 from .factories import PhaseDelayFactory, PhaseStartFactory
 from .models import (
     Phase,
     get_chart_start_end,
     get_margin_width,
+    get_month_dict,
     get_position_by_parent,
     move_younger_siblings,
 )
@@ -113,6 +115,20 @@ class PhaseModelTest(TestCase):
         self.assertEquals(get_margin_width(andy, mt, chst, chen), (27, 3))
         self.assertEquals(get_margin_width(after, after, chst, chen), (100, 0))
         print("\n-Test margin and width")
+
+    def test_get_month_dict(self):
+        now_y = now().year
+        now_m = now().month
+        self.assertEquals(next(iter(get_month_dict(1999, 1))), "Jan")
+        self.assertEquals(next(iter(get_month_dict(1999, 7))), "Jul")
+        self.assertTrue(get_month_dict(now_y, now_m)[calendar.month_abbr[now_m]])
+        print("\n-Test get month dict")
+
+    def test_draw_bar_chart(self):
+        phase = Phase.objects.create(title="Foo", start=date(2023, 4, 13))
+        style = "background-color: #dddddd; margin-left: 27%; width: 2%"
+        self.assertEquals(phase.draw_bar_chart(2023, 1), style)
+        print("\n-Test draw bar chart")
 
 
 class PhaseModifiedModelTest(TestCase):

@@ -2,6 +2,7 @@ import calendar
 from datetime import date, timedelta
 
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.timezone import now
 
 from .factories import PhaseDelayFactory, PhaseStartFactory
@@ -13,8 +14,6 @@ from .models import (
     get_position_by_parent,
     move_younger_siblings,
 )
-
-# from django.urls import reverse
 
 
 class PhaseModelTest(TestCase):
@@ -165,3 +164,55 @@ class PhaseModifiedModelTest(TestCase):
         pha1 = Phase.objects.get(title="Uncle")
         self.assertEquals(pha1.position, 0)
         print("\n-Test move younger roots")
+
+
+class PhaseViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        print("\nTest unmodified objects timeline views")
+        parent = PhaseStartFactory(title="Parent")
+        PhaseDelayFactory.create(parent=parent, title="First")
+        PhaseDelayFactory.create(parent=parent, position=1, title="Last")
+
+    def test_list_view(self):
+        response = self.client.get(
+            reverse("timeline:list", kwargs={"year": 2023, "month": 1})
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test list status 200")
+        self.assertTemplateUsed(response, "timeline/list.html")
+        print("\n-Test list template")
+        self.assertEquals(response.context["year"], 2023)
+        self.assertIsInstance(response.context["month_dict"], dict)
+        self.assertEquals(response.context["object_list"].first().tree_depth, 0)
+        print("\n-Test list context")
+        response = self.client.get(
+            reverse("timeline:list", kwargs={"year": 2023, "month": 1}),
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertTemplateUsed(response, "timeline/htmx/list.html")
+        print("\n-Test list template with HTMX header")
+
+    def test_create_view(self):
+        response = self.client.get(reverse("timeline:create"), HTTP_HX_REQUEST="true")
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test create status 200")
+        self.assertTemplateUsed(response, "timeline/htmx/create.html")
+        print("\n-Test create template")
+        parent = Phase.objects.get(title="Parent")
+        response = self.client.post(
+            reverse("timeline:create"),
+            {"title": "Foo", "parent": parent.id},
+            HTTP_HX_REQUEST="true",
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("timeline:add_button") + "?refresh=true",
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test create redirect")
+        it3 = Phase.objects.last()
+        self.assertEqual(it3.position, 2)
+        print("\n-Test last created position")

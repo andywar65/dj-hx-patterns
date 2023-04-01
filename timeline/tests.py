@@ -223,3 +223,92 @@ class PhaseViewTest(TestCase):
         it3 = Phase.objects.last()
         self.assertEqual(it3.position, 2)
         print("\n-Test last created position")
+
+
+class PhaseViewModifyTest(TestCase):
+    def setUp(self):
+        print("\nTest modified objects timeline views")
+        parent = PhaseStartFactory(title="Parent")
+        PhaseDelayFactory.create(parent=parent, title="First")
+        PhaseDelayFactory.create(parent=parent, position=1, title="Last")
+
+    def test_update_view(self):
+        ph1 = Phase.objects.get(title="First")
+        response = self.client.get(
+            reverse("timeline:update", kwargs={"pk": ph1.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test update status 200")
+        self.assertTemplateUsed(response, "timeline/htmx/update.html")
+        print("\n-Test update template")
+        response = self.client.post(
+            reverse("timeline:update", kwargs={"pk": ph1.id}),
+            {
+                "title": "Bar",
+                "parent": "",
+                "phase_type": "#dddddd",
+                "start": "",
+                "duration": 2,
+                "delay": 0,
+            },
+            HTTP_HX_REQUEST="true",
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("timeline:updating", kwargs={"pk": ph1.id}),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test update redirect")
+
+    # TODO fix next tests
+
+    def test_move_down_view(self):
+        ph1 = Phase.objects.get(title="First")
+        response = self.client.get(
+            reverse("timeline:move_down", kwargs={"pk": ph1.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 302)
+        print("\n-Test move down status 302")
+        self.assertRedirects(
+            response,
+            reverse("timeline:list"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test move down redirect")
+        ph2 = Phase.objects.get(title="Last")
+        self.assertEqual(ph2.position, 1)
+        print("\n-Test move down next position")
+
+    def test_move_up_view(self):
+        ph2 = Phase.objects.get(title="Last")
+        response = self.client.get(
+            reverse("timeline:move_up", kwargs={"pk": ph2.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 302)
+        print("\n-Test move up status 302")
+        self.assertRedirects(
+            response,
+            reverse("timeline:list"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test move up redirect")
+        ph1 = Phase.objects.get(title="First")
+        self.assertEqual(ph1.position, 2)
+        print("\n-Test move up previous position")
+
+    def test_delete_view(self):
+        ph1 = Phase.objects.get(title="First")
+        response = self.client.get(
+            reverse("timeline:delete", kwargs={"pk": ph1.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test delete status 200")
+        self.assertTemplateUsed(response, "timeline/htmx/delete.html")
+        print("\n-Test delete template")
+        ph2 = Phase.objects.get(title="Last")
+        self.assertEqual(ph2.position, 1)
+        print("\n-Test delete next position")

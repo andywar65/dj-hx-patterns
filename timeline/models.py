@@ -154,6 +154,7 @@ def get_chart_start_end(year, month):
 
 
 def get_margin_width(start, end, chart_start, chart_end):
+    # TODO check inconsistent output (see test)
     width = 100
     if start <= chart_start:
         margin = 0
@@ -169,7 +170,7 @@ def get_margin_width(start, end, chart_start, chart_end):
             width = 100 - margin - (chart_end - end).days / 365 * 100
         else:
             width = 100 - margin
-    return margin, width
+    return int(margin), int(width)
 
 
 def get_position_by_parent(parent):

@@ -7,6 +7,7 @@ from .factories import PhaseDelayFactory, PhaseStartFactory
 from .models import (
     Phase,
     get_chart_start_end,
+    get_margin_width,
     get_position_by_parent,
     move_younger_siblings,
 )
@@ -97,6 +98,21 @@ class PhaseModelTest(TestCase):
             get_chart_start_end(2023, 2), (date(2023, 7, 1), date(2024, 6, 30))
         )
         print("\n-Test get chart start & end")
+
+    def test_get_margin_width(self):
+        chst = date(2023, 1, 1)
+        chen = date(2023, 12, 31)
+        before = date(2022, 4, 13)
+        andy = date(2023, 4, 13)
+        mt = date(2023, 4, 23)
+        after = date(2024, 4, 13)
+        self.assertEquals(get_margin_width(before, before, chst, chen), (0, 0))
+        self.assertEquals(get_margin_width(before, andy, chst, chen), (0, 28))
+        self.assertEquals(get_margin_width(before, after, chst, chen), (0, 100))
+        self.assertEquals(get_margin_width(andy, after, chst, chen), (27, 100 - 28))
+        self.assertEquals(get_margin_width(andy, mt, chst, chen), (27, 3))
+        self.assertEquals(get_margin_width(after, after, chst, chen), (100, 0))
+        print("\n-Test margin and width")
 
 
 class PhaseModifiedModelTest(TestCase):

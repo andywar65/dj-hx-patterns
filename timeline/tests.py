@@ -202,7 +202,14 @@ class PhaseViewTest(TestCase):
         parent = Phase.objects.get(title="Parent")
         response = self.client.post(
             reverse("timeline:create"),
-            {"title": "Foo", "parent": parent.id},
+            {
+                "title": "Foo",
+                "parent": parent.id,
+                "phase_type": "#dddddd",
+                "start": "",
+                "duration": 2,
+                "delay": 0,
+            },
             HTTP_HX_REQUEST="true",
             follow=True,
         )

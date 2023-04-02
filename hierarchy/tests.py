@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import Category, get_position_by_parent, move_younger_siblings
 
@@ -82,3 +83,145 @@ class CategoryModifiedModelTest(TestCase):
         cat1 = Category.objects.get(title="Uncle")
         self.assertEquals(cat1.position, 0)
         print("\n-Test move younger roots")
+
+
+class CategoryViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        print("\nTest unmodified objects hierarchy views")
+        parent = Category.objects.create(title="Parent")
+        Category.objects.create(parent=parent, title="First")
+        Category.objects.create(parent=parent, position=1, title="Last")
+
+    def test_list_view(self):
+        response = self.client.get(reverse("hierarchy:list"))
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test list status 200")
+        self.assertTemplateUsed(response, "hierarchy/list.html")
+        print("\n-Test list template")
+        self.assertEquals(response.context["object_list"].first().tree_depth, 0)
+        print("\n-Test list context")
+        response = self.client.get(
+            reverse("hierarchy:list"),
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertTemplateUsed(response, "hierarchy/htmx/list.html")
+        print("\n-Test list template with HTMX header")
+
+    def test_create_view(self):
+        response = self.client.get(reverse("hierarchy:create"), HTTP_HX_REQUEST="true")
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test create status 200")
+        self.assertTemplateUsed(response, "hierarchy/htmx/create.html")
+        print("\n-Test create template")
+        parent = Category.objects.get(title="Parent")
+        response = self.client.post(
+            reverse("hierarchy:create"),
+            {
+                "title": "Foo",
+                "parent": parent.id,
+            },
+            HTTP_HX_REQUEST="true",
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("hierarchy:list"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test create redirect")
+        cat3 = Category.objects.last()
+        self.assertEqual(cat3.position, 2)
+        print("\n-Test last created position")
+
+
+class CategoryViewModifyTest(TestCase):
+    def setUp(self):
+        print("\nTest modified objects hierarchy views")
+        parent = Category.objects.create(title="Parent")
+        Category.objects.create(parent=parent, title="First")
+        Category.objects.create(parent=parent, position=1, title="Last")
+
+    def test_update_view(self):
+        parent = Category.objects.get(title="Parent")
+        cat1 = Category.objects.get(title="First")
+        response = self.client.get(
+            reverse("hierarchy:update", kwargs={"pk": cat1.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test update status 200")
+        self.assertTemplateUsed(response, "hierarchy/htmx/update.html")
+        print("\n-Test update template")
+        response = self.client.post(
+            reverse("hierarchy:update", kwargs={"pk": cat1.id}),
+            {
+                "title": "Bar",
+                "parent": parent.id,
+            },
+            HTTP_HX_REQUEST="true",
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("hierarchy:detail", kwargs={"pk": cat1.id}),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test update redirect")
+        response = self.client.post(
+            reverse("hierarchy:update", kwargs={"pk": cat1.id}),
+            {
+                "title": "Bar",
+                "parent": "",
+            },
+            HTTP_HX_REQUEST="true",
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("hierarchy:detail", kwargs={"pk": cat1.id}) + "?refresh=true",
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test update refresh redirect")
+
+    def test_move_down_view(self):
+        cat1 = Category.objects.get(title="First")
+        response = self.client.get(
+            reverse("hierarchy:move_down", kwargs={"pk": cat1.id}),
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test move down status 200")
+        self.assertTemplateUsed(response, "hierarchy/htmx/move.html")
+        print("\n-Test move down template")
+        cat2 = Category.objects.get(title="Last")
+        self.assertEqual(cat2.position, 0)
+        print("\n-Test move down next position")
+
+    def test_move_up_view(self):
+        cat2 = Category.objects.get(title="Last")
+        response = self.client.get(
+            reverse("hierarchy:move_up", kwargs={"pk": cat2.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test move up status 200")
+        self.assertTemplateUsed(response, "hierarchy/htmx/move.html")
+        print("\n-Test move up template")
+        cat1 = Category.objects.get(title="First")
+        self.assertEqual(cat1.position, 1)
+        print("\n-Test move up previous position")
+
+    def test_delete_view(self):
+        cat1 = Category.objects.get(title="First")
+        response = self.client.get(
+            reverse("hierarchy:delete", kwargs={"pk": cat1.id}), HTTP_HX_REQUEST="true"
+        )
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test delete status 200")
+        self.assertTemplateUsed(response, "hierarchy/htmx/delete.html")
+        print("\n-Test delete template")
+        cat2 = Category.objects.get(title="Last")
+        self.assertEqual(cat2.position, 0)
+        print("\n-Test delete next position")

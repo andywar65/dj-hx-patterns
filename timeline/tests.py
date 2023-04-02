@@ -262,24 +262,17 @@ class PhaseViewModifyTest(TestCase):
         )
         print("\n-Test update redirect")
 
-    # TODO fix next tests
-
     def test_move_down_view(self):
         ph1 = Phase.objects.get(title="First")
         response = self.client.get(
             reverse("timeline:move_down", kwargs={"pk": ph1.id}), HTTP_HX_REQUEST="true"
         )
-        self.assertEqual(response.status_code, 302)
-        print("\n-Test move down status 302")
-        self.assertRedirects(
-            response,
-            reverse("timeline:list"),
-            status_code=302,
-            target_status_code=200,
-        )
-        print("\n-Test move down redirect")
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test move down status 200")
+        self.assertTemplateUsed(response, "timeline/htmx/move.html")
+        print("\n-Test move down template")
         ph2 = Phase.objects.get(title="Last")
-        self.assertEqual(ph2.position, 1)
+        self.assertEqual(ph2.position, 0)
         print("\n-Test move down next position")
 
     def test_move_up_view(self):
@@ -287,17 +280,12 @@ class PhaseViewModifyTest(TestCase):
         response = self.client.get(
             reverse("timeline:move_up", kwargs={"pk": ph2.id}), HTTP_HX_REQUEST="true"
         )
-        self.assertEqual(response.status_code, 302)
-        print("\n-Test move up status 302")
-        self.assertRedirects(
-            response,
-            reverse("timeline:list"),
-            status_code=302,
-            target_status_code=200,
-        )
-        print("\n-Test move up redirect")
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test move up status 200")
+        self.assertTemplateUsed(response, "timeline/htmx/move.html")
+        print("\n-Test move up template")
         ph1 = Phase.objects.get(title="First")
-        self.assertEqual(ph1.position, 2)
+        self.assertEqual(ph1.position, 1)
         print("\n-Test move up previous position")
 
     def test_delete_view(self):
@@ -310,5 +298,5 @@ class PhaseViewModifyTest(TestCase):
         self.assertTemplateUsed(response, "timeline/htmx/delete.html")
         print("\n-Test delete template")
         ph2 = Phase.objects.get(title="Last")
-        self.assertEqual(ph2.position, 1)
+        self.assertEqual(ph2.position, 0)
         print("\n-Test delete next position")

@@ -192,10 +192,15 @@ class CategoryViewModifyTest(TestCase):
             reverse("hierarchy:move_down", kwargs={"pk": cat1.id}),
             HTTP_HX_REQUEST="true",
         )
-        self.assertEqual(response.status_code, 200)
-        print("\n-Test move down status 200")
-        self.assertTemplateUsed(response, "hierarchy/htmx/move.html")
-        print("\n-Test move down template")
+        self.assertEqual(response.status_code, 302)
+        print("\n-Test move down status 302")
+        self.assertRedirects(
+            response,
+            reverse("hierarchy:list"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test move down next redirects")
         cat2 = Category.objects.get(title="Last")
         self.assertEqual(cat2.position, 0)
         print("\n-Test move down next position")
@@ -205,10 +210,15 @@ class CategoryViewModifyTest(TestCase):
         response = self.client.get(
             reverse("hierarchy:move_up", kwargs={"pk": cat2.id}), HTTP_HX_REQUEST="true"
         )
-        self.assertEqual(response.status_code, 200)
-        print("\n-Test move up status 200")
-        self.assertTemplateUsed(response, "hierarchy/htmx/move.html")
-        print("\n-Test move up template")
+        self.assertEqual(response.status_code, 302)
+        print("\n-Test move up status 302")
+        self.assertRedirects(
+            response,
+            reverse("hierarchy:list"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test move up next redirects")
         cat1 = Category.objects.get(title="First")
         self.assertEqual(cat1.position, 1)
         print("\n-Test move up previous position")

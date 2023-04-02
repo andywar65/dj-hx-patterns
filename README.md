@@ -1,5 +1,5 @@
 # dj-hx-patterns
-Some patterns I use with Django and HTMX, Python 3.10 and Django 4.1
+Some patterns I use with Django and HTMX (Python 3.10 and Django 4.1)
 ## Purpose
 Experiment some patterns using [HTMX](https://htmx.org/) along with Django. Build reusable apps with typical `CRUD` interactions (see below).
 ## Installation
@@ -17,5 +17,7 @@ Long list with pagination. Modify or delete in bulk.
 Tree of hierarchical items. Based on fabulous lightweight [django-tree-queries](https://django-tree-queries.readthedocs.io/en/latest/).
 ### Timeline
 A timeline of hierarchical items. Items may have start date or follow parent item.
+## Tests
+Coverage 99%.
 ## TODO
-Tests.
+HTMX is great, but it adds a layer of complexity: you can swap just chunks of your `DOM`, targeting a specific element (use tag `hx-target="#<DOM element>"`). This info normally is found in your `Template`, so to get the whole picture of an interaction you have to track both `View` and `Template`. This could be avoided using `HX-target` header in the `dispatch` method of your `View`. See also [django-htmx Response Modifying Functions](https://django-htmx.readthedocs.io/en/latest/http.html#response-modifying-functions).

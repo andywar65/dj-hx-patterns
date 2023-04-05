@@ -86,11 +86,6 @@ class ItemMoveDownView(HxOnlyTemplateMixin, TemplateView):
         self.object = get_object_or_404(Item, id=self.kwargs["pk"])
         self.object.move_down()
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super(ItemMoveDownView, self).dispatch(request, *args, **kwargs)
-        response["HX-Retarget"] = "#item-%(id)s" % {"id": self.object.id}
-        return response
-
 
 class ItemMoveUpView(HxOnlyTemplateMixin, TemplateView):
     template_name = "boxlist/htmx/moving.html"
@@ -99,8 +94,3 @@ class ItemMoveUpView(HxOnlyTemplateMixin, TemplateView):
         super(ItemMoveUpView, self).setup(request, *args, **kwargs)
         self.object = get_object_or_404(Item, id=self.kwargs["pk"])
         self.object.move_up()
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super(ItemMoveUpView, self).dispatch(request, *args, **kwargs)
-        response["HX-Retarget"] = "#item-%(id)s" % {"id": self.object.id}
-        return response

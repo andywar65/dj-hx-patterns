@@ -3,7 +3,8 @@
 
 <div class="card">
   <form
-    hx-post="{% url 'boxlist:create' %}">
+    hx-post="{% url 'boxlist:create' %}"
+    hx-target="#content">
     <div class="card-body">
       {% bootstrap_form form %}
       <button class="btn btn-success" type="submit">
@@ -12,7 +13,8 @@
       </button>
       <button class="btn-close"
               title="{% trans 'Dismiss' %}"
-              hx-get="{% url 'boxlist:add_button' %}">
+              hx-get="{% url 'boxlist:add_button' %}"
+              hx-target="#add-button">
       </button>
     </div>
   </form>

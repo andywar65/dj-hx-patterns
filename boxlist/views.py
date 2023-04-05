@@ -31,11 +31,23 @@ class ItemCreateView(HxOnlyTemplateMixin, CreateView):
         return super(ItemCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("boxlist:list")
+        return reverse("boxlist:add_button") + "?refresh=true"
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super(ItemCreateView, self).dispatch(request, *args, **kwargs)
+        response["HX-Retarget"] = "#add-button"
+        return response
 
 
 class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "boxlist/htmx/add_button.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super(ItemAddButtonView, self).dispatch(request, *args, **kwargs)
+        response["HX-Retarget"] = "#add-button"
+        if "refresh" in request.GET:
+            response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
 
 
 class ItemDetailView(HxOnlyTemplateMixin, DetailView):

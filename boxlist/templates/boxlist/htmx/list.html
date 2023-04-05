@@ -1,5 +1,10 @@
 {% load i18n %}
 
+<div hx-get="{% url 'boxlist:list' %}"
+     hx-trigger="refreshList from:body"
+     hx-target="#content"
+     hx-push-url="true">
+</div>
 <div class="card mx-auto" style="max-width: 480px">
   <div class="card-header">
     <h3>{% translate 'Item list' %}</h3>

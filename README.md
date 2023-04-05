@@ -20,4 +20,5 @@ A timeline of hierarchical items. Items may have start date or follow parent ite
 ## Tests
 Coverage 99%.
 ## TODO
-HTMX is great, but it adds a layer of complexity: you can swap just chunks of your `DOM`, targeting a specific element (use tag `hx-target="#<DOM element>"`). This info normally is found in your `Template`, so to get the whole picture of an interaction you have to track both `View` and `Template`. This could be avoided using `HX-target` header in the `dispatch` method of your `View`. See also [django-htmx Response Modifying Functions](https://django-htmx.readthedocs.io/en/latest/http.html#response-modifying-functions).
+HTMX is great, but it adds a layer of complexity: you can swap just chunks of your `DOM`, targeting a specific element (use tag `hx-target="#<DOM element>"`). This info normally is found in your `Template`, so to get the whole picture of an interaction you have to track both `View` and `Template`. This could be avoided using `HX-Retarget` header in the `dispatch` method of your `View`. See also [django-htmx Response Modifying Functions](https://django-htmx.readthedocs.io/en/latest/http.html#response-modifying-functions).
+P.S. I tried to apply these concepts to the Boxlist app, but I'm not sure that complexity has decreased!

@@ -15,11 +15,15 @@ from .models import Item
 
 
 class ItemListView(HxPageTemplateMixin, ListView):
+    """Rendered in #content"""
+
     model = Item
     template_name = "boxlist/htmx/list.html"
 
 
 class ItemCreateView(HxOnlyTemplateMixin, CreateView):
+    """Rendered in #add-button, on success targets #content"""
+
     model = Item
     form_class = ItemCreateForm
     template_name = "boxlist/htmx/create.html"
@@ -34,16 +38,14 @@ class ItemCreateView(HxOnlyTemplateMixin, CreateView):
 
 
 class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
+    """Rendered in #add-button when create is dismissed"""
+
     template_name = "boxlist/htmx/add_button.html"
 
 
-class ItemDetailView(HxOnlyTemplateMixin, DetailView):
-    model = Item
-    context_object_name = "item"
-    template_name = "boxlist/htmx/detail.html"
-
-
 class ItemUpdateView(HxOnlyTemplateMixin, UpdateView):
+    """Rendered in #item-{{ item.id }}"""
+
     model = Item
     form_class = ItemCreateForm
     template_name = "boxlist/htmx/update.html"
@@ -52,7 +54,17 @@ class ItemUpdateView(HxOnlyTemplateMixin, UpdateView):
         return reverse("boxlist:detail", kwargs={"pk": self.object.id})
 
 
+class ItemDetailView(HxOnlyTemplateMixin, DetailView):
+    """Rendered in #item-{{ item.id }} when update is performed or dismissed"""
+
+    model = Item
+    context_object_name = "item"
+    template_name = "boxlist/htmx/detail.html"
+
+
 class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
+    """Rendered in #item-{{ item.id }}, then triggers list in #content"""
+
     template_name = "boxlist/htmx/delete.html"
 
     def setup(self, request, *args, **kwargs):
@@ -63,6 +75,8 @@ class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
 
 
 class ItemMoveDownView(HxOnlyTemplateMixin, TemplateView):
+    """Rendered in #item-{{ item.id }}, then triggers list in #content"""
+
     template_name = "boxlist/htmx/moving.html"
 
     def setup(self, request, *args, **kwargs):
@@ -72,6 +86,8 @@ class ItemMoveDownView(HxOnlyTemplateMixin, TemplateView):
 
 
 class ItemMoveUpView(HxOnlyTemplateMixin, TemplateView):
+    """Rendered in #item-{{ item.id }}, then triggers list in #content"""
+
     template_name = "boxlist/htmx/moving.html"
 
     def setup(self, request, *args, **kwargs):

@@ -3,7 +3,8 @@
 
 <div class="card mb-3">
   <form
-    hx-post="{% url 'boxlist:update' pk=object.id %}">
+    hx-post="{% url 'boxlist:update' pk=object.id %}"
+    hx-target="#item-{{ object.id }}">
     <div class="card-body">
       <h5>{{ object.title }}</h5>
       {% bootstrap_form form %}
@@ -15,7 +16,8 @@
           </button>
           <button class="btn-close"
                   title="{% trans 'Dismiss' %}"
-                  hx-get="{% url 'boxlist:detail' pk=object.id %}">
+                  hx-get="{% url 'boxlist:detail' pk=object.id %}"
+                  hx-target="#item-{{ object.id }}">
           </button>
         </div>
         <div class="col text-end">

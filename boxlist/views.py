@@ -58,6 +58,8 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
     def dispatch(self, request, *args, **kwargs):
         response = super(ItemDetailView, self).dispatch(request, *args, **kwargs)
         response["HX-Retarget"] = "#item-%(id)s" % {"id": self.object.id}
+        if "refresh" in request.GET:
+            response["HX-Trigger-After-Swap"] = "refreshList"
         return response
 
 
@@ -88,18 +90,22 @@ class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
 class ItemMoveDownView(HxOnlyTemplateMixin, RedirectView):
     def setup(self, request, *args, **kwargs):
         super(ItemMoveDownView, self).setup(request, *args, **kwargs)
-        item = get_object_or_404(Item, id=self.kwargs["pk"])
-        item.move_down()
+        self.object = get_object_or_404(Item, id=self.kwargs["pk"])
+        self.object.move_down()
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("boxlist:list")
+        return (
+            reverse("boxlist:detail", kwargs={"pk": self.object.id}) + "?refresh=true"
+        )
 
 
 class ItemMoveUpView(HxOnlyTemplateMixin, RedirectView):
     def setup(self, request, *args, **kwargs):
         super(ItemMoveUpView, self).setup(request, *args, **kwargs)
-        item = get_object_or_404(Item, id=self.kwargs["pk"])
-        item.move_up()
+        self.object = get_object_or_404(Item, id=self.kwargs["pk"])
+        self.object.move_up()
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("boxlist:list")
+        return (
+            reverse("boxlist:detail", kwargs={"pk": self.object.id}) + "?refresh=true"
+        )

@@ -55,6 +55,11 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
     context_object_name = "item"
     template_name = "boxlist/htmx/detail.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super(ItemDetailView, self).dispatch(request, *args, **kwargs)
+        response["HX-Retarget"] = "#item-%(id)s" % {"id": self.object.id}
+        return response
+
 
 class ItemUpdateView(HxOnlyTemplateMixin, UpdateView):
     model = Item
@@ -63,6 +68,11 @@ class ItemUpdateView(HxOnlyTemplateMixin, UpdateView):
 
     def get_success_url(self):
         return reverse("boxlist:detail", kwargs={"pk": self.object.id})
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super(ItemUpdateView, self).dispatch(request, *args, **kwargs)
+        response["HX-Retarget"] = "#item-%(id)s" % {"id": self.object.id}
+        return response
 
 
 class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):

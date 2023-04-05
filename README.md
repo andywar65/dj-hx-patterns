@@ -1,5 +1,5 @@
 # dj-hx-patterns
-Some patterns I use with Django and HTMX (Python 3.10 and Django 4.1)
+Some patterns I use with Django and HTMX (Python 3.10 and Django 4.2)
 ## Purpose
 Experiment some patterns using [HTMX](https://htmx.org/) along with Django. Build reusable apps with typical `CRUD` interactions (see below).
 ## Installation

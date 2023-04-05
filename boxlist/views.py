@@ -69,13 +69,7 @@ class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
         super(ItemDeleteView, self).setup(request, *args, **kwargs)
         item = get_object_or_404(Item, id=self.kwargs["pk"])
         item.move_following_items()
-        self.id = item.id
         item.delete()
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super(ItemDeleteView, self).dispatch(request, *args, **kwargs)
-        response["HX-Retarget"] = "#item-%(id)s" % {"id": self.id}
-        return response
 
 
 class ItemMoveDownView(HxOnlyTemplateMixin, TemplateView):
@@ -83,8 +77,8 @@ class ItemMoveDownView(HxOnlyTemplateMixin, TemplateView):
 
     def setup(self, request, *args, **kwargs):
         super(ItemMoveDownView, self).setup(request, *args, **kwargs)
-        self.object = get_object_or_404(Item, id=self.kwargs["pk"])
-        self.object.move_down()
+        item = get_object_or_404(Item, id=self.kwargs["pk"])
+        item.move_down()
 
 
 class ItemMoveUpView(HxOnlyTemplateMixin, TemplateView):
@@ -92,5 +86,5 @@ class ItemMoveUpView(HxOnlyTemplateMixin, TemplateView):
 
     def setup(self, request, *args, **kwargs):
         super(ItemMoveUpView, self).setup(request, *args, **kwargs)
-        self.object = get_object_or_404(Item, id=self.kwargs["pk"])
-        self.object.move_up()
+        item = get_object_or_404(Item, id=self.kwargs["pk"])
+        item.move_up()

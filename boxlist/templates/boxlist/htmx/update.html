@@ -22,6 +22,7 @@
           <button class="btn btn-danger"
                   title="{% trans 'Delete item' %}"
                   hx-get="{% url 'boxlist:delete' pk=object.id %}"
+                  hx-target="#item-{{ object.id }}"
                   hx-confirm="{% trans 'Are you sure you want to delete item' %} {{ object.title }}?">
             <i class="fa fa-times"></i>
           </button>

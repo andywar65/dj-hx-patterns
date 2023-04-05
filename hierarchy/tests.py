@@ -102,14 +102,15 @@ class CategoryViewTest(TestCase):
         self.assertEquals(response.context["object_list"].first().tree_depth, 0)
         print("\n-Test list context")
         response = self.client.get(
-            reverse("hierarchy:list"),
-            HTTP_HX_REQUEST="true",
+            reverse("hierarchy:list"), headers={"hx-request": "true"}
         )
         self.assertTemplateUsed(response, "hierarchy/htmx/list.html")
         print("\n-Test list template with HTMX header")
 
     def test_create_view(self):
-        response = self.client.get(reverse("hierarchy:create"), HTTP_HX_REQUEST="true")
+        response = self.client.get(
+            reverse("hierarchy:create"), headers={"hx-request": "true"}
+        )
         self.assertEqual(response.status_code, 200)
         print("\n-Test create status 200")
         self.assertTemplateUsed(response, "hierarchy/htmx/create.html")
@@ -121,7 +122,7 @@ class CategoryViewTest(TestCase):
                 "title": "Foo",
                 "parent": parent.id,
             },
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -147,7 +148,8 @@ class CategoryViewModifyTest(TestCase):
         parent = Category.objects.get(title="Parent")
         cat1 = Category.objects.get(title="First")
         response = self.client.get(
-            reverse("hierarchy:update", kwargs={"pk": cat1.id}), HTTP_HX_REQUEST="true"
+            reverse("hierarchy:update", kwargs={"pk": cat1.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)
         print("\n-Test update status 200")
@@ -159,7 +161,7 @@ class CategoryViewModifyTest(TestCase):
                 "title": "Bar",
                 "parent": parent.id,
             },
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -175,7 +177,7 @@ class CategoryViewModifyTest(TestCase):
                 "title": "Bar",
                 "parent": "",
             },
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -190,7 +192,7 @@ class CategoryViewModifyTest(TestCase):
         cat1 = Category.objects.get(title="First")
         response = self.client.get(
             reverse("hierarchy:move_down", kwargs={"pk": cat1.id}),
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 302)
         print("\n-Test move down status 302")
@@ -208,7 +210,8 @@ class CategoryViewModifyTest(TestCase):
     def test_move_up_view(self):
         cat2 = Category.objects.get(title="Last")
         response = self.client.get(
-            reverse("hierarchy:move_up", kwargs={"pk": cat2.id}), HTTP_HX_REQUEST="true"
+            reverse("hierarchy:move_up", kwargs={"pk": cat2.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 302)
         print("\n-Test move up status 302")
@@ -226,7 +229,8 @@ class CategoryViewModifyTest(TestCase):
     def test_delete_view(self):
         cat1 = Category.objects.get(title="First")
         response = self.client.get(
-            reverse("hierarchy:delete", kwargs={"pk": cat1.id}), HTTP_HX_REQUEST="true"
+            reverse("hierarchy:delete", kwargs={"pk": cat1.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)
         print("\n-Test delete status 200")

@@ -69,12 +69,16 @@ class ItemViewTest(TestCase):
         print("\n-Test list status 200")
         self.assertTemplateUsed(response, "boxlist/list.html")
         print("\n-Test list template")
-        response = self.client.get(reverse("boxlist:list"), HTTP_HX_REQUEST="true")
+        response = self.client.get(
+            reverse("boxlist:list"), headers={"hx-request": "true"}
+        )
         self.assertTemplateUsed(response, "boxlist/htmx/list.html")
         print("\n-Test list template with HTMX header")
 
     def test_create_view(self):
-        response = self.client.get(reverse("boxlist:create"), HTTP_HX_REQUEST="true")
+        response = self.client.get(
+            reverse("boxlist:create"), headers={"hx-request": "true"}
+        )
         self.assertEqual(response.status_code, 200)
         print("\n-Test create status 200")
         self.assertTemplateUsed(response, "boxlist/htmx/create.html")
@@ -82,7 +86,7 @@ class ItemViewTest(TestCase):
         response = self.client.post(
             reverse("boxlist:create"),
             {"title": "Foo"},
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -99,7 +103,8 @@ class ItemViewTest(TestCase):
     def test_update_view(self):
         it1 = Item.objects.get(title="First")
         response = self.client.get(
-            reverse("boxlist:update", kwargs={"pk": it1.id}), HTTP_HX_REQUEST="true"
+            reverse("boxlist:update", kwargs={"pk": it1.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)
         print("\n-Test update status 200")
@@ -108,7 +113,7 @@ class ItemViewTest(TestCase):
         response = self.client.post(
             reverse("boxlist:update", kwargs={"pk": it1.id}),
             {"title": "Bar"},
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -129,7 +134,8 @@ class ItemViewModifyTest(TestCase):
     def test_move_down_view(self):
         it1 = Item.objects.get(title="First")
         response = self.client.get(
-            reverse("boxlist:move_down", kwargs={"pk": it1.id}), HTTP_HX_REQUEST="true"
+            reverse("boxlist:move_down", kwargs={"pk": it1.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 302)
         print("\n-Test move down status 302")
@@ -147,7 +153,8 @@ class ItemViewModifyTest(TestCase):
     def test_move_up_view(self):
         it2 = Item.objects.get(title="Last")
         response = self.client.get(
-            reverse("boxlist:move_up", kwargs={"pk": it2.id}), HTTP_HX_REQUEST="true"
+            reverse("boxlist:move_up", kwargs={"pk": it2.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 302)
         print("\n-Test move up status 302")
@@ -165,7 +172,8 @@ class ItemViewModifyTest(TestCase):
     def test_delete_view(self):
         it1 = Item.objects.get(title="First")
         response = self.client.get(
-            reverse("boxlist:delete", kwargs={"pk": it1.id}), HTTP_HX_REQUEST="true"
+            reverse("boxlist:delete", kwargs={"pk": it1.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)
         print("\n-Test delete status 200")

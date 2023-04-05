@@ -24,12 +24,16 @@ class RowViewTest(TestCase):
         print("\n-Test list status 200")
         self.assertTemplateUsed(response, "bulktable/list.html")
         print("\n-Test list template")
-        response = self.client.get(reverse("bulktable:list"), HTTP_HX_REQUEST="true")
+        response = self.client.get(
+            reverse("bulktable:list"), headers={"hx-request": "true"}
+        )
         self.assertTemplateUsed(response, "bulktable/htmx/list.html")
         print("\n-Test list template with HTMX header")
 
     def test_create_view(self):
-        response = self.client.get(reverse("bulktable:create"), HTTP_HX_REQUEST="true")
+        response = self.client.get(
+            reverse("bulktable:create"), headers={"hx-request": "true"}
+        )
         self.assertEqual(response.status_code, 200)
         print("\n-Test create status 200")
         self.assertTemplateUsed(response, "bulktable/htmx/create.html")
@@ -37,7 +41,7 @@ class RowViewTest(TestCase):
         response = self.client.post(
             reverse("bulktable:create"),
             {"title": "Foo", "color": "light"},
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -52,7 +56,9 @@ class RowViewTest(TestCase):
 class RowModifiedViewTest(TestCase):
     def test_update_view(self):
         RowFactory.create_batch(3)
-        response = self.client.get(reverse("bulktable:update"), HTTP_HX_REQUEST="true")
+        response = self.client.get(
+            reverse("bulktable:update"), headers={"hx-request": "true"}
+        )
         self.assertEqual(response.status_code, 200)
         print("\n-Test update status 200")
         self.assertTemplateUsed(response, "bulktable/htmx/update.html")
@@ -62,7 +68,7 @@ class RowModifiedViewTest(TestCase):
         response = self.client.post(
             reverse("bulktable:update"),
             {"title": "Foo", "color": "success", "page": 1, "ids": [first.id, last.id]},
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -80,14 +86,16 @@ class RowModifiedViewTest(TestCase):
 
     def test_delete_view(self):
         RowFactory.create_batch(1)
-        response = self.client.get(reverse("bulktable:delete"), HTTP_HX_REQUEST="true")
+        response = self.client.get(
+            reverse("bulktable:delete"), headers={"hx-request": "true"}
+        )
         self.assertEqual(response.status_code, 302)
         print("\n-Test delete status 302")
         last = Row.objects.last()
         response = self.client.get(
             reverse("bulktable:delete"),
             {"page": 2, "ids": [last.id], "number": 1},
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(

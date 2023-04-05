@@ -188,13 +188,15 @@ class PhaseViewTest(TestCase):
         print("\n-Test list context")
         response = self.client.get(
             reverse("timeline:list", kwargs={"year": 2023, "month": 1}),
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
         )
         self.assertTemplateUsed(response, "timeline/htmx/list.html")
         print("\n-Test list template with HTMX header")
 
     def test_create_view(self):
-        response = self.client.get(reverse("timeline:create"), HTTP_HX_REQUEST="true")
+        response = self.client.get(
+            reverse("timeline:create"), headers={"hx-request": "true"}
+        )
         self.assertEqual(response.status_code, 200)
         print("\n-Test create status 200")
         self.assertTemplateUsed(response, "timeline/htmx/create.html")
@@ -210,7 +212,7 @@ class PhaseViewTest(TestCase):
                 "duration": 2,
                 "delay": 0,
             },
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -235,7 +237,8 @@ class PhaseViewModifyTest(TestCase):
     def test_update_view(self):
         ph1 = Phase.objects.get(title="First")
         response = self.client.get(
-            reverse("timeline:update", kwargs={"pk": ph1.id}), HTTP_HX_REQUEST="true"
+            reverse("timeline:update", kwargs={"pk": ph1.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)
         print("\n-Test update status 200")
@@ -251,7 +254,7 @@ class PhaseViewModifyTest(TestCase):
                 "duration": 2,
                 "delay": 0,
             },
-            HTTP_HX_REQUEST="true",
+            headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
@@ -265,7 +268,8 @@ class PhaseViewModifyTest(TestCase):
     def test_move_down_view(self):
         ph1 = Phase.objects.get(title="First")
         response = self.client.get(
-            reverse("timeline:move_down", kwargs={"pk": ph1.id}), HTTP_HX_REQUEST="true"
+            reverse("timeline:move_down", kwargs={"pk": ph1.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)
         print("\n-Test move down status 200")
@@ -278,7 +282,8 @@ class PhaseViewModifyTest(TestCase):
     def test_move_up_view(self):
         ph2 = Phase.objects.get(title="Last")
         response = self.client.get(
-            reverse("timeline:move_up", kwargs={"pk": ph2.id}), HTTP_HX_REQUEST="true"
+            reverse("timeline:move_up", kwargs={"pk": ph2.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)
         print("\n-Test move up status 200")
@@ -291,7 +296,8 @@ class PhaseViewModifyTest(TestCase):
     def test_delete_view(self):
         ph1 = Phase.objects.get(title="First")
         response = self.client.get(
-            reverse("timeline:delete", kwargs={"pk": ph1.id}), HTTP_HX_REQUEST="true"
+            reverse("timeline:delete", kwargs={"pk": ph1.id}),
+            headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)
         print("\n-Test delete status 200")

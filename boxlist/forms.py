@@ -4,11 +4,6 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import Item
 
-# class ItemCreateForm(ModelForm):
-# class Meta:
-# model = Item
-# exclude = ("position",)
-
 
 class ItemCreateForm(forms.Form):
     title = forms.CharField(
@@ -18,5 +13,13 @@ class ItemCreateForm(forms.Form):
     after = ModelChoiceField(
         queryset=Item.objects.all(),
         label=_("Add after..."),
+        required=False,
+    )
+
+
+class ItemUpdateForm(ItemCreateForm):
+    after = ModelChoiceField(
+        queryset=Item.objects.all(),
+        label=_("Move after..."),
         required=False,
     )

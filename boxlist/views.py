@@ -1,17 +1,11 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import (
-    DetailView,
-    FormView,
-    ListView,
-    TemplateView,
-    UpdateView,
-)
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
-from .forms import ItemCreateForm
-from .models import Item, move_down_siblings
+from .forms import ItemCreateForm, ItemUpdateForm
+from .models import Item, intercalate_siblings, move_down_siblings
 
 
 class ItemListView(HxPageTemplateMixin, ListView):
@@ -24,7 +18,6 @@ class ItemListView(HxPageTemplateMixin, ListView):
 class ItemCreateView(HxOnlyTemplateMixin, FormView):
     """Rendered in #add-button, on success targets #content"""
 
-    # model = Item
     form_class = ItemCreateForm
     template_name = "boxlist/htmx/create.html"
 
@@ -55,14 +48,44 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "boxlist/htmx/add_button.html"
 
 
-class ItemUpdateView(HxOnlyTemplateMixin, UpdateView):
+class ItemUpdateView(HxOnlyTemplateMixin, FormView):
     """Rendered in #item-{{ item.id }}"""
 
-    model = Item
-    form_class = ItemCreateForm
+    # model = Item
+    form_class = ItemUpdateForm
     template_name = "boxlist/htmx/update.html"
 
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.object = get_object_or_404(Item, id=self.kwargs["pk"])
+        self.original_position = self.object.position
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["title"] = self.object.title
+        prev = self.object.get_previous_item()
+        if prev:
+            initial["after"] = prev.id
+        return initial
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["object"] = self.object
+        return context
+
+    def form_valid(self, form):
+        position = self.original_position
+        if form.cleaned_data["after"]:
+            position = form.cleaned_data["after"].position + 1
+        intercalate_siblings(position, self.original_position)
+        self.object.title = form.cleaned_data["title"]
+        self.object.position = position
+        self.object.save()
+        return super().form_valid(form)
+
     def get_success_url(self):
+        if not self.object.position == self.original_position:
+            return reverse("boxlist:list")
         return reverse("boxlist:detail", kwargs={"pk": self.object.id})
 
 

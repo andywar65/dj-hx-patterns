@@ -69,3 +69,8 @@ def move_down_siblings(position):
     for sibling in siblings:
         sibling.position += 1
         sibling.save()
+
+
+def intercalate_siblings(new, original):
+    if new == original:
+        return

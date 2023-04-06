@@ -83,22 +83,25 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
 
     def get_success_url(self):
         if not self.object.position == self.original_position:
-            return reverse("boxlist:updating")
+            return (
+                reverse("boxlist:detail", kwargs={"pk": self.object.id})
+                + "?refresh=true"
+            )
         return reverse("boxlist:detail", kwargs={"pk": self.object.id})
 
 
-class ItemUpdatingView(HxOnlyTemplateMixin, TemplateView):
-    """Rendered in #item-{{ item.id }} when update is successful"""
-
-    template_name = "boxlist/htmx/updating.html"
-
-
 class ItemDetailView(HxOnlyTemplateMixin, DetailView):
-    """Rendered in #item-{{ item.id }} when update is dismissed"""
+    """Rendered in #item-{{ item.id }} when update is dismissed or successful"""
 
     model = Item
     context_object_name = "item"
     template_name = "boxlist/htmx/detail.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if "refresh" in request.GET:
+            response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
 
 
 class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):

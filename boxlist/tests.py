@@ -100,8 +100,14 @@ class ItemViewTest(TestCase):
         self.assertEqual(it3.position, 3)
         print("\n-Test last created position")
 
+
+class ItemViewModifyTest(TestCase):
+    def setUp(self):
+        print("\nTest modified objects boxlist views")
+        Item.objects.create(position=1, title="First")
+        Item.objects.create(position=2, title="Last")
+
     def test_update_view(self):
-        # TODO this view can modify objects
         it1 = Item.objects.get(title="First")
         response = self.client.get(
             reverse("boxlist:update", kwargs={"pk": it1.id}),
@@ -111,9 +117,10 @@ class ItemViewTest(TestCase):
         print("\n-Test update status 200")
         self.assertTemplateUsed(response, "boxlist/htmx/update.html")
         print("\n-Test update template")
+        it2 = Item.objects.get(title="Last")
         response = self.client.post(
             reverse("boxlist:update", kwargs={"pk": it1.id}),
-            {"title": "Bar"},
+            {"title": "Bar", "replace": it2.id},
             headers={"hx-request": "true"},
             follow=True,
         )
@@ -124,13 +131,8 @@ class ItemViewTest(TestCase):
             target_status_code=200,
         )
         print("\n-Test update redirect")
-
-
-class ItemViewModifyTest(TestCase):
-    def setUp(self):
-        print("\nTest modified objects boxlist views")
-        Item.objects.create(position=1, title="First")
-        Item.objects.create(position=2, title="Last")
+        it2 = Item.objects.get(title="Last")
+        self.assertEqual(it2.position, 1)
 
     def test_move_down_view(self):
         it1 = Item.objects.get(title="First")

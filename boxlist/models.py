@@ -73,7 +73,7 @@ def move_down_siblings(position):
 
 def intercalate_siblings(new, original):
     if new == original:
-        return
+        return new
     if original > new:
         siblings = Item.objects.filter(position__gte=new).exclude(
             position__gte=original

@@ -49,7 +49,7 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):
-    """Rendered in #item-{{ item.id }}"""
+    """Rendered in #item-{{ item.id }}, on success targets #content"""
 
     # model = Item
     form_class = ItemUpdateForm
@@ -84,13 +84,11 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        if not self.object.position == self.original_position:
-            return reverse("boxlist:list")
-        return reverse("boxlist:detail", kwargs={"pk": self.object.id})
+        return reverse("boxlist:list")
 
 
 class ItemDetailView(HxOnlyTemplateMixin, DetailView):
-    """Rendered in #item-{{ item.id }} when update is performed or dismissed"""
+    """Rendered in #item-{{ item.id }} when update is dismissed"""
 
     model = Item
     context_object_name = "item"

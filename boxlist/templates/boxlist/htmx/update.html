@@ -4,7 +4,7 @@
 <div class="card mb-3">
   <form
     hx-post="{% url 'boxlist:update' pk=object.id %}"
-    hx-target="#item-{{ object.id }}">
+    hx-target="#content">
     <div class="card-body">
       <h5>{{ object.title }}</h5>
       {% bootstrap_form form %}

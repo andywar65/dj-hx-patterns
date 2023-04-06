@@ -11,7 +11,7 @@ from django.views.generic import (
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
 from .forms import ItemCreateForm
-from .models import Item
+from .models import Item, move_down_siblings
 
 
 class ItemListView(HxPageTemplateMixin, ListView):
@@ -35,9 +35,15 @@ class ItemCreateView(HxOnlyTemplateMixin, FormView):
         return initial
 
     def form_valid(self, form):
-        last = Item.objects.last()
-        form.instance.position = last.position + 1
-        return super(ItemCreateView, self).form_valid(form)
+        position = 1
+        if form.cleaned_data["after"]:
+            position = form.cleaned_data["after"].position + 1
+        move_down_siblings(position)
+        object = Item()
+        object.title = form.cleaned_data["title"]
+        object.position = position
+        object.save()
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse("boxlist:list")

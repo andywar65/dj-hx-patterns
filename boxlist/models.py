@@ -58,3 +58,14 @@ class Item(models.Model):
         for item in following:
             item.position -= 1
             item.save()
+
+
+def move_down_siblings(position):
+    """Used when an item is added.
+    Items with greater / equal position are
+    moved down the ladder.
+    """
+    siblings = Item.objects.filter(position__gte=position)
+    for sibling in siblings:
+        sibling.position += 1
+        sibling.save()

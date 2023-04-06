@@ -101,6 +101,7 @@ class ItemViewTest(TestCase):
         print("\n-Test last created position")
 
     def test_update_view(self):
+        # TODO this view can modify objects
         it1 = Item.objects.get(title="First")
         response = self.client.get(
             reverse("boxlist:update", kwargs={"pk": it1.id}),
@@ -118,7 +119,7 @@ class ItemViewTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("boxlist:detail", kwargs={"pk": it1.id}),
+            reverse("boxlist:list"),
             status_code=302,
             target_status_code=200,
         )

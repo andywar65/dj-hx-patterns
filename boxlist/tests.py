@@ -137,15 +137,10 @@ class ItemViewModifyTest(TestCase):
             reverse("boxlist:move_down", kwargs={"pk": it1.id}),
             headers={"hx-request": "true"},
         )
-        self.assertEqual(response.status_code, 302)
-        print("\n-Test move down status 302")
-        self.assertRedirects(
-            response,
-            reverse("boxlist:list"),
-            status_code=302,
-            target_status_code=200,
-        )
-        print("\n-Test move down redirect")
+        self.assertEqual(response.status_code, 200)
+        print("\n-Test move down status 200")
+        self.assertTemplateUsed(response, "boxlist/htmx/moving.html")
+        print("\n-Test move down template")
         it2 = Item.objects.get(title="Last")
         self.assertEqual(it2.position, 1)
         print("\n-Test move down next position")
@@ -156,15 +151,9 @@ class ItemViewModifyTest(TestCase):
             reverse("boxlist:move_up", kwargs={"pk": it2.id}),
             headers={"hx-request": "true"},
         )
-        self.assertEqual(response.status_code, 302)
-        print("\n-Test move up status 302")
-        self.assertRedirects(
-            response,
-            reverse("boxlist:list"),
-            status_code=302,
-            target_status_code=200,
-        )
-        print("\n-Test move up redirect")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "boxlist/htmx/moving.html")
+        print("\n-Test move up template")
         it1 = Item.objects.get(title="First")
         self.assertEqual(it1.position, 2)
         print("\n-Test move up previous position")

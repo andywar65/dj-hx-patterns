@@ -9,6 +9,7 @@ from .views import (
     ItemMoveDownView,
     ItemMoveUpView,
     ItemUpdateView,
+    ItemUpdatingView,
 )
 
 app_name = "boxlist"
@@ -37,6 +38,11 @@ urlpatterns = [
         "item/<pk>/update/",
         ItemUpdateView.as_view(),
         name="update",
+    ),
+    path(
+        "item/<pk>/updating/",
+        ItemUpdatingView.as_view(),
+        name="updating",
     ),
     path(
         "item/<pk>/delete/",

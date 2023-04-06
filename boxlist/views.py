@@ -49,7 +49,8 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):
-    """Rendered in #item-{{ item.id }}, on success targets #content"""
+    """Rendered in #item-{{ item.id }}, on success targets
+    #item-{{ item.id }} and then #content if position changed"""
 
     # model = Item
     form_class = ItemUpdateForm
@@ -81,7 +82,15 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("boxlist:list")
+        if not self.object.position == self.original_position:
+            return reverse("boxlist:updating", kwargs={"pk": self.object.id})
+        return reverse("boxlist:detail", kwargs={"pk": self.object.id})
+
+
+class ItemUpdatingView(HxOnlyTemplateMixin, TemplateView):
+    """Rendered in #item-{{ item.id }} when update is successful"""
+
+    template_name = "boxlist/htmx/updating.html"
 
 
 class ItemDetailView(HxOnlyTemplateMixin, DetailView):

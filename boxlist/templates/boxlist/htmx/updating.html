@@ -1,0 +1,8 @@
+{% load i18n %}
+
+<div class="alert alert-primary"
+     hx-get="{% url 'boxlist:list' %}"
+     hx-target="#content"
+     hx-trigger="load delay:300ms">
+  {% trans "Updating..." %}<span class="spinner-border spinner-border-sm"></span>
+</div>

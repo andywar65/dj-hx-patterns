@@ -24,13 +24,13 @@ class ItemCreateView(HxOnlyTemplateMixin, FormView):
     def get_initial(self):
         initial = super().get_initial()
         last = Item.objects.last()
-        initial["after"] = last.id
+        initial["target"] = last.id
         return initial
 
     def form_valid(self, form):
         position = 1
-        if form.cleaned_data["after"]:
-            position = form.cleaned_data["after"].position + 1
+        if form.cleaned_data["target"]:
+            position = form.cleaned_data["target"].position + 1
         move_down_siblings(position)
         object = Item()
         object.title = form.cleaned_data["title"]
@@ -73,8 +73,8 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
 
     def form_valid(self, form):
         position = self.original_position
-        if form.cleaned_data["replace"]:
-            position = form.cleaned_data["replace"].position
+        if form.cleaned_data["target"]:
+            position = form.cleaned_data["target"].position
         intercalate_siblings(position, self.original_position)
         self.object.title = form.cleaned_data["title"]
         self.object.position = position

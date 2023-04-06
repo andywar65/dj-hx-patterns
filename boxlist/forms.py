@@ -10,20 +10,16 @@ class ItemCreateForm(forms.Form):
         label=_("Title"),
         max_length=50,
     )
-    after = ModelChoiceField(
+    target = ModelChoiceField(
         queryset=Item.objects.all(),
         label=_("Add after..."),
         required=False,
     )
 
 
-class ItemUpdateForm(forms.Form):
-    title = forms.CharField(
-        label=_("Title"),
-        max_length=50,
-    )
-    replace = ModelChoiceField(
+class ItemUpdateForm(ItemCreateForm):
+    target = ModelChoiceField(
         queryset=Item.objects.all(),
-        label=_("Replace with..."),
+        label=_("Move to..."),
         required=False,
     )

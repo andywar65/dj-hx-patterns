@@ -139,7 +139,7 @@ class ItemViewModifyTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("boxlist:updating"),
+            reverse("boxlist:detail", kwargs={"pk": it1.id}) + "?refresh=true",
             status_code=302,
             target_status_code=200,
         )

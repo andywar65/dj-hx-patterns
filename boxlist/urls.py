@@ -30,6 +30,11 @@ urlpatterns = [
         name="add_button",
     ),
     path(
+        "item/updating/",
+        ItemUpdatingView.as_view(),
+        name="updating",
+    ),
+    path(
         "item/<pk>/",
         ItemDetailView.as_view(),
         name="detail",
@@ -38,11 +43,6 @@ urlpatterns = [
         "item/<pk>/update/",
         ItemUpdateView.as_view(),
         name="update",
-    ),
-    path(
-        "item/<pk>/updating/",
-        ItemUpdatingView.as_view(),
-        name="updating",
     ),
     path(
         "item/<pk>/delete/",

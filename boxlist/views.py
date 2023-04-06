@@ -83,7 +83,7 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
 
     def get_success_url(self):
         if not self.object.position == self.original_position:
-            return reverse("boxlist:updating", kwargs={"pk": self.object.id})
+            return reverse("boxlist:updating")
         return reverse("boxlist:detail", kwargs={"pk": self.object.id})
 
 

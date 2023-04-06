@@ -117,20 +117,33 @@ class ItemViewModifyTest(TestCase):
         print("\n-Test update status 200")
         self.assertTemplateUsed(response, "boxlist/htmx/update.html")
         print("\n-Test update template")
-        it2 = Item.objects.get(title="Last")
         response = self.client.post(
             reverse("boxlist:update", kwargs={"pk": it1.id}),
-            {"title": "Bar", "replace": it2.id},
+            {"title": "Bar", "replace": ""},
             headers={"hx-request": "true"},
             follow=True,
         )
         self.assertRedirects(
             response,
-            reverse("boxlist:list"),
+            reverse("boxlist:detail", kwargs={"pk": it1.id}),
             status_code=302,
             target_status_code=200,
         )
-        print("\n-Test update redirect")
+        print("\n-Test update title redirect")
+        it2 = Item.objects.get(title="Last")
+        response = self.client.post(
+            reverse("boxlist:update", kwargs={"pk": it1.id}),
+            {"title": "Goo", "replace": it2.id},
+            headers={"hx-request": "true"},
+            follow=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("boxlist:updating"),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test update position redirect")
         it2 = Item.objects.get(title="Last")
         self.assertEqual(it2.position, 1)
 

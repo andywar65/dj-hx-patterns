@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import (
-    CreateView,
     DetailView,
+    FormView,
     ListView,
     TemplateView,
     UpdateView,
@@ -21,12 +21,18 @@ class ItemListView(HxPageTemplateMixin, ListView):
     template_name = "boxlist/htmx/list.html"
 
 
-class ItemCreateView(HxOnlyTemplateMixin, CreateView):
+class ItemCreateView(HxOnlyTemplateMixin, FormView):
     """Rendered in #add-button, on success targets #content"""
 
-    model = Item
+    # model = Item
     form_class = ItemCreateForm
     template_name = "boxlist/htmx/create.html"
+
+    def get_initial(self):
+        initial = super().get_initial()
+        last = Item.objects.last()
+        initial["after"] = last.id
+        return initial
 
     def form_valid(self, form):
         last = Item.objects.last()

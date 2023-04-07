@@ -17,7 +17,7 @@ from .models import Phase, get_month_dict, get_position_by_parent, move_younger_
 
 
 class RefreshListMixin:
-    """Description here"""
+    """Triggers the refresh list event that holds state"""
 
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
@@ -26,6 +26,8 @@ class RefreshListMixin:
 
 
 class PhaseListView(HxPageTemplateMixin, ListView):
+    """Rendered in #content"""
+
     model = Phase
     template_name = "timeline/htmx/list.html"
 
@@ -43,6 +45,8 @@ class PhaseListView(HxPageTemplateMixin, ListView):
 
 
 class PhaseCreateView(HxOnlyTemplateMixin, CreateView):
+    """Rendered in and redirects to #add_button"""
+
     model = Phase
     form_class = PhaseCreateForm
     template_name = "timeline/htmx/create.html"
@@ -58,6 +62,8 @@ class PhaseCreateView(HxOnlyTemplateMixin, CreateView):
 
 
 class PhaseAddButtonView(HxOnlyTemplateMixin, TemplateView):
+    """Rendered in #add_button, may trigger refresh list"""
+
     template_name = "timeline/htmx/add_button.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -68,6 +74,8 @@ class PhaseAddButtonView(HxOnlyTemplateMixin, TemplateView):
 
 
 class PhaseDetailView(HxOnlyTemplateMixin, DetailView):
+    """Rendered in #phase-index-{{ self.id }}, may trigger refresh list"""
+
     model = Phase
     context_object_name = "phase"
     template_name = "timeline/htmx/detail.html"
@@ -80,6 +88,8 @@ class PhaseDetailView(HxOnlyTemplateMixin, DetailView):
 
 
 class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
+    """Rendered in and redirects to #phase-index-{{ self.id }}"""
+
     model = Phase
     form_class = PhaseCreateForm
     template_name = "timeline/htmx/update.html"
@@ -106,6 +116,8 @@ class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
 
 
 class PhaseDeleteView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
+    """Rendered in #phase-index-{{ self.id }}, triggers refresh list"""
+
     template_name = "timeline/htmx/delete.html"
 
     def setup(self, request, *args, **kwargs):
@@ -118,6 +130,8 @@ class PhaseDeleteView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
 
 
 class PhaseMoveDownView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
+    """Rendered in #phase-index-{{ self.id }}, triggers refresh list"""
+
     template_name = "timeline/htmx/move.html"
 
     def setup(self, request, *args, **kwargs):
@@ -127,6 +141,8 @@ class PhaseMoveDownView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
 
 
 class PhaseMoveUpView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
+    """Rendered in #phase-index-{{ self.id }}, triggers refresh list"""
+
     template_name = "timeline/htmx/move.html"
 
     def setup(self, request, *args, **kwargs):

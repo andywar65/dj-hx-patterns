@@ -119,7 +119,7 @@ class ItemViewModifyTest(TestCase):
         print("\n-Test update template")
         response = self.client.post(
             reverse("boxlist:update", kwargs={"pk": it1.id}),
-            {"title": "Bar", "replace": ""},
+            {"title": "Bar", "target": ""},
             headers={"hx-request": "true"},
             follow=True,
         )
@@ -133,7 +133,7 @@ class ItemViewModifyTest(TestCase):
         it2 = Item.objects.get(title="Last")
         response = self.client.post(
             reverse("boxlist:update", kwargs={"pk": it1.id}),
-            {"title": "Goo", "replace": it2.id},
+            {"title": "Goo", "target": it2.id},
             headers={"hx-request": "true"},
             follow=True,
         )

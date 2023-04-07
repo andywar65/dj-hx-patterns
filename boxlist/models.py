@@ -17,7 +17,7 @@ class Item(models.Model):
         ]
 
     def __str__(self):
-        return self.title
+        return "%(pos)d - %(title)s" % {"pos": self.position, "title": self.title}
 
     def get_next_item(self):
         try:

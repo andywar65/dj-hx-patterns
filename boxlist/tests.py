@@ -14,7 +14,7 @@ class ItemModelTest(TestCase):
 
     def test_item_str(self):
         it1 = Item.objects.get(title="First")
-        self.assertEquals(it1.__str__(), "First")
+        self.assertEquals(it1.__str__(), "1 - First")
         print("\n-Test Item title")
 
     def test_get_next_previous_item(self):

@@ -105,10 +105,6 @@ class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
         )
 
 
-class PhaseUpdatingView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
-    template_name = "timeline/htmx/move.html"
-
-
 class PhaseDeleteView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
     template_name = "timeline/htmx/delete.html"
 

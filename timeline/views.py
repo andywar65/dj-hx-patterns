@@ -72,6 +72,12 @@ class PhaseDetailView(HxOnlyTemplateMixin, DetailView):
     context_object_name = "phase"
     template_name = "timeline/htmx/detail.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if "refresh" in request.GET:
+            response["HX-Trigger-After-Swap"] = "refreshList"
+        return response
+
 
 class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
     model = Phase
@@ -94,7 +100,9 @@ class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
         return super(PhaseUpdateView, self).form_valid(form)
 
     def get_success_url(self, *args, **kwargs):
-        return reverse("timeline:updating", kwargs={"pk": self.object.id})
+        return (
+            reverse("timeline:detail", kwargs={"pk": self.object.id}) + "?refresh=true"
+        )
 
 
 class PhaseUpdatingView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):

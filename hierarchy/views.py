@@ -4,7 +4,6 @@ from django.views.generic import (
     CreateView,
     DetailView,
     ListView,
-    RedirectView,
     TemplateView,
     UpdateView,
 )
@@ -93,21 +92,19 @@ class CategoryDeleteView(HxOnlyTemplateMixin, TemplateView):
         category.delete()
 
 
-class CategoryMoveDownView(HxOnlyTemplateMixin, RedirectView):
+class CategoryMoveDownView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "hierarchy/htmx/moving.html"
+
     def setup(self, request, *args, **kwargs):
         super(CategoryMoveDownView, self).setup(request, *args, **kwargs)
         category = get_object_or_404(Category, id=self.kwargs["pk"])
         category.move_down()
 
-    def get_redirect_url(self, *args, **kwargs):
-        return reverse("hierarchy:list")
 
+class CategoryMoveUpView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "hierarchy/htmx/moving.html"
 
-class CategoryMoveUpView(HxOnlyTemplateMixin, RedirectView):
     def setup(self, request, *args, **kwargs):
         super(CategoryMoveUpView, self).setup(request, *args, **kwargs)
         category = get_object_or_404(Category, id=self.kwargs["pk"])
         category.move_up()
-
-    def get_redirect_url(self, *args, **kwargs):
-        return reverse("hierarchy:list")

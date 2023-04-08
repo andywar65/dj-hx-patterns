@@ -108,10 +108,12 @@ class PhaseModelTest(TestCase):
         mt = date(2023, 4, 23)
         after = date(2024, 4, 13)
         self.assertEquals(get_margin_width(before, before, chst, chen), (0, 0))
-        self.assertEquals(get_margin_width(before, andy, chst, chen), (0, 28))
+        self.assertEquals(get_margin_width(before, andy, chst, chen), (0, 28.22))
         self.assertEquals(get_margin_width(before, after, chst, chen), (0, 100))
-        self.assertEquals(get_margin_width(andy, after, chst, chen), (27, 100 - 28))
-        self.assertEquals(get_margin_width(andy, mt, chst, chen), (27, 3))
+        self.assertEquals(
+            get_margin_width(andy, after, chst, chen), (28.22, 100 - 28.22)
+        )
+        self.assertEquals(get_margin_width(andy, mt, chst, chen), (28.22, 2.74))
         self.assertEquals(get_margin_width(after, after, chst, chen), (100, 0))
         print("\n-Test margin and width")
 
@@ -125,7 +127,7 @@ class PhaseModelTest(TestCase):
 
     def test_draw_bar_chart(self):
         phase = Phase.objects.create(title="Foo", start=date(2023, 4, 13))
-        style = "background-color: #dddddd; margin-left: 27%; width: 2%"
+        style = "background-color: #dddddd; margin-left: 28.22%; width: 1.92%"
         self.assertEquals(phase.draw_bar_chart(2023, 1), style)
         print("\n-Test draw bar chart")
 
@@ -259,7 +261,7 @@ class PhaseViewModifyTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("timeline:updating", kwargs={"pk": ph1.id}),
+            reverse("timeline:detail", kwargs={"pk": ph1.id}) + "?refresh=true",
             status_code=302,
             target_status_code=200,
         )

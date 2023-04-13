@@ -9,10 +9,16 @@ from .views import (
     PhaseMoveDownView,
     PhaseMoveUpView,
     PhaseUpdateView,
+    RefreshListView,
 )
 
 app_name = "timeline"
 urlpatterns = [
+    path(
+        "refresh/list/",
+        RefreshListView.as_view(),
+        name="refresh_list",
+    ),
     path(
         "<int:year>/<int:month>/",
         PhaseListView.as_view(),

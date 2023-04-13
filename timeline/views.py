@@ -1,11 +1,13 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
     CreateView,
     DetailView,
     ListView,
+    RedirectView,
     TemplateView,
     UpdateView,
 )
@@ -23,6 +25,15 @@ class RefreshListMixin:
         response = super().dispatch(request, *args, **kwargs)
         response["HX-Trigger-After-Swap"] = "refreshList"
         return response
+
+
+class BaseRedirectView(RedirectView):
+    """Redirects to now()"""
+
+    def get_redirect_url(self):
+        return reverse(
+            "timeline:list", kwargs={"year": now().year, "month": now().month}
+        )
 
 
 class PhaseListView(HxPageTemplateMixin, ListView):

@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    BaseRedirectView,
     PhaseAddButtonView,
     PhaseCreateView,
     PhaseDeleteView,
@@ -14,6 +15,11 @@ from .views import (
 
 app_name = "timeline"
 urlpatterns = [
+    path(
+        "",
+        BaseRedirectView.as_view(),
+        name="base",
+    ),
     path(
         "refresh/list/",
         RefreshListView.as_view(),

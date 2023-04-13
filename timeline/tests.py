@@ -96,7 +96,7 @@ class PhaseModelTest(TestCase):
             get_chart_start_end(2023, 1), (date(2023, 1, 1), date(2023, 12, 31))
         )
         self.assertEquals(
-            get_chart_start_end(2023, 2), (date(2023, 7, 1), date(2024, 6, 30))
+            get_chart_start_end(2023, 7), (date(2023, 7, 1), date(2024, 6, 30))
         )
         print("\n-Test get chart start & end")
 
@@ -219,7 +219,7 @@ class PhaseViewTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("timeline:add_button") + "?refresh=true",
+            reverse("timeline:refresh_list"),
             status_code=302,
             target_status_code=200,
         )
@@ -261,7 +261,7 @@ class PhaseViewModifyTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("timeline:detail", kwargs={"pk": ph1.id}) + "?refresh=true",
+            reverse("timeline:refresh_list"),
             status_code=302,
             target_status_code=200,
         )

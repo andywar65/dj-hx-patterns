@@ -144,7 +144,7 @@ class Phase(TreeNode):
 
 
 def get_chart_start_end(year, month):
-    if month == 1:
+    if month < 7:
         chart_start = date(year, 1, 1)
         chart_end = date(year, 12, 31)
     else:

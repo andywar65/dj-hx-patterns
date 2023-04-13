@@ -3,7 +3,7 @@
 <div class="row">
   <div class="col">
     <a class="link-primary"
-       {% if month == 1 %}
+       {% if month < 7 %}
          hx-get="{% url 'timeline:list' year=year|add:'-1' month=7 %}"
        {% else %}
          hx-get="{% url 'timeline:list' year=year month=1 %}"
@@ -15,7 +15,7 @@
     </a>
   </div>
   <div class="col text-center">
-    {% if month == 1 %}
+    {% if month < 7 %}
       {{ year }}
     {% else %}
       {{ year }} / {{ year|add:"1" }}
@@ -23,7 +23,7 @@
   </div>
   <div class="col text-end">
     <a class="link-primary"
-       {% if month == 1 %}
+       {% if month < 7 %}
          hx-get="{% url 'timeline:list' year=year month=7 %}"
        {% else %}
          hx-get="{% url 'timeline:list' year=year|add:'1' month=1 %}"

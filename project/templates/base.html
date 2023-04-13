@@ -48,7 +48,7 @@
             </li>
             <li>
               <a class="link-primary"
-                 hx-get="{% url 'timeline:list' year=2023 month=1 %}"
+                 hx-get="{% url 'timeline:base' %}"
                  hx-target="#content"
                  hx-push-url="true">
                 {% trans "Timeline" %}

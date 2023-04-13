@@ -3,7 +3,7 @@
 <div class="card mb-3">
   <form
     hx-post="{% url 'timeline:update' pk=object.id %}"
-    hx-target="#phase-index-{{ object.id }}">
+    hx-swap="none">
     <div class="card-body">
       <h5>{{ object.title }}</h5>
       {% include "timeline/htmx/form_fields.html" %}
@@ -15,7 +15,8 @@
           <button class="btn-close"
                   title="{% trans 'Dismiss' %}"
                   hx-get="{% url 'timeline:detail' pk=object.id %}"
-                  hx-target="#phase-index-{{ object.id }}">
+                  hx-target="#phase-index-{{ object.id }}"
+                  hx-swap="innerHTML">
           </button>
         </div>
         <div class="col text-end">
@@ -23,6 +24,7 @@
                   title="{% trans 'Delete phase' %}"
                   hx-get="{% url 'timeline:delete' pk=object.id %}"
                   hx-target="#phase-index-{{ object.id }}"
+                  hx-swap="innerHTML"
                   hx-confirm="{% trans 'Are you sure you want to delete phase' %} {{ object.title }}?">
             <i class="fa fa-times"></i>
           </button>

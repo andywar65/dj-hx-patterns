@@ -45,7 +45,7 @@ class PhaseListView(HxPageTemplateMixin, ListView):
 
 
 class PhaseCreateView(HxOnlyTemplateMixin, CreateView):
-    """Rendered in and redirects to #add_button"""
+    """Rendered in #add_button, swaps none"""
 
     model = Phase
     form_class = PhaseCreateForm
@@ -58,37 +58,31 @@ class PhaseCreateView(HxOnlyTemplateMixin, CreateView):
         return super(PhaseCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("timeline:add_button") + "?refresh=true"
+        return reverse("timeline:refresh_list")
+
+
+class RefreshListView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):
+    """Void template, triggers refresh list"""
+
+    template_name = "timeline/htmx/none.html"
 
 
 class PhaseAddButtonView(HxOnlyTemplateMixin, TemplateView):
-    """Rendered in #add_button, may trigger refresh list"""
+    """Rendered in #add_button"""
 
     template_name = "timeline/htmx/add_button.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super(PhaseAddButtonView, self).dispatch(request, *args, **kwargs)
-        if "refresh" in request.GET:
-            response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
-
 
 class PhaseDetailView(HxOnlyTemplateMixin, DetailView):
-    """Rendered in #phase-index-{{ self.id }}, may trigger refresh list"""
+    """Rendered in #phase-index-{{ self.id }}"""
 
     model = Phase
     context_object_name = "phase"
     template_name = "timeline/htmx/detail.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        if "refresh" in request.GET:
-            response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
-
 
 class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
-    """Rendered in and redirects to #phase-index-{{ self.id }}"""
+    """Rendered in #phase-index-{{ self.id }}, swaps none"""
 
     model = Phase
     form_class = PhaseCreateForm
@@ -110,9 +104,7 @@ class PhaseUpdateView(HxOnlyTemplateMixin, UpdateView):
         return super(PhaseUpdateView, self).form_valid(form)
 
     def get_success_url(self, *args, **kwargs):
-        return (
-            reverse("timeline:detail", kwargs={"pk": self.object.id}) + "?refresh=true"
-        )
+        return reverse("timeline:refresh_list")
 
 
 class PhaseDeleteView(HxOnlyTemplateMixin, RefreshListMixin, TemplateView):

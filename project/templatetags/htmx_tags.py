@@ -24,7 +24,7 @@ SWAP = ["innerHTML", "outerHTML", "none"]
 
 
 @register.simple_tag
-def htmx_link(link_dict):
+def htmx_request(link_dict):
     output = ""
     if "method" in link_dict and link_dict["method"] in METHODS:
         method = link_dict["method"].lower()

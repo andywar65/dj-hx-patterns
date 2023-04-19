@@ -5,7 +5,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def htmx_url():
+def htmx_cdn():
     url = "https://unpkg.com/htmx.org@1.9.0"
     sha = "sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls"
     return mark_safe(

@@ -1,6 +1,7 @@
 {% load static %}
 {% load i18n %}
 {% load bootstrap5 %}
+{% load htmx_tags %}
 
 <!doctype html>
 <html lang="en">
@@ -12,7 +13,7 @@
     <!-- Bootstrap CSS -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     {% bootstrap_css %}
-    <script src="https://unpkg.com/htmx.org@1.9.0" integrity="sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls" crossorigin="anonymous"></script>
+    {% htmx_url %}
     <link href="{% static 'css/base.css' %}" rel="stylesheet">
     <title>Hello World!</title>
     {% block extra-head %}{% endblock extra-head %}

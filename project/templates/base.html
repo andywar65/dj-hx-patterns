@@ -18,7 +18,7 @@
     <title>Hello World!</title>
     {% block extra-head %}{% endblock extra-head %}
   </head>
-  <body class="d-flex flex-column h-100" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  <body class="d-flex flex-column h-100" {% htmx_csrf csrf_token %}>
     <main class="flex-shrink-0">
       <div id="content" class="container">
         {% block content %}

@@ -11,3 +11,8 @@ def htmx_url():
         'integrity="sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls"\n'  # noqa
         'crossorigin="anonymous"></script>'
     )
+
+
+@register.simple_tag
+def htmx_csrf(token):
+    return mark_safe('hx-headers=\'{"X-CSRFToken": "%(token)s"}\'' % {"token": token})

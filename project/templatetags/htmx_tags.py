@@ -64,10 +64,10 @@ def htmx_request(link_dict):
         output += 'hx-sync="%(sync)s" ' % {"sync": link_dict["sync"]}
     if "confirm" in link_dict:
         output += 'hx-confirm="%(confirm)s" ' % {"confirm": link_dict["confirm"]}
-    if "headers" in link_dict and isinstance(dict, link_dict["headers"]):
+    if "headers" in link_dict and isinstance(link_dict, dict):
         output += "hx-headers='%(headers)s' " % {
             "headers": json.dumps(link_dict["headers"])
         }
-    if "vals" in link_dict and isinstance(dict, link_dict["vals"]):
+    if "vals" in link_dict and isinstance(link_dict, dict):
         output += "hx-vals='%(vals)s' " % {"vals": json.dumps(link_dict["vals"])}
     return mark_safe(output)

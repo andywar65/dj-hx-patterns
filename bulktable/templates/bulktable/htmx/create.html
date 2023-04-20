@@ -3,7 +3,7 @@
 {% load i18n %}
 
 <div class="card">
-  <form {% htmx_request form_link %}>
+  <form {% htmx_request form_submit %}>
     <div class="card-body">
       {% bootstrap_form form %}
       <button class="btn btn-success" type="submit">
@@ -12,7 +12,7 @@
       </button>
       <button class="btn-close"
               title="{% trans 'Dismiss' %}"
-              {% htmx_request dismiss_link %}>
+              {% htmx_request form_dismiss %}>
       </button>
     </div>
   </form>

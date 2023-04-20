@@ -30,12 +30,12 @@ class RowCreateView(HxOnlyTemplateMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form_link"] = {
+        context["form_submit"] = {
             "method": "post",
             "url": reverse("bulktable:create"),
             "target": "add-button",
         }
-        context["dismiss_link"] = {"url": reverse("bulktable:add_button")}
+        context["form_dismiss"] = {"url": reverse("bulktable:add_button")}
         return context
 
     def form_valid(self, form):

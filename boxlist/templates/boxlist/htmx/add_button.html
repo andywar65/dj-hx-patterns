@@ -1,8 +1,8 @@
 {% load i18n %}
+{% load htmx_tags %}
 
 <a class="btn btn-success"
-   hx-get="{% url 'boxlist:create' %}"
-   hx-target="#add-button">
+   {% htmx_request create_form %}>
   {% trans "Add item" %}
   <span class="htmx-indicator spinner-border spinner-border-sm text-success"></span>
 </a>

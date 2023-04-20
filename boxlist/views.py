@@ -21,6 +21,10 @@ class ItemListView(HxPageTemplateMixin, ListView):
             "target": "content",
             "trigger": "refreshList from:body",
         }
+        context["create_form"] = {
+            "url": reverse("boxlist:create"),
+            "target": "add-button",
+        }
         return context
 
 
@@ -68,6 +72,14 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
     """Rendered in #add-button when create is dismissed"""
 
     template_name = "boxlist/htmx/add_button.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["create_form"] = {
+            "url": reverse("boxlist:create"),
+            "target": "add-button",
+        }
+        return context
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):

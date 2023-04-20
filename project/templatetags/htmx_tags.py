@@ -19,21 +19,22 @@ def htmx_csrf(token):
     return mark_safe('hx-headers=\'{"X-CSRFToken": "%(token)s"}\'' % {"token": token})
 
 
-METHODS = ["post", "POST"]
+METHODS = ["post", "POST", "put", "PUT", "patch", "PATCH", "delete", "DELETE"]
 SWAP = ["innerHTML", "outerHTML", "none"]
 
 
 @register.simple_tag
 def htmx_request(link_dict):
     output = ""
-    if "method" in link_dict and link_dict["method"] in METHODS:
-        method = link_dict["method"].lower()
-        output += 'hx-%(method)s="%(url)s" ' % {
-            "method": method,
-            "url": link_dict["url"],
-        }
-    else:
-        output += 'hx-get="%(url)s" ' % {"url": link_dict["url"]}
+    if "url" in link_dict:
+        if "method" in link_dict and link_dict["method"] in METHODS:
+            method = link_dict["method"].lower()
+            output += 'hx-%(method)s="%(url)s" ' % {
+                "method": method,
+                "url": link_dict["url"],
+            }
+        else:
+            output += 'hx-get="%(url)s" ' % {"url": link_dict["url"]}
     if "target" in link_dict:
         if not link_dict["target"].startswith("#"):
             link_dict["target"] = "#" + link_dict["target"]

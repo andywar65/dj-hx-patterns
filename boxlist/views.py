@@ -30,6 +30,19 @@ class ItemCreateView(HxOnlyTemplateMixin, FormView):
     form_class = ItemCreateForm
     template_name = "boxlist/htmx/create.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form_submit"] = {
+            "method": "post",
+            "url": reverse("boxlist:create"),
+            "target": "content",
+        }
+        context["form_dismiss"] = {
+            "url": reverse("boxlist:add_button"),
+            "target": "add-button",
+        }
+        return context
+
     def get_initial(self):
         initial = super().get_initial()
         last = Item.objects.last()

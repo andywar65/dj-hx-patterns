@@ -14,6 +14,15 @@ class ItemListView(HxPageTemplateMixin, ListView):
     model = Item
     template_name = "boxlist/htmx/list.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["list_refresh"] = {
+            "url": reverse("boxlist:list"),
+            "target": "content",
+            "trigger": "refreshList from:body",
+        }
+        return context
+
 
 class ItemCreateView(HxOnlyTemplateMixin, FormView):
     """Rendered in #add-button, on success targets #content"""

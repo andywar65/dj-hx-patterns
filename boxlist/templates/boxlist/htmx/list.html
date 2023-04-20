@@ -1,8 +1,7 @@
 {% load i18n %}
+{% load htmx_tags %}
 
-<div hx-get="{% url 'boxlist:list' %}"
-     hx-target="#content"
-     hx-trigger="refreshList from:body">
+<div {% htmx_request list_refresh %}>
 </div>
 <div class="card mx-auto" style="max-width: 480px">
   <div class="card-header">

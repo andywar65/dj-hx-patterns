@@ -49,8 +49,8 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):
-    """Rendered in #item-{{ item.id }}, on success targets
-    #item-{{ item.id }} and then #content if position changed"""
+    """Rendered in #item-{{ item.id }}, on success swaps none
+    and refreshes #item-{{ item.id }} or #content if position changed"""
 
     # model = Item
     form_class = ItemUpdateForm
@@ -83,11 +83,10 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
 
     def get_success_url(self):
         if not self.object.position == self.original_position:
-            return (
-                reverse("boxlist:detail", kwargs={"pk": self.object.id})
-                + "?refresh=true"
-            )
-        return reverse("boxlist:detail", kwargs={"pk": self.object.id})
+            return reverse("boxlist:event_emit") + "?event=refreshList"
+        return (
+            reverse("boxlist:event_emit") + "?event=refreshItem" + str(self.object.id)
+        )
 
 
 class ItemDetailView(HxOnlyTemplateMixin, DetailView):
@@ -96,12 +95,6 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
     model = Item
     context_object_name = "item"
     template_name = "boxlist/htmx/detail.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        if "refresh" in request.GET:
-            response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
 
 
 class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
@@ -136,3 +129,15 @@ class ItemMoveUpView(HxOnlyTemplateMixin, TemplateView):
         super(ItemMoveUpView, self).setup(request, *args, **kwargs)
         item = get_object_or_404(Item, id=self.kwargs["pk"])
         item.move_up()
+
+
+class EventEmitterView(HxOnlyTemplateMixin, TemplateView):
+    """This view emits an event"""
+
+    template_name = "boxlist/htmx/none.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if "event" in request.GET:
+            response["HX-Trigger-After-Swap"] = request.GET["event"]
+        return response

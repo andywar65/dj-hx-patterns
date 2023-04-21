@@ -14,7 +14,9 @@
     </div>
     {% if object_list %}
       {% for item in object_list %}
-        <div id="item-{{ item.id }}">
+        <div id="item-{{ item.id }}"
+             hx-get="{% url 'boxlist:detail' pk=item.id %}"
+             hx-trigger="refreshItem{{ item.id }} from:body">
           {% include "boxlist/htmx/detail.html" %}
         </div>
       {% endfor %}

@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    EventEmitterView,
     ItemAddButtonView,
     ItemCreateView,
     ItemDeleteView,
@@ -52,5 +53,10 @@ urlpatterns = [
         "item/<pk>/move/up/",
         ItemMoveUpView.as_view(),
         name="move_up",
+    ),
+    path(
+        "event-emit/",
+        EventEmitterView.as_view(),
+        name="event_emit",
     ),
 ]

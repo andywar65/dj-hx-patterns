@@ -1,9 +1,9 @@
 {% load bootstrap5 %}
 {% load i18n %}
-{% load htmx_tags %}
 
 <div class="card">
-  <form {% htmx_request form_submit %}>
+  <form hx-post="{% url 'boxlist:create' %}"
+        hx-target="#content">
     <div class="card-body">
       {% bootstrap_form form %}
       <button class="btn btn-success" type="submit">
@@ -12,7 +12,8 @@
       </button>
       <button class="btn-close"
               title="{% trans 'Dismiss' %}"
-              {% htmx_request form_dismiss %}>
+              hx-get="{% url 'boxlist:add_button' %}"
+              hx-target="#add-button">
       </button>
     </div>
   </form>

@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 
@@ -50,7 +50,8 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):
     """Rendered in #item-{{ item.id }}, on success swaps none
-    and refreshes #item-{{ item.id }} or #content if position changed"""
+    and refreshes #item-{{ item.id }} or #content if position changed.
+    If DELETE method, swaps in #item-{{ item.id }}"""
 
     # model = Item
     form_class = ItemUpdateForm
@@ -87,6 +88,12 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
         return (
             reverse("boxlist:event_emit") + "?event=refreshItem" + str(self.object.id)
         )
+
+    def delete(self, request, **kwargs):
+        item = get_object_or_404(Item, id=kwargs["pk"])
+        item.move_following_items()
+        item.delete()
+        return render(request, "boxlist/htmx/delete.html")
 
 
 class ItemDetailView(HxOnlyTemplateMixin, DetailView):

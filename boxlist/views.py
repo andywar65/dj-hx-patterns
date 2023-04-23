@@ -104,18 +104,6 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
     template_name = "boxlist/htmx/detail.html"
 
 
-class ItemDeleteView(HxOnlyTemplateMixin, TemplateView):
-    """Rendered in #item-{{ item.id }}, then triggers list in #content"""
-
-    template_name = "boxlist/htmx/delete.html"
-
-    def setup(self, request, *args, **kwargs):
-        super(ItemDeleteView, self).setup(request, *args, **kwargs)
-        item = get_object_or_404(Item, id=self.kwargs["pk"])
-        item.move_following_items()
-        item.delete()
-
-
 class ItemMoveDownView(HxOnlyTemplateMixin, TemplateView):
     """Rendered in #item-{{ item.id }}, then triggers list in #content"""
 

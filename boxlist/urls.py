@@ -4,7 +4,6 @@ from .views import (
     EventEmitterView,
     ItemAddButtonView,
     ItemCreateView,
-    ItemDeleteView,
     ItemDetailView,
     ItemListView,
     ItemMoveDownView,
@@ -38,11 +37,6 @@ urlpatterns = [
         "item/<pk>/update/",
         ItemUpdateView.as_view(),
         name="update",
-    ),
-    path(
-        "item/<pk>/delete/",
-        ItemDeleteView.as_view(),
-        name="delete",
     ),
     path(
         "item/<pk>/move/down/",

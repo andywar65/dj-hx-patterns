@@ -1,26 +1,26 @@
 {% load i18n %}
 
 <div class="alert alert-secondary"
-     hx-target="#item-{{ item.id }}">
+     hx-target="#item-{{ object.id }}">
   <div class="row">
     <div class="col col-10">
-      <strong>{{ item.position }}</strong> -
+      <strong>{{ object.position }}</strong> -
       <a class="link-primary"
          title="{% trans 'Modify item' %}"
-         hx-get="{% url 'boxlist:update' pk=item.id %}">
-        {{ item.title }}</a>
+         hx-get="{% url 'boxlist:update' pk=object.id %}">
+        {{ object.title }}</a>
     </div>
     <div class="col text-end">
-      {% if item.get_previous_item %}
+      {% if object.get_previous_item %}
         <a class="link-primary"
            title="{% trans 'Move up' %}"
-           hx-get="{% url 'boxlist:move_up' pk=item.id %}">
+           hx-get="{% url 'boxlist:move_up' pk=object.id %}">
           <i class="fa fa-arrow-up"></i></a>
       {% endif %}
-      {% if item.get_next_item %}
+      {% if object.get_next_item %}
         <a class="link-primary"
            title="{% trans 'Move down' %}"
-           hx-get="{% url 'boxlist:move_down' pk=item.id %}">
+           hx-get="{% url 'boxlist:move_down' pk=object.id %}">
           <i class="fa fa-arrow-down"></i></a>
       {% endif %}
     </div>

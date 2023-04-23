@@ -13,10 +13,10 @@
       {% include "boxlist/htmx/add_button.html" %}
     </div>
     {% if object_list %}
-      {% for item in object_list %}
-        <div id="item-{{ item.id }}"
-             hx-get="{% url 'boxlist:detail' pk=item.id %}"
-             hx-trigger="refreshItem{{ item.id }} from:body">
+      {% for object in object_list %}
+        <div id="item-{{ object.id }}"
+             hx-get="{% url 'boxlist:detail' pk=object.id %}"
+             hx-trigger="refreshItem{{ object.id }} from:body">
           {% include "boxlist/htmx/detail.html" %}
         </div>
       {% endfor %}

@@ -53,7 +53,6 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
     and refreshes #item-{{ item.id }} or #content if position changed.
     If DELETE method, swaps in #item-{{ item.id }}"""
 
-    # model = Item
     form_class = ItemUpdateForm
     template_name = "boxlist/htmx/update.html"
 
@@ -100,7 +99,6 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
     """Rendered in #item-{{ item.id }} when update is dismissed or successful"""
 
     model = Item
-    context_object_name = "item"
     template_name = "boxlist/htmx/detail.html"
 
 

@@ -3,7 +3,6 @@ from django.urls import path
 from .views import (
     CategoryAddButtonView,
     CategoryCreateView,
-    CategoryDeleteView,
     CategoryDetailView,
     CategoryListView,
     CategoryMoveDownView,
@@ -37,11 +36,6 @@ urlpatterns = [
         "category/<pk>/update/",
         CategoryUpdateView.as_view(),
         name="update",
-    ),
-    path(
-        "category/<pk>/delete/",
-        CategoryDeleteView.as_view(),
-        name="delete",
     ),
     path(
         "category/<pk>/move/down/",

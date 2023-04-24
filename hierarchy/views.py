@@ -87,16 +87,6 @@ class CategoryUpdateView(HxOnlyTemplateMixin, UpdateView):
         return render(request, "hierarchy/htmx/delete.html")
 
 
-class CategoryDeleteView(HxOnlyTemplateMixin, TemplateView):
-    template_name = "hierarchy/htmx/delete.html"
-
-    def setup(self, request, *args, **kwargs):
-        super(CategoryDeleteView, self).setup(request, *args, **kwargs)
-        category = get_object_or_404(Category, id=self.kwargs["pk"])
-        move_younger_siblings(category.parent, category.position)
-        category.delete()
-
-
 class CategoryMoveDownView(HxOnlyTemplateMixin, TemplateView):
     template_name = "hierarchy/htmx/moving.html"
 

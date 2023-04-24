@@ -13,11 +13,11 @@
       {% include "hierarchy/htmx/add_button.html" %}
     </div>
     {% if object_list %}
-      {% for category in object_list %}
+      {% for object in object_list %}
         <div class="row">
-          <div class="col-{{ category.tree_depth }}">
+          <div class="col-{{ object.tree_depth }}">
           </div>
-          <div class="col" id="cat-{{ category.id }}">
+          <div class="col" id="cat-{{ object.id }}">
             {% include "hierarchy/htmx/detail.html" %}
           </div>
         </div>

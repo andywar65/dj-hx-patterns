@@ -43,7 +43,6 @@ class CategoryAddButtonView(HxOnlyTemplateMixin, TemplateView):
 
 class CategoryDetailView(HxOnlyTemplateMixin, DetailView):
     model = Category
-    context_object_name = "category"
     template_name = "hierarchy/htmx/detail.html"
 
     def dispatch(self, request, *args, **kwargs):

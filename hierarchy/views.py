@@ -74,11 +74,10 @@ class CategoryUpdateView(HxOnlyTemplateMixin, UpdateView):
 
     def get_success_url(self):
         if not self.original_parent == self.object.parent:
-            return (
-                reverse("hierarchy:detail", kwargs={"pk": self.object.id})
-                + "?refresh=true"
-            )
-        return reverse("hierarchy:detail", kwargs={"pk": self.object.id})
+            return reverse("hierarchy:event_emit") + "?event=refreshList"
+        return (
+            reverse("hierarchy:event_emit") + "?event=refreshItem" + str(self.object.id)
+        )
 
     def delete(self, request, **kwargs):
         category = get_object_or_404(Category, id=kwargs["pk"])

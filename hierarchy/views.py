@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import (
     CreateView,
@@ -79,6 +79,12 @@ class CategoryUpdateView(HxOnlyTemplateMixin, UpdateView):
                 + "?refresh=true"
             )
         return reverse("hierarchy:detail", kwargs={"pk": self.object.id})
+
+    def delete(self, request, **kwargs):
+        category = get_object_or_404(Category, id=kwargs["pk"])
+        move_younger_siblings(category.parent, category.position)
+        category.delete()
+        return render(request, "hierarchy/htmx/delete.html")
 
 
 class CategoryDeleteView(HxOnlyTemplateMixin, TemplateView):

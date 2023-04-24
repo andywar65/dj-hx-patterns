@@ -45,12 +45,6 @@ class CategoryDetailView(HxOnlyTemplateMixin, DetailView):
     model = Category
     template_name = "hierarchy/htmx/detail.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super(CategoryDetailView, self).dispatch(request, *args, **kwargs)
-        if "refresh" in request.GET:
-            response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
-
 
 class CategoryUpdateView(HxOnlyTemplateMixin, UpdateView):
     model = Category

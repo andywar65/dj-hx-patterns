@@ -103,3 +103,15 @@ class CategoryMoveUpView(HxOnlyTemplateMixin, TemplateView):
         super(CategoryMoveUpView, self).setup(request, *args, **kwargs)
         category = get_object_or_404(Category, id=self.kwargs["pk"])
         category.move_up()
+
+
+class EventEmitterView(HxOnlyTemplateMixin, TemplateView):
+    """This view emits an event"""
+
+    template_name = "hierarchy/htmx/none.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if "event" in request.GET:
+            response["HX-Trigger-After-Swap"] = request.GET["event"]
+        return response

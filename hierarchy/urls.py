@@ -8,6 +8,7 @@ from .views import (
     CategoryMoveDownView,
     CategoryMoveUpView,
     CategoryUpdateView,
+    EventEmitterView,
 )
 
 app_name = "hierarchy"
@@ -46,5 +47,10 @@ urlpatterns = [
         "category/<pk>/move/up/",
         CategoryMoveUpView.as_view(),
         name="move_up",
+    ),
+    path(
+        "event-emit/",
+        EventEmitterView.as_view(),
+        name="event_emit",
     ),
 ]

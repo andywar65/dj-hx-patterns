@@ -1,14 +1,14 @@
 <td>
   <strong>
-    {{ row.id }}
+    {{ object.id }}
   </strong>
 </td>
 <td>
-  {{ row.title }}
+  {{ object.title }}
 </td>
-<td class="table-{{ row.color }}">
-  {{ row.get_color_display }}
+<td class="table-{{ object.color }}">
+  {{ object.get_color_display }}
 </td>
 <td>
-  <input type='checkbox' name='ids' value='{{ row.id }}'>
+  <input type='checkbox' name='ids' value='{{ object.id }}'>
 </td>

@@ -14,8 +14,8 @@
   {% if object_list %}
     <form id="checked-rows">
       <tbody id="row-list">
-        {% for row in object_list %}
-          <tr id="row-{{ row.id }}">
+        {% for object in object_list %}
+          <tr id="row-{{ object.id }}">
             {% include "bulktable/htmx/detail.html" %}
           </tr>
         {% endfor %}

@@ -28,16 +28,6 @@ class RowCreateView(HxOnlyTemplateMixin, CreateView):
     form_class = RowCreateForm
     template_name = "bulktable/htmx/create.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form_submit"] = {
-            "method": "post",
-            "url": reverse("bulktable:create"),
-            "target": "add-button",
-        }
-        context["form_dismiss"] = {"url": reverse("bulktable:add_button")}
-        return context
-
     def form_valid(self, form):
         report = _("Added row with title: ") + form.instance.title
         messages.success(self.request, report)

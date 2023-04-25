@@ -34,17 +34,11 @@ class RowCreateView(HxOnlyTemplateMixin, CreateView):
         return super(RowCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("bulktable:add_button") + "?refresh=true"
+        return reverse("bulktable:event_emit") + "?event=refreshList"
 
 
 class RowAddButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "bulktable/htmx/add_button.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super(RowAddButtonView, self).dispatch(request, *args, **kwargs)
-        if "refresh" in request.GET:
-            response["HX-Trigger-After-Swap"] = "refreshList"
-        return response
 
 
 class RowUpdateView(HxOnlyTemplateMixin, FormView):
@@ -102,3 +96,15 @@ class RowDeleteView(HxOnlyTemplateMixin, RedirectView):
 
 class RowUpdateButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "bulktable/htmx/update_button.html"
+
+
+class EventEmitterView(HxOnlyTemplateMixin, TemplateView):
+    """This view emits an event"""
+
+    template_name = "bulktable/htmx/none.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if "event" in request.GET:
+            response["HX-Trigger-After-Swap"] = request.GET["event"]
+        return response

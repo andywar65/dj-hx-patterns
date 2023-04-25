@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    EventEmitterView,
     RowAddButtonView,
     RowCreateView,
     RowDeleteView,
@@ -40,5 +41,10 @@ urlpatterns = [
         "row/delete/",
         RowDeleteView.as_view(),
         name="delete",
+    ),
+    path(
+        "event-emit/",
+        EventEmitterView.as_view(),
+        name="event_emit",
     ),
 ]

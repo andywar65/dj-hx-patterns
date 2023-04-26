@@ -69,7 +69,9 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
     def form_valid(self, form):
         if self.ids:
             updated = 0
-            title = form.cleaned_data["title"]
+            title = None
+            if len(self.ids) == 1:
+                title = form.cleaned_data["title"]
             color = form.cleaned_data["color"]
             for row in Row.objects.filter(id__in=self.ids):
                 if title:
@@ -86,7 +88,9 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
         return super(RowUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("bulktable:list") + f"?page={self.request.POST.get('page')}"
+        return reverse("bulktable:list") + "?page=%(page)s" % {
+            "page": self.request.POST.get("page")
+        }
 
 
 class RowDeleteView(HxOnlyTemplateMixin, RedirectView):

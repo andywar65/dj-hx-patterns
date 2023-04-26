@@ -42,21 +42,29 @@ class RowAddButtonView(HxOnlyTemplateMixin, TemplateView):
 
 
 class RowUpdateView(HxOnlyTemplateMixin, FormView):
-    form_class = RowUpdateForm
+    form_class = RowCreateForm
     template_name = "bulktable/htmx/update.html"
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.ids = None
+        self.ids = []
         if "ids" in self.request.GET:
             self.ids = request.GET.getlist("ids")
         if "ids" in self.request.POST:
             self.ids = request.POST.getlist("ids")
 
     def get_form_class(self):
-        if len(self.ids) == 1:
-            return RowCreateForm
+        if len(self.ids) > 1:
+            return RowUpdateForm
         return self.form_class
+
+    def get_initial(self):
+        initial = super().get_initial()
+        if len(self.ids) == 1:
+            row = Row.objects.get(id=self.ids[0])
+            initial["title"] = row.title
+            initial["color"] = row.color
+        return initial
 
     def form_valid(self, form):
         if self.ids:

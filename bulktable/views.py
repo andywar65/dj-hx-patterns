@@ -45,13 +45,25 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
     form_class = RowUpdateForm
     template_name = "bulktable/htmx/update.html"
 
-    def form_valid(self, form):
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.ids = None
+        if "ids" in self.request.GET:
+            self.ids = request.GET.getlist("ids")
         if "ids" in self.request.POST:
+            self.ids = request.POST.getlist("ids")
+
+    def get_form_class(self):
+        if len(self.ids) == 1:
+            return RowCreateForm
+        return self.form_class
+
+    def form_valid(self, form):
+        if self.ids:
             updated = 0
-            id_list = self.request.POST.getlist("ids")
             title = form.cleaned_data["title"]
             color = form.cleaned_data["color"]
-            for row in Row.objects.filter(id__in=id_list):
+            for row in Row.objects.filter(id__in=self.ids):
                 if title:
                     row.title = title
                 if color:

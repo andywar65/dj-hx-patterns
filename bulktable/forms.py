@@ -10,11 +10,6 @@ class RowCreateForm(ModelForm):
 
 
 class RowUpdateForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(RowUpdateForm, self).__init__(*args, **kwargs)
-        self.fields["title"].required = False
-        self.fields["color"].required = False
-
     class Meta:
         model = Row
-        fields = "__all__"
+        fields = ["color"]

@@ -2,6 +2,7 @@
 
 <a class="btn btn-primary"
    hx-get="{% url 'bulktable:update' %}"
-   hx-target="#update-button">
+   hx-target="#update-button"
+   hx-include="#checked-rows">
   {% trans "Modify checked rows" %}
 </a>

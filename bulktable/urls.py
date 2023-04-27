@@ -5,6 +5,7 @@ from .views import (
     RowAddButtonView,
     RowCreateView,
     RowDeleteView,
+    RowDetailView,
     RowListView,
     RowUpdateButtonView,
     RowUpdateView,
@@ -41,6 +42,11 @@ urlpatterns = [
         "row/delete/",
         RowDeleteView.as_view(),
         name="delete",
+    ),
+    path(
+        "row/<pk>/",
+        RowDetailView.as_view(),
+        name="detail",
     ),
     path(
         "event-emit/",

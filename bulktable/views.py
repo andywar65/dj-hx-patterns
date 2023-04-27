@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
     CreateView,
+    DetailView,
     FormView,
     ListView,
     RedirectView,
@@ -39,6 +40,11 @@ class RowCreateView(HxOnlyTemplateMixin, CreateView):
 
 class RowAddButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "bulktable/htmx/add_button.html"
+
+
+class RowDetailView(HxOnlyTemplateMixin, DetailView):
+    model = Row
+    template_name = "bulktable/htmx/detail.html"
 
 
 class RowUpdateView(HxOnlyTemplateMixin, FormView):

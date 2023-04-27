@@ -15,7 +15,9 @@
     <form id="checked-rows">
       <tbody id="row-list">
         {% for object in object_list %}
-          <tr id="row-{{ object.id }}">
+          <tr id="row-{{ object.id }}"
+              hx-get="{% url 'bulktable:detail' pk=object.id %}"
+              hx-trigger="refreshItem{{ object.id }} from:body">
             {% include "bulktable/htmx/detail.html" %}
           </tr>
         {% endfor %}

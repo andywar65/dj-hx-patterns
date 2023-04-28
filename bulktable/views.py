@@ -136,5 +136,5 @@ class EventEmitterView(HxOnlyTemplateMixin, TemplateView):
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         if "event" in request.GET:
-            response["HX-Trigger-After-Swap"] = request.GET["event"]
+            response["HX-Trigger"] = request.GET["event"]
         return response

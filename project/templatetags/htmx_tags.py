@@ -8,8 +8,8 @@ register = template.Library()
 
 @register.simple_tag
 def htmx_cdn():
-    url = "https://unpkg.com/htmx.org@1.9.0"
-    sha = "sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls"
+    url = "https://unpkg.com/htmx.org@1.9.2"
+    sha = "sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h"
     return mark_safe(
         '<script src="%(url)s" integrity="%(sha)s" crossorigin="anonymous"></script>'
         % {"url": url, "sha": sha}

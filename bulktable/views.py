@@ -1,8 +1,7 @@
 import json
 
 from django.contrib import messages
-
-# from django.shortcuts import get_object_or_404
+from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
@@ -100,8 +99,11 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
         ) + "?event=refreshControllers&%(string)s" % {"string": "&".join(events)}
 
 
-class RowDeleteView(HxOnlyTemplateMixin, RedirectView):
+class RowDeleteView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
+        # no get_template in redirect view
+        if not self.request.htmx:
+            raise Http404("Request without HTMX headers")
         # control if we actually have rows and delete them
         if "ids" in self.request.GET:
             deleted = 0

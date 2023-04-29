@@ -2,8 +2,7 @@
 
 <a class="btn btn-success"
    hx-get="{% url 'bulktable:create' %}"
-   hx-target="#add-button"
-   hx-swap="morph:innerHTML">
+   hx-target="#add-button">
   {% trans "Add row" %}
   <span class="htmx-indicator spinner-border spinner-border-sm text-success"></span>
 </a>

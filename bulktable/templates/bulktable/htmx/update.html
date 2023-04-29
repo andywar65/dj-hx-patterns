@@ -3,14 +3,14 @@
 
 <div class="card text-start" style="margin-bottom: 15px">
   <div class="card-body">
-    <form
-      hx-include="#checked-rows"
-      hx-post="{% url 'bulktable:update' %}"
-      hx-target="#content">
+    <form>
       {% bootstrap_form form %}
       <div class="row">
         <div class="col">
-          <button class="btn btn-primary" type="submit">
+          <button class="btn btn-primary"
+                  hx-include="#checked-rows"
+                  hx-post="{% url 'bulktable:update' %}"
+                  hx-swap="none">
             {% trans "Update" %}
             <span class="htmx-indicator spinner-border spinner-border-sm"></span>
           </button>

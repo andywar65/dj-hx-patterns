@@ -96,9 +96,12 @@ class RowUpdateView(HxOnlyTemplateMixin, FormView):
         return super(RowUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("bulktable:list") + "?page=%(page)s" % {
-            "page": self.request.POST.get("page")
-        }
+        events = []
+        for id in self.ids:
+            events.append("event=refreshItem" + str(id))
+        return reverse(
+            "bulktable:event_emit"
+        ) + "?event=refreshControllers&%(string)s" % {"string": "&".join(events)}
 
 
 class RowDeleteView(HxOnlyTemplateMixin, RedirectView):
@@ -128,6 +131,10 @@ class RowDeleteView(HxOnlyTemplateMixin, RedirectView):
 
 class RowUpdateButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "bulktable/htmx/update_button.html"
+
+
+class RowControllersView(HxOnlyTemplateMixin, TemplateView):
+    template_name = "bulktable/htmx/controllers.html"
 
 
 class EventEmitterView(HxOnlyTemplateMixin, TemplateView):

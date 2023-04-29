@@ -14,13 +14,10 @@
     <h3>{% translate 'Rows' %}</h3>
   </div>
   <div class="card-body">
-    <div class="row mb-3">
-      <div id="add-button" class="col"  hx-ext="morph">
-        {% include "bulktable/htmx/add_button.html" %}
-      </div>
-      <div id="update-button" class="col text-end">
-        {% include "bulktable/htmx/update_button.html" %}
-      </div>
+    <div id="controllers"
+         hx-get="{% url 'bulktable:controllers' %}"
+         hx-trigger="refreshControllers from:body">
+      {% include "bulktable/htmx/controllers.html" %}
     </div>
     {% include "bulktable/htmx/list_loop.html" %}
   </div>

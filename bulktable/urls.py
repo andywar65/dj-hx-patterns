@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     EventEmitterView,
     RowAddButtonView,
+    RowControllersView,
     RowCreateView,
     RowDeleteView,
     RowDetailView,
@@ -32,6 +33,11 @@ urlpatterns = [
         "row/update/",
         RowUpdateView.as_view(),
         name="update",
+    ),
+    path(
+        "row/controllers/",
+        RowControllersView.as_view(),
+        name="controllers",
     ),
     path(
         "row/update/button/",

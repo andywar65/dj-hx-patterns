@@ -40,10 +40,6 @@ class RowCreateView(HxOnlyTemplateMixin, CreateView):
         return reverse("bulktable:event_emit") + "?event=refreshList"
 
 
-class RowAddButtonView(HxOnlyTemplateMixin, TemplateView):
-    template_name = "bulktable/htmx/add_button.html"
-
-
 class RowDetailView(HxOnlyTemplateMixin, DetailView):
     model = Row
     template_name = "bulktable/htmx/detail.html"
@@ -127,10 +123,6 @@ class RowDeleteView(HxOnlyTemplateMixin, RedirectView):
                         + f"?page={int(self.request.GET['page']) - 1}"
                     )
         return reverse("bulktable:list") + f"?page={self.request.GET.get('page')}"
-
-
-class RowUpdateButtonView(HxOnlyTemplateMixin, TemplateView):
-    template_name = "bulktable/htmx/update_button.html"
 
 
 class RowControllersView(HxOnlyTemplateMixin, TemplateView):

@@ -1,6 +1,8 @@
 import json
+from pathlib import Path
 
 from django import template
+from django.conf import settings
 from django.utils.safestring import mark_safe
 
 register = template.Library()
@@ -14,6 +16,12 @@ def htmx_cdn():
         '<script src="%(url)s" integrity="%(sha)s" crossorigin="anonymous"></script>'
         % {"url": url, "sha": sha}
     )
+
+
+@register.simple_tag
+def htmx_static():
+    url = Path(settings.STATIC_URL, "js/htmx.min.js")
+    return mark_safe('<script src="%(url)s"></script>' % {"url": url})
 
 
 @register.simple_tag

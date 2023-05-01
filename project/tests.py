@@ -9,6 +9,3 @@ class ProjectViewTest(TestCase):
         print("\n-Test base status 200")
         self.assertTemplateUsed(response, "base.html")
         print("\n-Test base template")
-        self.assertIsInstance(response.context["year"], int)
-        self.assertIsInstance(response.context["month"], int)
-        print("\n-Test base context")

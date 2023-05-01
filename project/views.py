@@ -1,5 +1,4 @@
 from django.http import Http404
-from django.utils.timezone import now
 from django.views.generic import TemplateView
 
 
@@ -23,11 +22,3 @@ class HxOnlyTemplateMixin:
 
 class BaseTemplateView(TemplateView):
     template_name = "base.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(BaseTemplateView, self).get_context_data()
-        context["year"] = now().year
-        context["month"] = 1
-        if now().month > 6:
-            context["month"] = 7
-        return context

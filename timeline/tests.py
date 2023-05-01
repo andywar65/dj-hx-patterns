@@ -176,6 +176,16 @@ class PhaseViewTest(TestCase):
         PhaseDelayFactory.create(parent=parent, title="First")
         PhaseDelayFactory.create(parent=parent, position=1, title="Last")
 
+    def test_base_view(self):
+        response = self.client.get(reverse("timeline:base"))
+        self.assertRedirects(
+            response,
+            reverse("timeline:list", kwargs={"year": now().year, "month": now().month}),
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test base redirects")
+
     def test_list_view(self):
         response = self.client.get(
             reverse("timeline:list", kwargs={"year": 2023, "month": 1})

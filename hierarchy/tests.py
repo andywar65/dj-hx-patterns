@@ -166,7 +166,8 @@ class CategoryViewModifyTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("hierarchy:detail", kwargs={"pk": cat1.id}),
+            reverse("hierarchy:event_emit")
+            + "?event=refreshItem%(cat1)s" % {"cat1": str(cat1.id)},
             status_code=302,
             target_status_code=200,
         )
@@ -182,7 +183,7 @@ class CategoryViewModifyTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("hierarchy:detail", kwargs={"pk": cat1.id}) + "?refresh=true",
+            reverse("hierarchy:event_emit") + "?event=refreshList",
             status_code=302,
             target_status_code=200,
         )
@@ -218,8 +219,8 @@ class CategoryViewModifyTest(TestCase):
 
     def test_delete_view(self):
         cat1 = Category.objects.get(title="First")
-        response = self.client.get(
-            reverse("hierarchy:delete", kwargs={"pk": cat1.id}),
+        response = self.client.delete(
+            reverse("hierarchy:update", kwargs={"pk": cat1.id}),
             headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)

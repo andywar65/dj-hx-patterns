@@ -176,8 +176,8 @@ class ItemViewModifyTest(TestCase):
 
     def test_delete_view(self):
         it1 = Item.objects.get(title="First")
-        response = self.client.get(
-            reverse("boxlist:delete", kwargs={"pk": it1.id}),
+        response = self.client.delete(
+            reverse("boxlist:update", kwargs={"pk": it1.id}),
             headers={"hx-request": "true"},
         )
         self.assertEqual(response.status_code, 200)

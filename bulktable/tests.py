@@ -65,6 +65,16 @@ class RowModifiedViewTest(TestCase):
         print("\n-Test update template")
         first = Row.objects.first()
         last = Row.objects.last()
+        # next two responses are for coverage purposes
+        response = self.client.get(
+            reverse("bulktable:update") + "?ids=%(first)s" % {"first": first.id},
+        )
+        response = self.client.post(
+            reverse("bulktable:update"),
+            {"title": "Foo", "color": "success", "page": 1, "ids": [first.id]},
+            headers={"hx-request": "true"},
+            follow=True,
+        )
         response = self.client.post(
             reverse("bulktable:update"),
             {"title": "Foo", "color": "success", "page": 1, "ids": [first.id, last.id]},
@@ -89,6 +99,9 @@ class RowModifiedViewTest(TestCase):
 
     def test_delete_view(self):
         RowFactory.create_batch(1)
+        response = self.client.get(reverse("bulktable:delete"))
+        self.assertEqual(response.status_code, 404)
+        print("\n-Test delete status 404")
         response = self.client.get(
             reverse("bulktable:delete"), headers={"hx-request": "true"}
         )

@@ -46,7 +46,7 @@ class RowViewTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("bulktable:add_button") + "?refresh=true",
+            reverse("bulktable:event_emit") + "?event=refreshList",
             status_code=302,
             target_status_code=200,
         )
@@ -71,9 +71,12 @@ class RowModifiedViewTest(TestCase):
             headers={"hx-request": "true"},
             follow=True,
         )
+        event = "event=refreshItem"
         self.assertRedirects(
             response,
-            reverse("bulktable:list") + "?page=1",
+            reverse("bulktable:event_emit")
+            + "?event=refreshControllers&%(event)s%(first)s&%(event)s%(last)s"
+            % {"first": str(first.id), "last": str(last.id), "event": event},
             status_code=302,
             target_status_code=200,
         )

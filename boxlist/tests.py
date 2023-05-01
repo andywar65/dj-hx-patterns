@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Item
+from .models import Item, intercalate_siblings, move_down_siblings
 
 
 class ItemModelTest(TestCase):
@@ -33,6 +33,7 @@ class ItemModifiedModelTest(TestCase):
         print("\nTest modified boxlist models")
         Item.objects.create(position=1, title="First")
         Item.objects.create(position=2, title="Central")
+        Item.objects.create(position=3, title="Last")
 
     def test_move_up_item(self):
         it2 = Item.objects.get(title="Central")
@@ -54,6 +55,26 @@ class ItemModifiedModelTest(TestCase):
         it2 = Item.objects.get(title="Central")
         self.assertEquals(it2.position, 1)
         print("\n-Test move following Items")
+
+    def test_move_down_siblings(self):
+        move_down_siblings(2)
+        it1 = Item.objects.get(title="First")
+        it2 = Item.objects.get(title="Central")
+        self.assertEquals(it1.position, 1)
+        self.assertEquals(it2.position, 3)
+        print("\n-Test move down siblings")
+
+    def test_intercalate_siblings_down(self):
+        intercalate_siblings(2, 1)
+        it2 = Item.objects.get(title="Central")
+        self.assertEquals(it2.position, 1)
+        print("\n-Test intercalate siblings downwards")
+
+    def test_intercalate_siblings_up(self):
+        intercalate_siblings(2, 3)
+        it2 = Item.objects.get(title="Central")
+        self.assertEquals(it2.position, 3)
+        print("\n-Test intercalate siblings upwards")
 
 
 class ItemViewTest(TestCase):

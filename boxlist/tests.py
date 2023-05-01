@@ -104,9 +104,10 @@ class ItemViewTest(TestCase):
         print("\n-Test create status 200")
         self.assertTemplateUsed(response, "boxlist/htmx/create.html")
         print("\n-Test create template")
+        it2 = Item.objects.last()
         response = self.client.post(
             reverse("boxlist:create"),
-            {"title": "Foo"},
+            {"title": "Foo", "target": it2.id},
             headers={"hx-request": "true"},
             follow=True,
         )

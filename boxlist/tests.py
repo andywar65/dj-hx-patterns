@@ -125,7 +125,7 @@ class ItemViewModifyTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("boxlist:detail", kwargs={"pk": it1.id}),
+            reverse("boxlist:event_emit") + "?event=refreshItem" + str(it1.id),
             status_code=302,
             target_status_code=200,
         )
@@ -139,7 +139,7 @@ class ItemViewModifyTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("boxlist:detail", kwargs={"pk": it1.id}) + "?refresh=true",
+            reverse("boxlist:event_emit") + "?event=refreshList",
             status_code=302,
             target_status_code=200,
         )

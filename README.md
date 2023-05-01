@@ -18,7 +18,7 @@ Tree of hierarchical items. Based on fabulous lightweight [django-tree-queries](
 ### Timeline
 A timeline of hierarchical items. Items may have start date or follow parent item.
 ## Tests
-Coverage 93%.
+Coverage 99%.
 ## Template Tags
 HTMX is great, but it adds a slight complexity: you can swap just chunks of your `DOM`, targeting a specific element (use tag `hx-target="#<DOM element>"`). This info normally is found in your `Template`, so to get the whole picture of an interaction you have to track both `View` and `Template` content. To bring all logic into the `View`, my first workaround  used `HX-Retarget` header in the `dispatch` method (see also [django-htmx Response Modifying Functions](https://django-htmx.readthedocs.io/en/latest/http.html#response-modifying-functions)), but the approach has debatable results!
 ### htmx_request tag (not used)

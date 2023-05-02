@@ -121,28 +121,6 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
     template_name = "boxlist/htmx/detail.html"
 
 
-class ItemMoveDownView(HxOnlyTemplateMixin, TemplateView):
-    """Rendered in #item-{{ item.id }}, then triggers list in #content"""
-
-    template_name = "boxlist/htmx/moving.html"
-
-    def setup(self, request, *args, **kwargs):
-        super(ItemMoveDownView, self).setup(request, *args, **kwargs)
-        item = get_object_or_404(Item, id=self.kwargs["pk"])
-        item.move_down()
-
-
-class ItemMoveUpView(HxOnlyTemplateMixin, TemplateView):
-    """Rendered in #item-{{ item.id }}, then triggers list in #content"""
-
-    template_name = "boxlist/htmx/moving.html"
-
-    def setup(self, request, *args, **kwargs):
-        super(ItemMoveUpView, self).setup(request, *args, **kwargs)
-        item = get_object_or_404(Item, id=self.kwargs["pk"])
-        item.move_up()
-
-
 class EventEmitterView(HxOnlyTemplateMixin, TemplateView):
     """This view emits an event"""
 

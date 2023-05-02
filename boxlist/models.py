@@ -17,37 +17,7 @@ class Item(models.Model):
         ]
 
     def __str__(self):
-        return "%(pos)d - %(title)s" % {"pos": self.position, "title": self.title}
-
-    def get_next_item(self):
-        try:
-            next = Item.objects.get(position=self.position + 1)
-            return next
-        except Item.DoesNotExist:
-            return None
-
-    def get_previous_item(self):
-        try:
-            prev = Item.objects.get(position=self.position - 1)
-            return prev
-        except Item.DoesNotExist:
-            return None
-
-    def move_down(self):
-        next = self.get_next_item()
-        if next:
-            self.position += 1
-            self.save()
-            next.position -= 1
-            next.save()
-
-    def move_up(self):
-        prev = self.get_previous_item()
-        if prev:
-            self.position -= 1
-            self.save()
-            prev.position += 1
-            prev.save()
+        return "%(pos)d - %(title)s" % {"pos": self.id, "title": self.title}
 
     def move_following_items(self):
         """Used when an item is deleted.

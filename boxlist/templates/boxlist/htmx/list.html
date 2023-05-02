@@ -13,13 +13,23 @@
       {% include "boxlist/htmx/add_button.html" %}
     </div>
     {% if object_list %}
-      {% for object in object_list %}
-        <div id="item-{{ object.id }}"
-             hx-get="{% url 'boxlist:detail' pk=object.id %}"
-             hx-trigger="refreshItem{{ object.id }} from:body">
-          {% include "boxlist/htmx/detail.html" %}
+      <form class="sortable"
+            hx-get="{% url 'boxlist:sort' %}"
+            hx-trigger="end"
+            hx-swap="none">
+        <div class="htmx-indicator">
+          <p>{% trans "Updating order..." %}</p>
         </div>
-      {% endfor %}
+        {% for object in object_list %}
+          <div id="item-{{ object.id }}"
+               hx-get="{% url 'boxlist:detail' pk=object.id %}"
+               hx-trigger="refreshItem{{ object.id }} from:body"
+               hx-swap="innerHTML">
+            <input type='hidden' name='item' value='{{ object.id }}'/>
+            {% include "boxlist/htmx/detail.html" %}
+          </div>
+        {% endfor %}
+      </form>
     {% else %}
       <p>{% trans "No items yet" %}</p>
     {% endif %}

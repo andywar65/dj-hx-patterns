@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import DetailView, FormView, ListView, TemplateView
@@ -46,6 +47,24 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
     """Rendered in #add-button when create is dismissed"""
 
     template_name = "boxlist/htmx/add_button.html"
+
+
+class ItemSortView(TemplateView):
+    template_name = "boxlist/htmx/none.html"
+
+    def setup(self, request, *args, **kwargs):
+        if not request.htmx:
+            raise Http404("Request without HTMX headers")
+        super().setup(request, *args, **kwargs)
+        if "item" in request.GET:
+            i = 1
+            id_list = request.GET.getlist("item")
+            for id in id_list:
+                item = get_object_or_404(Item, id=id)
+                if not item.position == i:
+                    item.position = i
+                    item.save()
+                i += 1
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):
@@ -100,28 +119,6 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
 
     model = Item
     template_name = "boxlist/htmx/detail.html"
-
-
-class ItemMoveDownView(HxOnlyTemplateMixin, TemplateView):
-    """Rendered in #item-{{ item.id }}, then triggers list in #content"""
-
-    template_name = "boxlist/htmx/moving.html"
-
-    def setup(self, request, *args, **kwargs):
-        super(ItemMoveDownView, self).setup(request, *args, **kwargs)
-        item = get_object_or_404(Item, id=self.kwargs["pk"])
-        item.move_down()
-
-
-class ItemMoveUpView(HxOnlyTemplateMixin, TemplateView):
-    """Rendered in #item-{{ item.id }}, then triggers list in #content"""
-
-    template_name = "boxlist/htmx/moving.html"
-
-    def setup(self, request, *args, **kwargs):
-        super(ItemMoveUpView, self).setup(request, *args, **kwargs)
-        item = get_object_or_404(Item, id=self.kwargs["pk"])
-        item.move_up()
 
 
 class EventEmitterView(HxOnlyTemplateMixin, TemplateView):

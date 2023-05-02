@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import DetailView, FormView, ListView, TemplateView
@@ -46,6 +47,17 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
     """Rendered in #add-button when create is dismissed"""
 
     template_name = "boxlist/htmx/add_button.html"
+
+
+class ItemSortView(TemplateView):
+    template_name = "boxlist/htmx/none.html"
+
+    def setup(self, request, *args, **kwargs):
+        if not request.htmx:
+            raise Http404("Request without HTMX headers")
+        super().setup(request, *args, **kwargs)
+        if "item" in request.GET:
+            print("Items!")
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):

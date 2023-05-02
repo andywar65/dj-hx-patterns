@@ -8,6 +8,7 @@ from .views import (
     ItemListView,
     ItemMoveDownView,
     ItemMoveUpView,
+    ItemSortView,
     ItemUpdateView,
 )
 
@@ -27,6 +28,11 @@ urlpatterns = [
         "item/add/button/",
         ItemAddButtonView.as_view(),
         name="add_button",
+    ),
+    path(
+        "item/sort/",
+        ItemSortView.as_view(),
+        name="sort",
     ),
     path(
         "item/<pk>/",

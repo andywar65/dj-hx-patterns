@@ -13,8 +13,13 @@
       {% include "boxlist/htmx/add_button.html" %}
     </div>
     {% if object_list %}
-      <form class="sortable" hx-post="/items" hx-trigger="end">
-        <div class="htmx-indicator">Updating...</div>
+      <form class="sortable"
+            hx-get="{% url 'boxlist:sort' %}"
+            hx-trigger="end"
+            hx-swap="none">
+        <div class="htmx-indicator">
+          {% trans "Updating order..." %}
+        </div>
         {% for object in object_list %}
           <div id="item-{{ object.id }}"
                hx-get="{% url 'boxlist:detail' pk=object.id %}"

@@ -57,7 +57,14 @@ class ItemSortView(TemplateView):
             raise Http404("Request without HTMX headers")
         super().setup(request, *args, **kwargs)
         if "item" in request.GET:
-            print("Items!")
+            i = 1
+            id_list = request.GET.getlist("item")
+            for id in id_list:
+                item = get_object_or_404(Item, id=id)
+                if not item.position == i:
+                    item.position = i
+                    item.save()
+                i += 1
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):

@@ -18,7 +18,7 @@
             hx-trigger="end"
             hx-swap="none">
         <div class="htmx-indicator">
-          {% trans "Updating order..." %}
+          <p>{% trans "Updating order..." %}</p>
         </div>
         {% for object in object_list %}
           <div id="item-{{ object.id }}"

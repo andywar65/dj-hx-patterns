@@ -23,7 +23,8 @@
         {% for object in object_list %}
           <div id="item-{{ object.id }}"
                hx-get="{% url 'boxlist:detail' pk=object.id %}"
-               hx-trigger="refreshItem{{ object.id }} from:body">
+               hx-trigger="refreshItem{{ object.id }} from:body"
+               hx-swap="innerHTML">
             <input type='hidden' name='item' value='{{ object.id }}'/>
             {% include "boxlist/htmx/detail.html" %}
           </div>

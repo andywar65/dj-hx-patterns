@@ -1,3 +1,5 @@
+import json
+
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -129,5 +131,9 @@ class EventEmitterView(HxOnlyTemplateMixin, TemplateView):
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         if "event" in request.GET:
-            response["HX-Trigger-After-Swap"] = request.GET["event"]
+            event_dict = {}
+            events = request.GET.getlist("event")
+            for e in events:
+                event_dict[e] = "true"
+            response["HX-Trigger"] = json.dumps(event_dict)
         return response

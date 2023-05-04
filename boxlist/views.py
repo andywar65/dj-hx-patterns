@@ -61,6 +61,7 @@ class ItemSortView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         if not self.request.htmx:
             raise Http404("Request without HTMX headers")
+        events = []
         if "item" in self.request.POST:
             i = 1
             id_list = self.request.POST.getlist("item")
@@ -69,8 +70,11 @@ class ItemSortView(RedirectView):
                 if not item.position == i:
                     item.position = i
                     item.save()
+                    events.append("event=refreshItem" + str(item.id))
                 i += 1
-        return reverse("boxlist:event_emit") + "?event=refreshList"
+        return reverse("boxlist:event_emit") + "?%(string)s" % {
+            "string": "&".join(events)
+        }
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):

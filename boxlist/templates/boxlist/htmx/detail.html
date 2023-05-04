@@ -1,7 +1,8 @@
 {% load i18n %}
 
+<input type='hidden' name='item' value='{{ object.id }}'/>
 <div class="alert alert-secondary">
-  <strong>{{ object.id }}</strong> -
+  <strong>{{ object.position }}</strong> -
   <a class="link-primary"
      title="{% trans 'Modify item' %}"
      hx-get="{% url 'boxlist:update' pk=object.id %}"

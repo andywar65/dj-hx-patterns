@@ -17,7 +17,7 @@ class Item(models.Model):
         ]
 
     def __str__(self):
-        return "%(pos)d - %(title)s" % {"pos": self.id, "title": self.title}
+        return "%(pos)d - %(title)s" % {"pos": self.position, "title": self.title}
 
     def move_following_items(self):
         """Used when an item is deleted.

@@ -3,7 +3,13 @@ import json
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views.generic import DetailView, FormView, ListView, TemplateView
+from django.views.generic import (
+    DetailView,
+    FormView,
+    ListView,
+    RedirectView,
+    TemplateView,
+)
 
 from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
 
@@ -51,22 +57,20 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
     template_name = "boxlist/htmx/add_button.html"
 
 
-class ItemSortView(TemplateView):
-    template_name = "boxlist/htmx/none.html"
-
-    def setup(self, request, *args, **kwargs):
-        if not request.htmx:
+class ItemSortView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        if not self.request.htmx:
             raise Http404("Request without HTMX headers")
-        super().setup(request, *args, **kwargs)
-        if "item" in request.GET:
+        if "item" in self.request.POST:
             i = 1
-            id_list = request.GET.getlist("item")
+            id_list = self.request.POST.getlist("item")
             for id in id_list:
                 item = get_object_or_404(Item, id=id)
                 if not item.position == i:
                     item.position = i
                     item.save()
                 i += 1
+        return reverse("boxlist:event_emit") + "?event=refreshList"
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):

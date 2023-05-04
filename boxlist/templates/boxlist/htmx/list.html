@@ -14,14 +14,13 @@
     </div>
     {% if object_list %}
       <form class="sortable"
-            hx-get="{% url 'boxlist:sort' %}"
+            hx-post="{% url 'boxlist:sort' %}"
             hx-trigger="end"
             hx-swap="none">
         <div class="htmx-indicator">
           <p>{% trans "Updating order..." %}</p>
         </div>
         {% for object in object_list %}
-          <input type='hidden' name='item' value='{{ object.id }}'/>
           <div id="item-{{ object.id }}"
                hx-get="{% url 'boxlist:detail' pk=object.id %}"
                hx-trigger="refreshItem{{ object.id }} from:body"

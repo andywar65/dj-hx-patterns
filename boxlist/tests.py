@@ -144,16 +144,37 @@ class ItemViewModifyTest(TestCase):
         print("\n-Test update position redirect")
         it2 = Item.objects.get(title="Last")
         self.assertEqual(it2.position, 1)
+        print("\n-Test update position")
 
     def test_sortable_view(self):
-        it1 = Item.objects.get(title="First")  # noqa
-        it2 = Item.objects.get(title="Last")  # noqa
+        it1 = Item.objects.get(title="First")
+        it2 = Item.objects.get(title="Last")
         response = self.client.post(
             reverse("boxlist:sort"),
             headers={"hx-request": "false"},
         )
         self.assertEqual(response.status_code, 404)
         print("\n-Test sortable status 404")
+        response = self.client.post(
+            reverse("boxlist:sort"),
+            {"item": [str(it2.id), str(it1.id)]},
+            headers={"hx-request": "true"},
+            follow=True,
+        )
+        string = "?event=refreshItem%(item2)s&event=refreshItem%(item1)s" % {
+            "item1": str(it1.id),
+            "item2": str(it2.id),
+        }
+        self.assertRedirects(
+            response,
+            reverse("boxlist:event_emit") + string,
+            status_code=302,
+            target_status_code=200,
+        )
+        print("\n-Test sortable redirect")
+        it2 = Item.objects.get(title="Last")
+        self.assertEqual(it2.position, 1)
+        print("\n-Test update position")
 
     def test_delete_view(self):
         it1 = Item.objects.get(title="First")

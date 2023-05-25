@@ -58,6 +58,9 @@ class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
 
 
 class ItemSortView(RedirectView):
+    """Updates POSTed positions of items and redirects
+    to the EventemitterView"""
+
     def get_redirect_url(self, *args, **kwargs):
         if not self.request.htmx:
             raise Http404("Request without HTMX headers")
@@ -132,7 +135,9 @@ class ItemDetailView(HxOnlyTemplateMixin, DetailView):
 
 
 class EventEmitterView(HxOnlyTemplateMixin, TemplateView):
-    """This view emits an event"""
+    """This view emits an event: gets list of event paramenters
+    and dispatches event dictinary. Renders none template as
+    swapping is null"""
 
     template_name = "boxlist/htmx/none.html"
 

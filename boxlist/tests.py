@@ -145,6 +145,16 @@ class ItemViewModifyTest(TestCase):
         it2 = Item.objects.get(title="Last")
         self.assertEqual(it2.position, 1)
 
+    def test_sortable_view(self):
+        it1 = Item.objects.get(title="First")  # noqa
+        it2 = Item.objects.get(title="Last")  # noqa
+        response = self.client.post(
+            reverse("boxlist:sort"),
+            headers={"hx-request": "false"},
+        )
+        self.assertEqual(response.status_code, 404)
+        print("\n-Test sortable status 404")
+
     def test_delete_view(self):
         it1 = Item.objects.get(title="First")
         response = self.client.delete(

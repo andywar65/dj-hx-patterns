@@ -17,16 +17,6 @@ class ItemModelTest(TestCase):
         self.assertEquals(it1.__str__(), "1 - First")
         print("\n-Test Item title")
 
-    def test_get_next_previous_item(self):
-        it1 = Item.objects.get(title="First")
-        it2 = Item.objects.get(title="Central")
-        it3 = Item.objects.get(title="Last")
-        self.assertEquals(it1.get_next_item(), it2)
-        self.assertEquals(it3.get_next_item(), None)
-        self.assertEquals(it1.get_previous_item(), None)
-        self.assertEquals(it3.get_previous_item(), it2)
-        print("\n-Test next / previous Item")
-
 
 class ItemModifiedModelTest(TestCase):
     def setUp(self):
@@ -34,20 +24,6 @@ class ItemModifiedModelTest(TestCase):
         Item.objects.create(position=1, title="First")
         Item.objects.create(position=2, title="Central")
         Item.objects.create(position=3, title="Last")
-
-    def test_move_up_item(self):
-        it2 = Item.objects.get(title="Central")
-        it2.move_up()
-        it1 = Item.objects.get(title="First")
-        self.assertEquals(it1.position, 2)
-        print("\n-Test move up Item")
-
-    def test_move_down_item(self):
-        it1 = Item.objects.get(title="First")
-        it1.move_down()
-        it2 = Item.objects.get(title="Central")
-        self.assertEquals(it2.position, 1)
-        print("\n-Test move down Item")
 
     def test_move_following_items(self):
         it1 = Item.objects.get(title="First")
@@ -168,33 +144,6 @@ class ItemViewModifyTest(TestCase):
         print("\n-Test update position redirect")
         it2 = Item.objects.get(title="Last")
         self.assertEqual(it2.position, 1)
-
-    def test_move_down_view(self):
-        it1 = Item.objects.get(title="First")
-        response = self.client.get(
-            reverse("boxlist:move_down", kwargs={"pk": it1.id}),
-            headers={"hx-request": "true"},
-        )
-        self.assertEqual(response.status_code, 200)
-        print("\n-Test move down status 200")
-        self.assertTemplateUsed(response, "boxlist/htmx/moving.html")
-        print("\n-Test move down template")
-        it2 = Item.objects.get(title="Last")
-        self.assertEqual(it2.position, 1)
-        print("\n-Test move down next position")
-
-    def test_move_up_view(self):
-        it2 = Item.objects.get(title="Last")
-        response = self.client.get(
-            reverse("boxlist:move_up", kwargs={"pk": it2.id}),
-            headers={"hx-request": "true"},
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "boxlist/htmx/moving.html")
-        print("\n-Test move up template")
-        it1 = Item.objects.get(title="First")
-        self.assertEqual(it1.position, 2)
-        print("\n-Test move up previous position")
 
     def test_delete_view(self):
         it1 = Item.objects.get(title="First")

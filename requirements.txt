@@ -4,17 +4,17 @@
 #
 #    pip-compile
 #
-asgiref==3.6.0
+asgiref==3.7.2
     # via django
-beautifulsoup4==4.11.2
+beautifulsoup4==4.12.2
     # via django-bootstrap-v5
-coverage==7.2.2
+coverage==7.2.6
     # via -r requirements.in
-dj-database-url==1.2.0
+dj-database-url==2.0.0
     # via environs
 dj-email-url==1.0.6
     # via environs
-django==4.2
+django==4.2.1
     # via
     #   -r requirements.in
     #   dj-database-url
@@ -25,7 +25,7 @@ django-bootstrap-v5==1.0.11
     # via -r requirements.in
 django-cache-url==3.4.4
     # via environs
-django-debug-toolbar==3.8.1
+django-debug-toolbar==4.1.0
     # via -r requirements.in
 django-htmx==1.14.0
     # via -r requirements.in
@@ -35,11 +35,11 @@ environs[django]==9.5.0
     # via -r requirements.in
 factory-boy==3.2.1
     # via -r requirements.in
-faker==17.6.0
+faker==18.9.0
     # via factory-boy
 marshmallow==3.19.0
     # via environs
-packaging==23.0
+packaging==23.1
     # via marshmallow
 python-dateutil==2.8.2
     # via faker
@@ -47,11 +47,15 @@ python-dotenv==1.0.0
     # via environs
 six==1.16.0
     # via python-dateutil
-soupsieve==2.4
+soupsieve==2.4.1
     # via beautifulsoup4
-sqlparse==0.4.3
+sqlparse==0.4.4
     # via
     #   django
     #   django-debug-toolbar
-tzdata==2022.7
+typing-extensions==4.6.2
+    # via
+    #   asgiref
+    #   dj-database-url
+tzdata==2023.3
     # via django

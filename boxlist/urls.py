@@ -5,16 +5,16 @@ from .views import (
     ItemAddButtonView,
     ItemCreateView,
     ItemDetailView,
-    ItemListView,
     ItemSortView,
     ItemUpdateView,
+    item_list,
 )
 
 app_name = "boxlist"
 urlpatterns = [
     path(
         "",
-        ItemListView.as_view(),
+        item_list,
         name="list",
     ),
     path(

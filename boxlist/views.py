@@ -2,26 +2,24 @@ import json
 
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
+from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.views.generic import (
-    DetailView,
-    FormView,
-    ListView,
-    RedirectView,
-    TemplateView,
-)
+from django.views.generic import DetailView, FormView, RedirectView, TemplateView
 
-from project.views import HxOnlyTemplateMixin, HxPageTemplateMixin
+from project.views import HxOnlyTemplateMixin
 
 from .forms import ItemCreateForm, ItemUpdateForm
 from .models import Item, intercalate_siblings, move_down_siblings
 
 
-class ItemListView(HxPageTemplateMixin, ListView):
+def item_list(request):
     """Rendered in #content"""
 
-    model = Item
     template_name = "boxlist/htmx/list.html"
+    if not request.htmx:
+        template_name = template_name.replace("htmx/", "")
+    context = {"object_list": Item.objects.all()}
+    return TemplateResponse(request, template_name, context)
 
 
 class ItemCreateView(HxOnlyTemplateMixin, FormView):

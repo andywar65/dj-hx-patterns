@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.views.generic import DetailView, FormView, RedirectView, TemplateView
+from django.views.generic import FormView, RedirectView, TemplateView
 
 from project.views import HxOnlyTemplateMixin
 
@@ -125,11 +125,14 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
         return render(request, "boxlist/htmx/delete.html")
 
 
-class ItemDetailView(HxOnlyTemplateMixin, DetailView):
+def item_detail(request, pk):
     """Rendered in #item-{{ item.id }} when update is dismissed or successful"""
 
-    model = Item
+    if not request.htmx:
+        raise Http404("Request without HTMX headers")
     template_name = "boxlist/htmx/detail.html"
+    context = {"object": get_object_or_404(Item, id=pk)}
+    return TemplateResponse(request, template_name, context)
 
 
 class EventEmitterView(HxOnlyTemplateMixin, TemplateView):

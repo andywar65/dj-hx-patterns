@@ -4,9 +4,9 @@ from .views import (
     EventEmitterView,
     ItemAddButtonView,
     ItemCreateView,
-    ItemDetailView,
     ItemSortView,
     ItemUpdateView,
+    item_detail,
     item_list,
 )
 
@@ -34,7 +34,7 @@ urlpatterns = [
     ),
     path(
         "item/<pk>/",
-        ItemDetailView.as_view(),
+        item_detail,
         name="detail",
     ),
     path(

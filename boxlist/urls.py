@@ -2,10 +2,10 @@ from django.urls import path
 
 from .views import (
     EventEmitterView,
-    ItemAddButtonView,
     ItemCreateView,
     ItemSortView,
     ItemUpdateView,
+    add_button,
     item_detail,
     item_list,
 )
@@ -24,7 +24,7 @@ urlpatterns = [
     ),
     path(
         "item/add/button/",
-        ItemAddButtonView.as_view(),
+        add_button,
         name="add_button",
     ),
     path(

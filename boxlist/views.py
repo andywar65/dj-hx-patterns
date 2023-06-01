@@ -49,10 +49,14 @@ class ItemCreateView(HxOnlyTemplateMixin, FormView):
         return reverse("boxlist:list")
 
 
-class ItemAddButtonView(HxOnlyTemplateMixin, TemplateView):
+def add_button(request):
     """Rendered in #add-button when create is dismissed"""
 
+    if not request.htmx:
+        raise Http404("Request without HTMX headers")
     template_name = "boxlist/htmx/add_button.html"
+    context = {}
+    return TemplateResponse(request, template_name, context)
 
 
 class ItemSortView(RedirectView):

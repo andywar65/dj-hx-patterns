@@ -1,18 +1,17 @@
 import json
 
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.views.generic import FormView
-
-from project.views import HxOnlyTemplateMixin
 
 from .forms import ItemCreateForm, ItemUpdateForm
 from .models import Item, intercalate_siblings, move_down_siblings
 
 
 def check_htmx_request(request):
+    """Helper function"""
+
     if not request.htmx:
         raise Http404("Request without HTMX headers")
 
@@ -80,51 +79,41 @@ def item_sort(request):
     )
 
 
-class ItemUpdateView(HxOnlyTemplateMixin, FormView):
+def item_update(request, pk):
     """Rendered in #item-{{ item.id }}, on success swaps none
     and refreshes #item-{{ item.id }} or #content if position changed.
     If DELETE method, swaps in #item-{{ item.id }}"""
 
-    form_class = ItemUpdateForm
+    check_htmx_request(request)
     template_name = "boxlist/htmx/update.html"
-
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-        self.object = get_object_or_404(Item, id=self.kwargs["pk"])
-        self.original_position = self.object.position
-
-    def get_initial(self):
-        initial = super().get_initial()
-        initial["title"] = self.object.title
-        return initial
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["object"] = self.object
-        return context
-
-    def form_valid(self, form):
-        position = self.original_position
-        if form.cleaned_data["target"]:
-            position = form.cleaned_data["target"].position
-        intercalate_siblings(position, self.original_position)
-        self.object.title = form.cleaned_data["title"]
-        self.object.position = position
-        self.object.save()
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        if not self.object.position == self.original_position:
-            return reverse("boxlist:event_emit") + "?event=refreshList"
-        return (
-            reverse("boxlist:event_emit") + "?event=refreshItem" + str(self.object.id)
-        )
-
-    def delete(self, request, **kwargs):
-        item = get_object_or_404(Item, id=kwargs["pk"])
+    item = get_object_or_404(Item, id=pk)
+    original_position = item.position
+    if request.method == "DELETE":
+        template_name = "boxlist/htmx/delete.html"
         item.move_following_items()
         item.delete()
-        return render(request, "boxlist/htmx/delete.html")
+        return TemplateResponse(request, template_name, {})
+    elif request.method == "POST":
+        form = ItemUpdateForm(request.POST)
+        if form.is_valid():
+            position = original_position
+            if form.cleaned_data["target"]:
+                position = form.cleaned_data["target"].position
+            intercalate_siblings(position, original_position)
+            item.title = form.cleaned_data["title"]
+            item.position = position
+            item.save()
+            if not item.position == original_position:
+                return HttpResponseRedirect(
+                    reverse("boxlist:event_emit") + "?event=refreshList"
+                )
+            return HttpResponseRedirect(
+                reverse("boxlist:event_emit") + "?event=refreshItem" + str(item.id)
+            )
+    else:
+        form = ItemUpdateForm(initial={"title": item.title})
+        context = {"object": item, "form": form}
+        return TemplateResponse(request, template_name, context)
 
 
 def item_detail(request, pk):

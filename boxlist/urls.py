@@ -1,13 +1,13 @@
 from django.urls import path
 
 from .views import (
-    ItemUpdateView,
     add_button,
     event_emit,
     item_create,
     item_detail,
     item_list,
     item_sort,
+    item_update,
 )
 
 app_name = "boxlist"
@@ -39,7 +39,7 @@ urlpatterns = [
     ),
     path(
         "item/<pk>/update/",
-        ItemUpdateView.as_view(),
+        item_update,
         name="update",
     ),
     path(

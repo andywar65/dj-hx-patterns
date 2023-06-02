@@ -7,10 +7,10 @@ If you are on Windows like me, copy the `launch_dj_hx_patterns.ps1` to your comp
 The routine sets a python virtual environment, downloads the libraries, clones the repository, sets the environment, migrates
 the database tables, creates a superuser, populates the tables and runs the server. Enjoy!
 ## Warning, CBVs!
-All views are `Class Based` (this is not mainstream, but I like to stick to this rule). I have about three `HTMX  Mixins`, mostly controlling if `HTMX` headers are in the request.
+All views except in the `Box list` app are `Class Based` (this is not mainstream, I'm still wondering if I have to stick to this rule). I have about three `HTMX  Mixins`, mostly controlling if `HTMX` headers are in the request.
 ## Apps
 ### Box list
-Most simple. Add items to a list, modify them inline, change their position with [Sortable.js](https://sortablejs.github.io/Sortable/). Suitable for related objects.
+Most simple. Add items to a list, modify them inline, change their position with [Sortable.js](https://sortablejs.github.io/Sortable/). Suitable for related objects. This app unlike the others uses `Function Based Views`, that I'm starting to appreciate.
 ### Bulk table
 Long list with pagination. Modify or delete in bulk. Here an `EventEmitter TemplateView` is used: you have a `hx-post` call for an `UpdateView` with swapping set to `none`. On success `UpdateView` redirects (with parameters) to the `EventEmitterView` that has a void template (nothing to swap, but here I control if `HTMX` headers are in the request) and a `dispatch` method that sends multiple `HX-TRIGGER` events back to the client.
 ### Hierarchy

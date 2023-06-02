@@ -1,6 +1,6 @@
 import json
 
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -22,31 +22,28 @@ def item_list(request):
     return TemplateResponse(request, template_name, context)
 
 
-class ItemCreateView(HxOnlyTemplateMixin, FormView):
+def item_create(request):
     """Rendered in #add-button, on success targets #content"""
 
-    form_class = ItemCreateForm
+    if not request.htmx:
+        raise Http404("Request without HTMX headers")
     template_name = "boxlist/htmx/create.html"
-
-    def get_initial(self):
-        initial = super().get_initial()
+    if request.method == "POST":
+        form = ItemCreateForm(request.POST)
+        if form.is_valid():
+            position = 1
+            if form.cleaned_data["target"]:
+                position = form.cleaned_data["target"].position + 1
+            move_down_siblings(position)
+            object = Item()
+            object.title = form.cleaned_data["title"]
+            object.position = position
+            object.save()
+            return HttpResponseRedirect(reverse("boxlist:list"))
+    else:
         last = Item.objects.last()
-        initial["target"] = last.id
-        return initial
-
-    def form_valid(self, form):
-        position = 1
-        if form.cleaned_data["target"]:
-            position = form.cleaned_data["target"].position + 1
-        move_down_siblings(position)
-        object = Item()
-        object.title = form.cleaned_data["title"]
-        object.position = position
-        object.save()
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse("boxlist:list")
+        form = ItemCreateForm(initial={"target": last.id})
+        return TemplateResponse(request, template_name, {"form": form})
 
 
 def add_button(request):

@@ -12,6 +12,11 @@ from .forms import ItemCreateForm, ItemUpdateForm
 from .models import Item, intercalate_siblings, move_down_siblings
 
 
+def check_htmx_request(request):
+    if not request.htmx:
+        raise Http404("Request without HTMX headers")
+
+
 def item_list(request):
     """Rendered in #content"""
 
@@ -25,8 +30,7 @@ def item_list(request):
 def item_create(request):
     """Rendered in #add-button, on success targets #content"""
 
-    if not request.htmx:
-        raise Http404("Request without HTMX headers")
+    check_htmx_request(request)
     template_name = "boxlist/htmx/create.html"
     if request.method == "POST":
         form = ItemCreateForm(request.POST)
@@ -49,8 +53,7 @@ def item_create(request):
 def add_button(request):
     """Rendered in #add-button when create is dismissed"""
 
-    if not request.htmx:
-        raise Http404("Request without HTMX headers")
+    check_htmx_request(request)
     template_name = "boxlist/htmx/add_button.html"
     context = {}
     return TemplateResponse(request, template_name, context)
@@ -60,8 +63,7 @@ def item_sort(request):
     """Updates POSTed positions of items and redirects
     to the EventemitterView"""
 
-    if not request.htmx:
-        raise Http404("Request without HTMX headers")
+    check_htmx_request(request)
     events = []
     if "item" in request.POST:
         i = 1
@@ -128,8 +130,7 @@ class ItemUpdateView(HxOnlyTemplateMixin, FormView):
 def item_detail(request, pk):
     """Rendered in #item-{{ item.id }} when update is dismissed or successful"""
 
-    if not request.htmx:
-        raise Http404("Request without HTMX headers")
+    check_htmx_request(request)
     template_name = "boxlist/htmx/detail.html"
     context = {"object": get_object_or_404(Item, id=pk)}
     return TemplateResponse(request, template_name, context)

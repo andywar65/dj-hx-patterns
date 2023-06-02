@@ -1,9 +1,9 @@
 from django.urls import path
 
 from .views import (
-    EventEmitterView,
     ItemUpdateView,
     add_button,
+    event_emit,
     item_create,
     item_detail,
     item_list,
@@ -44,7 +44,7 @@ urlpatterns = [
     ),
     path(
         "event-emit/",
-        EventEmitterView.as_view(),
+        event_emit,
         name="event_emit",
     ),
 ]

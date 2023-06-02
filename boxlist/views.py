@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView
 
 from project.views import HxOnlyTemplateMixin
 
@@ -136,19 +136,18 @@ def item_detail(request, pk):
     return TemplateResponse(request, template_name, context)
 
 
-class EventEmitterView(HxOnlyTemplateMixin, TemplateView):
-    """This view emits an event: gets list of event paramenters
-    and dispatches event dictinary. Renders none template as
+def event_emit(request):
+    """This view emits an event: gets list of event parameters
+    and dispatches event dictionary. Renders none template as
     swapping is null"""
 
+    check_htmx_request(request)
     template_name = "boxlist/htmx/none.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        if "event" in request.GET:
-            event_dict = {}
-            events = request.GET.getlist("event")
-            for e in events:
-                event_dict[e] = "true"
-            response["HX-Trigger"] = json.dumps(event_dict)
-        return response
+    event_dict = {}
+    if "event" in request.GET:
+        events = request.GET.getlist("event")
+        for e in events:
+            event_dict[e] = "true"
+    return TemplateResponse(
+        request, template_name, {}, headers={"HX-Trigger": json.dumps(event_dict)}
+    )

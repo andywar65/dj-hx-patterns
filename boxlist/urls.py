@@ -2,12 +2,12 @@ from django.urls import path
 
 from .views import (
     EventEmitterView,
-    ItemSortView,
     ItemUpdateView,
     add_button,
     item_create,
     item_detail,
     item_list,
+    item_sort,
 )
 
 app_name = "boxlist"
@@ -29,7 +29,7 @@ urlpatterns = [
     ),
     path(
         "item/sort/",
-        ItemSortView.as_view(),
+        item_sort,
         name="sort",
     ),
     path(

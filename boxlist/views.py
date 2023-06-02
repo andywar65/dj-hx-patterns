@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.views.generic import FormView, RedirectView, TemplateView
+from django.views.generic import FormView, TemplateView
 
 from project.views import HxOnlyTemplateMixin
 
@@ -56,27 +56,26 @@ def add_button(request):
     return TemplateResponse(request, template_name, context)
 
 
-class ItemSortView(RedirectView):
+def item_sort(request):
     """Updates POSTed positions of items and redirects
     to the EventemitterView"""
 
-    def get_redirect_url(self, *args, **kwargs):
-        if not self.request.htmx:
-            raise Http404("Request without HTMX headers")
-        events = []
-        if "item" in self.request.POST:
-            i = 1
-            id_list = self.request.POST.getlist("item")
-            for id in id_list:
-                item = get_object_or_404(Item, id=id)
-                if not item.position == i:
-                    item.position = i
-                    item.save()
-                    events.append("event=refreshItem" + str(item.id))
-                i += 1
-        return reverse("boxlist:event_emit") + "?%(string)s" % {
-            "string": "&".join(events)
-        }
+    if not request.htmx:
+        raise Http404("Request without HTMX headers")
+    events = []
+    if "item" in request.POST:
+        i = 1
+        id_list = request.POST.getlist("item")
+        for id in id_list:
+            item = get_object_or_404(Item, id=id)
+            if not item.position == i:
+                item.position = i
+                item.save()
+                events.append("event=refreshItem" + str(item.id))
+            i += 1
+    return HttpResponseRedirect(
+        reverse("boxlist:event_emit") + "?%(string)s" % {"string": "&".join(events)}
+    )
 
 
 class ItemUpdateView(HxOnlyTemplateMixin, FormView):

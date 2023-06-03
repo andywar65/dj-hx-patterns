@@ -122,20 +122,3 @@ def item_detail(request, pk):
     template_name = "boxlist/htmx/detail.html"
     context = {"object": get_object_or_404(Item, id=pk)}
     return TemplateResponse(request, template_name, context)
-
-
-def event_emit(request):
-    """This view emits an event: gets list of event parameters
-    and dispatches event dictionary. Renders none template as
-    swapping is null"""
-
-    check_htmx_request(request)
-    template_name = "boxlist/htmx/none.html"
-    event_dict = {}
-    if "event" in request.GET:
-        events = request.GET.getlist("event")
-        for e in events:
-            event_dict[e] = "true"
-    return TemplateResponse(
-        request, template_name, {}, headers={"HX-Trigger": json.dumps(event_dict)}
-    )

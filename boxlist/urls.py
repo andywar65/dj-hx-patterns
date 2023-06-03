@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import (
     add_button,
-    event_emit,
     item_create,
     item_detail,
     item_list,
@@ -41,10 +40,5 @@ urlpatterns = [
         "item/<pk>/update/",
         item_update,
         name="update",
-    ),
-    path(
-        "event-emit/",
-        event_emit,
-        name="event_emit",
     ),
 ]

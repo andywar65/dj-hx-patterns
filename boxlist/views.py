@@ -85,7 +85,6 @@ def item_update(request, pk):
     If DELETE method, swaps in #item-{{ item.id }}"""
 
     check_htmx_request(request)
-    template_name = "boxlist/htmx/update.html"
     item = get_object_or_404(Item, id=pk)
     original_position = item.position
     if request.method == "DELETE":
@@ -94,6 +93,7 @@ def item_update(request, pk):
         item.delete()
         return TemplateResponse(request, template_name, {})
     elif request.method == "POST":
+        template_name = "boxlist/htmx/none.html"
         form = ItemUpdateForm(request.POST)
         if form.is_valid():
             position = original_position
@@ -104,13 +104,12 @@ def item_update(request, pk):
             item.position = position
             item.save()
             if not item.position == original_position:
-                return HttpResponseRedirect(
-                    reverse("boxlist:event_emit") + "?event=refreshList"
-                )
-            return HttpResponseRedirect(
-                reverse("boxlist:event_emit") + "?event=refreshItem" + str(item.id)
-            )
+                headers = {"HX-Trigger": "refreshList"}
+            else:
+                headers = {"HX-Trigger": "refreshItem" + str(item.id)}
+            return TemplateResponse(request, template_name, {}, headers=headers)
     else:
+        template_name = "boxlist/htmx/update.html"
         form = ItemUpdateForm(initial={"title": item.title})
         context = {"object": item, "form": form}
         return TemplateResponse(request, template_name, context)

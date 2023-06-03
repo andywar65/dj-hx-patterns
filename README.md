@@ -10,7 +10,7 @@ the database tables, creates a superuser, populates the tables and runs the serv
 All views except in the `Box list` app are `Class Based` (this is not mainstream, I'm still wondering if I have to stick to this rule). I have about three `HTMX  Mixins`, mostly controlling if `HTMX` headers are in the request.
 ## Apps
 ### Box list
-Most simple. Add items to a list, modify them inline, change their position with [Sortable.js](https://sortablejs.github.io/Sortable/). Suitable for related objects. This app unlike the others uses `Function Based Views`, that I'm starting to appreciate.
+Most simple. Add items to a list, modify them inline, change their position with [Sortable.js](https://sortablejs.github.io/Sortable/). Suitable for related objects. This app unlike the others uses `Function Based Views`, that I'm starting to appreciate: view workflow is clear, views can perform more tasks.
 ### Bulk table
 Long list with pagination. Modify or delete in bulk. Here an `EventEmitter TemplateView` is used: you have a `hx-post` call for an `UpdateView` with swapping set to `none`. On success `UpdateView` redirects (with parameters) to the `EventEmitterView` that has a void template (nothing to swap, but here I control if `HTMX` headers are in the request) and a `dispatch` method that sends multiple `HX-TRIGGER` events back to the client.
 ### Hierarchy

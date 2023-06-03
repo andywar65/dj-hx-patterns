@@ -54,16 +54,16 @@ def add_button(request):
 
     check_htmx_request(request)
     template_name = "boxlist/htmx/add_button.html"
-    context = {}
-    return TemplateResponse(request, template_name, context)
+    return TemplateResponse(request, template_name, {})
 
 
 def item_sort(request):
-    """Updates POSTed positions of items and redirects
-    to the EventemitterView"""
+    """Updates POSTed position of items, swaps none and
+    emits events to refresh items"""
 
     check_htmx_request(request)
-    events = []
+    template_name = "boxlist/htmx/none.html"
+    event_dict = {}
     if "item" in request.POST:
         i = 1
         id_list = request.POST.getlist("item")
@@ -72,10 +72,10 @@ def item_sort(request):
             if not item.position == i:
                 item.position = i
                 item.save()
-                events.append("event=refreshItem" + str(item.id))
+                event_dict["refreshItem" + str(item.id)] = "true"
             i += 1
-    return HttpResponseRedirect(
-        reverse("boxlist:event_emit") + "?%(string)s" % {"string": "&".join(events)}
+    return TemplateResponse(
+        request, template_name, {}, headers={"HX-Trigger": json.dumps(event_dict)}
     )
 
 

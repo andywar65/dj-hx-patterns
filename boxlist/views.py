@@ -90,7 +90,6 @@ def item_update(request, pk):
         item.delete()
         return TemplateResponse(request, template_name, {})
     elif request.method == "POST":
-        template_name = "boxlist/htmx/none.html"
         form = ItemUpdateForm(request.POST)
         if form.is_valid():
             position = original_position
@@ -104,7 +103,7 @@ def item_update(request, pk):
                 headers = {"HX-Trigger": "refreshList"}
             else:
                 headers = {"HX-Trigger": "refreshItem" + str(item.id)}
-            return TemplateResponse(request, template_name, {}, headers=headers)
+            return HttpResponse(headers=headers)
     else:
         template_name = "boxlist/htmx/update.html"
         form = ItemUpdateForm(initial={"title": item.title})

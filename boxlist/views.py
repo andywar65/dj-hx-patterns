@@ -1,6 +1,6 @@
 import json
 
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -62,7 +62,6 @@ def item_sort(request):
     emits events to refresh items"""
 
     check_htmx_request(request)
-    template_name = "boxlist/htmx/none.html"
     event_dict = {}
     if "item" in request.POST:
         i = 1
@@ -74,9 +73,7 @@ def item_sort(request):
                 item.save()
                 event_dict["refreshItem" + str(item.id)] = "true"
             i += 1
-    return TemplateResponse(
-        request, template_name, {}, headers={"HX-Trigger": json.dumps(event_dict)}
-    )
+    return HttpResponse(headers={"HX-Trigger": json.dumps(event_dict)})
 
 
 def item_update(request, pk):

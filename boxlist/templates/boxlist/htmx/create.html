@@ -7,7 +7,7 @@
       {% bootstrap_form form %}
       <button class="btn btn-success"
               hx-post="{% url 'boxlist:create' %}"
-              hx-target="#content">
+              hx-swap="none">
         {% trans "Add" %}
         <span class="htmx-indicator spinner-border spinner-border-sm"></span>
       </button>

@@ -1,9 +1,8 @@
 import json
 
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
-from django.urls import reverse
 
 from .forms import ItemCreateForm, ItemUpdateForm
 from .models import Item, intercalate_siblings, move_down_siblings
@@ -27,10 +26,10 @@ def item_list(request):
 
 
 def item_create(request):
-    """Rendered in #add-button, on success targets #content"""
+    """Rendered in #add-button, on success swaps none and triggers
+    list refresh"""
 
     check_htmx_request(request)
-    template_name = "boxlist/htmx/create.html"
     if request.method == "POST":
         form = ItemCreateForm(request.POST)
         if form.is_valid():
@@ -42,8 +41,9 @@ def item_create(request):
             object.title = form.cleaned_data["title"]
             object.position = position
             object.save()
-            return HttpResponseRedirect(reverse("boxlist:list"))
+            return HttpResponse(headers={"HX-Trigger": "refreshList"})
     else:
+        template_name = "boxlist/htmx/create.html"
         last = Item.objects.last()
         form = ItemCreateForm(initial={"target": last.id})
         return TemplateResponse(request, template_name, {"form": form})

@@ -15,17 +15,14 @@ def check_htmx_request(request):
         raise Http404("Request without HTMX headers")
 
 
-def item_list(request):
-    """Rendered in #content"""
-
-    template_name = "boxlist/htmx/list.html"
-    if not request.htmx:
-        template_name = template_name.replace("htmx/", "")
-    context = {"object_list": Item.objects.all()}
-    return TemplateResponse(request, template_name, context)
-
-
 def item_list_create(request):
+    """Lists or creates item, depending on request method:
+    GET = List items, rendered in #content
+    PUT = Open create form, rendered in #add-button
+    POST = Create item, swaps none and triggers list refresh
+    DELETE = Dismiss create form, rendered in #add-button
+    """
+
     if request.method == "GET":
         template_name = "boxlist/htmx/list.html"
         if not request.htmx:
@@ -55,38 +52,6 @@ def item_list_create(request):
         check_htmx_request(request)
         template_name = "boxlist/htmx/add_button.html"
         return TemplateResponse(request, template_name, {})
-
-
-def item_create(request):
-    """Rendered in #add-button, on success swaps none and triggers
-    list refresh"""
-
-    check_htmx_request(request)
-    if request.method == "POST":
-        form = ItemCreateForm(request.POST)
-        if form.is_valid():
-            position = 1
-            if form.cleaned_data["target"]:
-                position = form.cleaned_data["target"].position + 1
-            move_down_siblings(position)
-            object = Item()
-            object.title = form.cleaned_data["title"]
-            object.position = position
-            object.save()
-            return HttpResponse(headers={"HX-Trigger": "refreshList"})
-    else:
-        template_name = "boxlist/htmx/create.html"
-        last = Item.objects.last()
-        form = ItemCreateForm(initial={"target": last.id})
-        return TemplateResponse(request, template_name, {"form": form})
-
-
-def add_button(request):
-    """Rendered in #add-button when create is dismissed"""
-
-    check_htmx_request(request)
-    template_name = "boxlist/htmx/add_button.html"
-    return TemplateResponse(request, template_name, {})
 
 
 def item_sort(request):

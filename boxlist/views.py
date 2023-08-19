@@ -73,50 +73,6 @@ def item_sort(request):
     return HttpResponse(headers={"HX-Trigger": json.dumps(event_dict)})
 
 
-def item_update(request, pk):
-    """Rendered in #item-{{ item.id }}, on success swaps none
-    and refreshes #item-{{ item.id }} or #content if position changed.
-    If DELETE method, swaps in #item-{{ item.id }}"""
-
-    check_htmx_request(request)
-    item = get_object_or_404(Item, id=pk)
-    original_position = item.position
-    if request.method == "DELETE":
-        template_name = "boxlist/htmx/delete.html"
-        item.move_following_items()
-        item.delete()
-        return TemplateResponse(request, template_name, {})
-    elif request.method == "POST":
-        form = ItemUpdateForm(request.POST)
-        if form.is_valid():
-            position = original_position
-            if form.cleaned_data["target"]:
-                position = form.cleaned_data["target"].position
-            intercalate_siblings(position, original_position)
-            item.title = form.cleaned_data["title"]
-            item.position = position
-            item.save()
-            if not item.position == original_position:
-                headers = {"HX-Trigger": "refreshList"}
-            else:
-                headers = {"HX-Trigger": "refreshItem" + str(item.id)}
-            return HttpResponse(headers=headers)
-    else:
-        template_name = "boxlist/htmx/update.html"
-        form = ItemUpdateForm(initial={"title": item.title})
-        context = {"object": item, "form": form}
-        return TemplateResponse(request, template_name, context)
-
-
-def item_detail(request, pk):
-    """Rendered in #item-{{ item.id }} when update is dismissed or successful"""
-
-    check_htmx_request(request)
-    template_name = "boxlist/htmx/detail.html"
-    context = {"object": get_object_or_404(Item, id=pk)}
-    return TemplateResponse(request, template_name, context)
-
-
 def item_review_update_delete(request, pk):
     """Manages item, depending on request method,
     rendered in #item-{{ item.id }}:

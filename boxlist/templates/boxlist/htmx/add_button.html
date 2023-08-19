@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <a class="btn btn-success"
-   hx-get="{% url 'boxlist:create' %}"
+   hx-put="{% url 'boxlist:list' %}"
    hx-target="#add-button">
   {% trans "Add item" %}
   <span class="htmx-indicator spinner-border spinner-border-sm text-success"></span>

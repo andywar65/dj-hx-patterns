@@ -1,10 +1,11 @@
 from django.urls import path
 
-from .views import (
+from .views import (  # noqa
     add_button,
     item_create,
     item_detail,
     item_list,
+    item_list_create,
     item_sort,
     item_update,
 )
@@ -13,7 +14,7 @@ app_name = "boxlist"
 urlpatterns = [
     path(
         "",
-        item_list,
+        item_list_create,
         name="list",
     ),
     path(

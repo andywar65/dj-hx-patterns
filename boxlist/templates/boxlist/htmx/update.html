@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col">
           <button class="btn btn-primary"
-                  hx-post="{% url 'boxlist:update' pk=object.id %}"
+                  hx-post="{% url 'boxlist:detail' pk=object.id %}"
                   swap="none">
             {% trans "Update" %}
             <span class="htmx-indicator spinner-border spinner-border-sm"></span>
@@ -24,7 +24,7 @@
         <div class="col text-end">
           <button class="btn btn-danger"
                   title="{% trans 'Delete item' %}"
-                  hx-delete="{% url 'boxlist:update' pk=object.id %}"
+                  hx-delete="{% url 'boxlist:detail' pk=object.id %}"
                   hx-target="#item-{{ object.id }}"
                   hx-confirm="{% trans 'Are you sure you want to delete item' %} {{ object.title }}?">
             <i class="fa fa-times"></i>

@@ -1,6 +1,12 @@
 from django.urls import path
 
-from .views import item_detail, item_list_create, item_sort, item_update
+from .views import (  # noqa
+    item_detail,
+    item_list_create,
+    item_review_update_delete,
+    item_sort,
+    item_update,
+)
 
 app_name = "boxlist"
 urlpatterns = [
@@ -16,7 +22,7 @@ urlpatterns = [
     ),
     path(
         "item/<pk>/",
-        item_detail,
+        item_review_update_delete,
         name="detail",
     ),
     path(

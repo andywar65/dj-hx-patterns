@@ -5,7 +5,7 @@
   <strong>{{ object.position }}</strong> -
   <a class="link-primary"
      title="{% trans 'Modify item' %}"
-     hx-get="{% url 'boxlist:update' pk=object.id %}"
+     hx-put="{% url 'boxlist:detail' pk=object.id %}"
      hx-target="#item-{{ object.id }}">
     {{ object.title }}</a>
 </div>

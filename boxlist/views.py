@@ -115,3 +115,47 @@ def item_detail(request, pk):
     template_name = "boxlist/htmx/detail.html"
     context = {"object": get_object_or_404(Item, id=pk)}
     return TemplateResponse(request, template_name, context)
+
+
+def item_review_update_delete(request, pk):
+    """Manages item, depending on request method,
+    rendered in #item-{{ item.id }}:
+    GET = Reviews item
+    PUT = Open update form
+    POST = Update item, on success swaps none
+    and refreshes #item-{{ item.id }} or #content if position changed
+    DELETE = Deletes item
+    """
+
+    check_htmx_request(request)
+    item = get_object_or_404(Item, id=pk)
+    if request.method == "GET":
+        template_name = "boxlist/htmx/detail.html"
+        context = {"object": item}
+        return TemplateResponse(request, template_name, context)
+    elif request.method == "PUT":
+        template_name = "boxlist/htmx/update.html"
+        form = ItemUpdateForm(initial={"title": item.title})
+        context = {"object": item, "form": form}
+        return TemplateResponse(request, template_name, context)
+    elif request.method == "POST":
+        original_position = item.position
+        form = ItemUpdateForm(request.POST)
+        if form.is_valid():
+            position = original_position
+            if form.cleaned_data["target"]:
+                position = form.cleaned_data["target"].position
+            intercalate_siblings(position, original_position)
+            item.title = form.cleaned_data["title"]
+            item.position = position
+            item.save()
+            if not item.position == original_position:
+                headers = {"HX-Trigger": "refreshList"}
+            else:
+                headers = {"HX-Trigger": "refreshItem" + str(item.id)}
+            return HttpResponse(headers=headers)
+    elif request.method == "DELETE":
+        template_name = "boxlist/htmx/delete.html"
+        item.move_following_items()
+        item.delete()
+        return TemplateResponse(request, template_name, {})

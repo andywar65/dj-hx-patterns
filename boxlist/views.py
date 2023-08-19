@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .forms import ItemCreateForm, ItemUpdateForm
+from .forms import ItemCreateForm, ItemModelForm, ItemUpdateForm  # noqa
 from .models import Item, intercalate_siblings, move_down_siblings
 
 
@@ -23,6 +23,38 @@ def item_list(request):
         template_name = template_name.replace("htmx/", "")
     context = {"object_list": Item.objects.all()}
     return TemplateResponse(request, template_name, context)
+
+
+def item_list_create(request):
+    if request.method == "GET":
+        template_name = "boxlist/htmx/list.html"
+        if not request.htmx:
+            template_name = template_name.replace("htmx/", "")
+        context = {"object_list": Item.objects.all()}
+        return TemplateResponse(request, template_name, context)
+    elif request.method == "PUT":
+        check_htmx_request(request)
+        template_name = "boxlist/htmx/create.html"
+        last = Item.objects.last()
+        form = ItemCreateForm(initial={"target": last.id})
+        return TemplateResponse(request, template_name, {"form": form})
+    elif request.method == "POST":
+        check_htmx_request(request)
+        form = ItemCreateForm(request.POST)
+        if form.is_valid():
+            position = 1
+            if form.cleaned_data["target"]:
+                position = form.cleaned_data["target"].position + 1
+            move_down_siblings(position)
+            object = Item()
+            object.title = form.cleaned_data["title"]
+            object.position = position
+            object.save()
+            return HttpResponse(headers={"HX-Trigger": "refreshList"})
+    elif request.method == "DELETE":
+        check_htmx_request(request)
+        template_name = "boxlist/htmx/add_button.html"
+        return TemplateResponse(request, template_name, {})
 
 
 def item_create(request):

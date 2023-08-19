@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelChoiceField  # , ModelForm
+from django.forms import ModelChoiceField, ModelForm
 from django.utils.translation import gettext_lazy as _
 
 from .models import Item
@@ -23,3 +23,9 @@ class ItemUpdateForm(ItemCreateForm):
         label=_("Move to..."),
         required=False,
     )
+
+
+class ItemModelForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = "__all__"

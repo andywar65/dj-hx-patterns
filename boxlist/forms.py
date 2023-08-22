@@ -28,4 +28,4 @@ class ItemUpdateForm(ItemCreateForm):
 class ItemModelForm(ModelForm):
     class Meta:
         model = Item
-        fields = "__all__"
+        fields = ("title",)

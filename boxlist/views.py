@@ -32,16 +32,13 @@ def item_list_create(request):
     elif request.method == "PUT":
         check_htmx_request(request)
         template_name = "boxlist/htmx/create.html"
-        last = Item.objects.last()
-        form = ItemCreateForm(initial={"target": last.id})
+        form = ItemModelForm()
         return TemplateResponse(request, template_name, {"form": form})
     elif request.method == "POST":
         check_htmx_request(request)
         form = ItemCreateForm(request.POST)
         if form.is_valid():
             position = 1
-            if form.cleaned_data["target"]:
-                position = form.cleaned_data["target"].position + 1
             move_down_siblings(position)
             object = Item()
             object.title = form.cleaned_data["title"]

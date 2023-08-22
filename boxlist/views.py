@@ -4,8 +4,8 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .forms import ItemCreateForm, ItemModelForm, ItemUpdateForm  # noqa
-from .models import Item, intercalate_siblings, move_down_siblings
+from .forms import ItemModelForm
+from .models import Item, move_down_siblings
 
 
 def check_htmx_request(request):
@@ -36,7 +36,7 @@ def item_list_create(request):
         return TemplateResponse(request, template_name, {"form": form})
     elif request.method == "POST":
         check_htmx_request(request)
-        form = ItemCreateForm(request.POST)
+        form = ItemModelForm(request.POST)
         if form.is_valid():
             position = 1
             move_down_siblings(position)
@@ -88,24 +88,15 @@ def item_review_update_delete(request, pk):
         return TemplateResponse(request, template_name, context)
     elif request.method == "PUT":
         template_name = "boxlist/htmx/update.html"
-        form = ItemUpdateForm(initial={"title": item.title})
+        form = ItemModelForm(initial={"title": item.title})
         context = {"object": item, "form": form}
         return TemplateResponse(request, template_name, context)
     elif request.method == "POST":
-        original_position = item.position
-        form = ItemUpdateForm(request.POST)
+        form = ItemModelForm(request.POST)
         if form.is_valid():
-            position = original_position
-            if form.cleaned_data["target"]:
-                position = form.cleaned_data["target"].position
-            intercalate_siblings(position, original_position)
             item.title = form.cleaned_data["title"]
-            item.position = position
             item.save()
-            if not item.position == original_position:
-                headers = {"HX-Trigger": "refreshList"}
-            else:
-                headers = {"HX-Trigger": "refreshItem" + str(item.id)}
+            headers = {"HX-Trigger": "refreshItem" + str(item.id)}
             return HttpResponse(headers=headers)
     elif request.method == "DELETE":
         template_name = "boxlist/htmx/delete.html"

@@ -11,7 +11,7 @@
         <div class="col">
           <button class="btn btn-primary"
                   hx-post="{% url 'boxlist:detail' pk=object.id %}"
-                  swap="none">
+                  hx-target="#item-{{ object.id }}">
             {% trans "Update" %}
             <span class="htmx-indicator spinner-border spinner-border-sm"></span>
           </button>

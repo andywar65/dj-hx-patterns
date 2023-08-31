@@ -1,6 +1,6 @@
 # import json
 
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -99,8 +99,10 @@ def item_review_update_delete(request, pk):
         if form.is_valid():
             item.title = form.cleaned_data["title"]
             item.save()
-            headers = {"HX-Trigger": "refreshItem" + str(item.id)}
-            return HttpResponse(headers=headers)
+            return HttpResponseRedirect(
+                reverse("boxlist:detail", kwargs={"pk": item.id}),
+                headers={"HX-Request": True},
+            )
     elif request.method == "DELETE":
         template_name = "boxlist/htmx/delete.html"
         item.move_following_items()

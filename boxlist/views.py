@@ -1,4 +1,4 @@
-import json
+# import json
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -18,10 +18,10 @@ def check_htmx_request(request):
 
 def item_list_create(request):
     """Lists or creates item, depending on request method:
-    GET = List items, rendered in #content
+    GET = List items, renders in #content
     PUT = Open create form, rendered in #add-button
-    POST = Create item, redirects to boxlist:list
-    DELETE = Dismiss create form, rendered in #add-button
+    POST = Create item, redirects to boxlist:list, renders in #content
+    DELETE = Dismiss create form, renders in #add-button
     """
 
     if request.method == "GET":
@@ -55,11 +55,11 @@ def item_list_create(request):
 
 
 def item_sort(request):
-    """Updates POSTed position of items, swaps none and
-    emits events to refresh items"""
+    """Updates POSTed position of items, redirects to boxlist:list,
+    renders in #content"""
 
     check_htmx_request(request)
-    event_dict = {}
+    # event_dict = {}
     if "item" in request.POST:
         i = 1
         id_list = request.POST.getlist("item")
@@ -68,14 +68,14 @@ def item_sort(request):
             if not item.position == i:
                 item.position = i
                 item.save()
-                event_dict["refreshItem" + str(item.id)] = "true"
+                # event_dict["refreshItem" + str(item.id)] = "true"
             i += 1
-    return HttpResponse(headers={"HX-Trigger": json.dumps(event_dict)})
+    return HttpResponseRedirect(reverse("boxlist:list"), headers={"HX-Request": True})
 
 
 def item_review_update_delete(request, pk):
     """Manages item, depending on request method,
-    rendered in #item-{{ item.id }}:
+    renders in #item-{{ item.id }}:
     GET = Reviews item
     PUT = Open update form
     POST = Update item, on success swaps none

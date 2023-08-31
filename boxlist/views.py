@@ -1,8 +1,9 @@
 import json
 
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.urls import reverse
 
 from .forms import ItemModelForm
 from .models import Item, move_down_siblings
@@ -19,7 +20,7 @@ def item_list_create(request):
     """Lists or creates item, depending on request method:
     GET = List items, rendered in #content
     PUT = Open create form, rendered in #add-button
-    POST = Create item, swaps none and triggers list refresh
+    POST = Create item, redirects to boxlist:list
     DELETE = Dismiss create form, rendered in #add-button
     """
 
@@ -44,7 +45,9 @@ def item_list_create(request):
             object.title = form.cleaned_data["title"]
             object.position = position
             object.save()
-            return HttpResponse(headers={"HX-Trigger": "refreshList"})
+            return HttpResponseRedirect(
+                reverse("boxlist:list"), headers={"HX-Request": True}
+            )
     elif request.method == "DELETE":
         check_htmx_request(request)
         template_name = "boxlist/htmx/add_button.html"

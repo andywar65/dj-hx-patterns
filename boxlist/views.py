@@ -56,7 +56,7 @@ def item_list_create(request):
 
 def item_sort(request):
     """Updates POSTed position of items, redirects to boxlist:list,
-    renders in #content"""
+    renders in #content (left previous code in comments)"""
 
     check_htmx_request(request)
     # event_dict = {}
@@ -78,8 +78,7 @@ def item_review_update_delete(request, pk):
     renders in #item-{{ item.id }}:
     GET = Reviews item
     PUT = Open update form
-    POST = Update item, on success swaps none
-    and refreshes #item-{{ item.id }} or #content if position changed
+    POST = Update item, on success redirects to boxlist:detail
     DELETE = Deletes item
     """
 
